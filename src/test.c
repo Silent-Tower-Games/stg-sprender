@@ -8,7 +8,9 @@ int main()
     
     SDL_Init(SDL_INIT_VIDEO);
     
-    Sprender* sprender = Sprender_Create();
+    Sprender* sprender = Sprender_Create("Vulkan");
+    
+    SDL_Delay(1000);
     
     Sprender_Destroy(sprender);
     

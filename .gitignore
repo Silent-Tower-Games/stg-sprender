@@ -1,3 +1,6 @@
+.vscode/c_cpp_properties.json
+.vscode/tasks.json
+libFNA3D.so.0
 *.o
 *.so
 *.a

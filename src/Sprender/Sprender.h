@@ -1,6 +1,16 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <FNA3D.h>
+
+typedef struct Sprender_FNA3D
+{
+    FNA3D_Device* device;
+    FNA3D_BlendState blendState;
+    FNA3D_PresentationParameters presentationParameters;
+    FNA3D_VertexBufferBinding vertexBufferBinding;
+    FNA3D_VertexElement vertexElements[3];
+} Sprender_FNA3D;
 
 typedef struct Sprender
 {
@@ -9,6 +19,8 @@ typedef struct Sprender
 
 void Sprender_Init();
 
-Sprender* Sprender_Create();
+Sprender* Sprender_Create(
+    char* driver
+);
 
 void Sprender_Destroy(Sprender* sprender);
