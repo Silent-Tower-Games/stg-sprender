@@ -4,9 +4,17 @@
 static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d);
 
 Sprender* Sprender_Create(
-    char* driver
+    char* windowTitle,
+    int windowWidth,
+    int windowHeight,
+    int resolutionWidth,
+    int resolutionHeight,
+    char* driver,
+    Uint32 flags
 )
 {
+    SDL_Init(SDL_INIT_VIDEO | flags);
+    
     Sprender* sprender = malloc(sizeof(Sprender));
     
     if(driver != NULL)
@@ -15,11 +23,11 @@ Sprender* Sprender_Create(
     }
     
     sprender->window = SDL_CreateWindow(
-        "Sprender Test",
+        windowTitle,
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        640,
-        360,
+        windowWidth,
+        windowHeight,
         FNA3D_PrepareWindowAttributes()
     );
     

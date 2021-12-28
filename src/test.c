@@ -6,9 +6,13 @@ int main()
 {
     printf("Hello, World!\n");
     
-    SDL_Init(SDL_INIT_VIDEO);
-    
-    Sprender* sprender = Sprender_Create("Vulkan");
+    Sprender* sprender = Sprender_Create(
+        "Sprender Test",
+        640, 360, // window size
+        320, 180, // game resolution
+        "Vulkan",
+        0
+    );
     
     SDL_Delay(1000);
     

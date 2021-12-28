@@ -20,7 +20,13 @@ typedef struct Sprender
 void Sprender_Init();
 
 Sprender* Sprender_Create(
-    char* driver
+    char* windowTitle,
+    int windowWidth,
+    int windowHeight,
+    int resolutionWidth,
+    int resolutionHeight,
+    char* driver,
+    Uint32 flags
 );
 
 void Sprender_Destroy(Sprender* sprender);
