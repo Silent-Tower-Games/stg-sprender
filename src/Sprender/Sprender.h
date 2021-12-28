@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <FNA3D.h>
+#include "SpriteBatch.h"
 
 typedef struct Sprender_FNA3D
 {
@@ -14,6 +15,9 @@ typedef struct Sprender_FNA3D
 
 typedef struct Sprender
 {
+    Sprender_FNA3D fna3d;
+    int maxSprites;
+    Sprender_SpriteBatch spriteBatch;
     SDL_Window* window;
 } Sprender;
 
@@ -26,6 +30,7 @@ Sprender* Sprender_Create(
     int resolutionWidth,
     int resolutionHeight,
     char* driver,
+    int maxSprites,
     Uint32 flags
 );
 

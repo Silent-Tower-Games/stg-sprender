@@ -2,9 +2,9 @@
 
 #include <stdint.h>
 
-typedef struct Vertex
+typedef struct Sprender_Vertex
 {
 	float x, y;
 	float u, v;
 	uint32_t color;
-} Vertex;
+} Sprender_Vertex;

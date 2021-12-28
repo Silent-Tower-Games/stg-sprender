@@ -17,17 +17,22 @@ application-static:
 
 lib:
 	make objs-lib
-	${CC} ${CFLAGS} src/Sprender/Sprender.o -shared -o libsprender.so ${SDL2}
+	${CC} ${CFLAGS} src/Sprender/Sprender.o src/Sprender/SpriteBatch.o src/Sprender/Shader.o src/Sprender/Texture.o -shared -o libsprender.so ${SDL2}
 
 lib-static:
 	make objs-lib
 	ar rcs libsprender.a src/Sprender/Sprender.o
+	ar rcs libsprender.a src/Sprender/SpriteBatch.o
+	ar rcs libsprender.a src/Sprender/Texture.o
 
 objs:
 	${CC} ${CFLAGS} -c src/test.c -o src/test.o ${INCLUDE_PATHS}
 
 objs-lib:
 	${CC} ${CFLAGS} -c src/Sprender/Sprender.c -o src/Sprender/Sprender.o ${INCLUDE_PATHS} -fPIC
+	${CC} ${CFLAGS} -c src/Sprender/SpriteBatch.c -o src/Sprender/SpriteBatch.o ${INCLUDE_PATHS} -fPIC
+	${CC} ${CFLAGS} -c src/Sprender/Shader.c -o src/Sprender/Shader.o ${INCLUDE_PATHS} -fPIC
+	${CC} ${CFLAGS} -c src/Sprender/Texture.c -o src/Sprender/Texture.o ${INCLUDE_PATHS} -fPIC
 
 clear:
 	rm -f src/*.o src/**/*.o ./main ./*.so ./*.a

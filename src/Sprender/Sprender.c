@@ -1,5 +1,7 @@
 #include "Sprender.h"
 #include "Vertex.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "../vendor/stb_image.h"
 
 static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d);
 
@@ -10,12 +12,15 @@ Sprender* Sprender_Create(
     int resolutionWidth,
     int resolutionHeight,
     char* driver,
+    int maxSprites,
     Uint32 flags
 )
 {
+    // SDL init & create window
     SDL_Init(SDL_INIT_VIDEO | flags);
     
-    Sprender* sprender = malloc(sizeof(Sprender));
+    Sprender* sprender = calloc(1, sizeof(Sprender));
+    sprender->maxSprites = maxSprites;
     
     if(driver != NULL)
     {
@@ -31,11 +36,39 @@ Sprender* Sprender_Create(
         FNA3D_PrepareWindowAttributes()
     );
     
+    // FNA3D create device
+    FNA3D_PresentationParameters presentationParameters;
+    memset(&presentationParameters, 0, sizeof(presentationParameters));
+    presentationParameters.backBufferWidth = windowWidth;
+    presentationParameters.backBufferHeight = windowHeight;
+    presentationParameters.deviceWindowHandle = sprender->window;
+    presentationParameters.backBufferFormat = FNA3D_SURFACEFORMAT_COLOR;
+    presentationParameters.presentationInterval = FNA3D_PRESENTINTERVAL_IMMEDIATE; // vsync is _DEFAULT, not _IMMEDIATE
+    sprender->fna3d.presentationParameters = presentationParameters;
+    
+    sprender->fna3d.device = FNA3D_CreateDevice(&sprender->fna3d.presentationParameters, 0);
+    
+    sprender->fna3d.vertexBufferBinding.vertexBuffer = FNA3D_GenVertexBuffer(
+        sprender->fna3d.device,
+        1,
+        FNA3D_BUFFERUSAGE_WRITEONLY,
+        sprender->maxSprites * 6 * sizeof(Sprender_Vertex) // Maximum number of sprites * 6 vertices per sprite * bytes per vertex
+    );
+    
+    // Create SpriteBatch
+    sprender->spriteBatch = Sprender_SpriteBatch_Create(sprender->maxSprites * 6);
+    
     return sprender;
 }
 
 void Sprender_Destroy(Sprender* sprender)
 {
+    // FNA3D Destroy
+    FNA3D_AddDisposeVertexBuffer(sprender->fna3d.device, sprender->fna3d.vertexBufferBinding.vertexBuffer);
+    FNA3D_DestroyDevice(sprender->fna3d.device);
+    
+    Sprender_SpriteBatch_Destroy(&sprender->spriteBatch);
+    
     SDL_DestroyWindow(sprender->window);
     
     free(sprender);
@@ -78,7 +111,7 @@ static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d)
     FNA3D_VertexDeclaration vertexDeclaration;
     memset(&vertexDeclaration, 0, sizeof(vertexDeclaration));
     vertexDeclaration.elementCount = 3;
-    vertexDeclaration.vertexStride = sizeof(Vertex);
+    vertexDeclaration.vertexStride = sizeof(Sprender_Vertex);
     vertexDeclaration.elements = vertexElements;
     
     fna3d->vertexBufferBinding.vertexDeclaration = vertexDeclaration;
