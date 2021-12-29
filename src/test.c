@@ -1,5 +1,7 @@
+#include <assert.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include "Sprender/Camera.h"
 #include "Sprender/Sprender.h"
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
@@ -37,19 +39,60 @@ int main()
         .minDepth = 0.0f,
         .maxDepth = 1.0f,
     };
-    FNA3D_SetViewport(sprender->fna3d.device, &viewport);
-    // Clear
+    // Clear color
     FNA3D_Vec4 color = { 0, 0, 0, 1, };
-    FNA3D_Clear(
-        sprender->fna3d.device,
-        FNA3D_CLEAROPTIONS_TARGET,
-        &color,
-        0,
-        0
-    );
-    // Load camera next...
+    // Camera
+    Sprender_Camera camera = Sprender_Camera_Create(640, 360, 1, 1);
     
-    SDL_Delay(1000);
+    // We're gonna render this many frames
+    for(int i = 0; i < 1; i++)
+    {
+        FNA3D_SetRenderTargets(
+            sprender->fna3d.device,
+            NULL,
+            0,
+            NULL,
+            FNA3D_DEPTHFORMAT_NONE,
+            0
+        );
+        
+        FNA3D_SetViewport(sprender->fna3d.device, &viewport);
+        
+        FNA3D_Clear(
+            sprender->fna3d.device,
+            FNA3D_CLEAROPTIONS_TARGET,
+            &color,
+            0,
+            0
+        );
+        
+        MOJOSHADER_effectParam* shaderMatrix = Sprender_Shader_ParamGet(&shader, "MatrixTransform");
+        assert(shaderMatrix != NULL);
+        
+        Sprender_Camera_LoadInto(&camera, shaderMatrix->value.values);
+        
+        MOJOSHADER_effectStateChanges stateChanges;
+        memset(&stateChanges, 0, sizeof(stateChanges));
+        FNA3D_ApplyEffect(
+            sprender->fna3d.device,
+            shader.effect,
+            0,
+            &stateChanges
+        );
+        
+        // TODO: SpriteBatch add vertices
+        
+        // TODO: SpriteBatch end
+        
+        FNA3D_SwapBuffers(
+            sprender->fna3d.device,
+            NULL,
+            NULL,
+            sprender->window
+        );
+        
+        SDL_Delay(1000);
+    }
     
     Sprender_Destroy(sprender);
     

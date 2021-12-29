@@ -6,8 +6,8 @@
             "command": "make",
             "args": [
                 "CFLAGS=\"-g -pedantic\"",
-                "INCLUDE_PATHS=\"-I/home/swan/Programming/Libraries/Debug/FNA3D/include\"",
-                "LIBRARY_PATHS=\"-L/home/swan/Programming/Libraries/Debug/FNA3D\"",
+                "INCLUDE_PATHS=\"-I/FNA3D/include -I/FNA3D/MojoShader\"",
+                "LIBRARY_PATHS=\"-L/FNA3D\"",
                 "LIBS=\"-lFNA3D\""
             ],
             "group": {

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <FNA3D.h>
 #include "Shader.h"
 
 Sprender_Shader Sprender_Shader_Create(FNA3D_Device* device, char* name, uint8_t* code, uint32_t codeSize)
@@ -36,4 +37,17 @@ Sprender_Shader Sprender_Shader_Load(FNA3D_Device* device, char* name, char* fil
     fclose(effectFile);
     
     return Sprender_Shader_Create(device, name, code, codeSize);
+}
+
+MOJOSHADER_effectParam* Sprender_Shader_ParamGet(Sprender_Shader* shader, const char* key)
+{
+    for(int i = 0; i < shader->data->param_count; i++)
+    {
+        if(strcmp(key, shader->data->params[i].value.name) == 0)
+        {
+            return &shader->data->params[i];
+        }
+    }
+    
+    return NULL;
 }
