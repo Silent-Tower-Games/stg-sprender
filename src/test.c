@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include "Sprender/Camera.h"
+#include "Sprender/Quad.h"
 #include "Sprender/Sprender.h"
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
@@ -28,6 +29,13 @@ int main()
         4,
         0
     );
+    Sprender_Texture texture2 = Sprender_Texture_NewBlank(
+        sprender->fna3d.device,
+        16,
+        32,
+        4,
+        0
+    );
     
     // TODO: Make this not ugly!
     // Viewport
@@ -40,13 +48,27 @@ int main()
         .maxDepth = 1.0f,
     };
     // Clear color
-    FNA3D_Vec4 color = { 0, 0, 0, 1, };
+    FNA3D_Vec4 color = { 0, 1, 0, 1, };
     // Camera
+    // TODO: Try moving the camera & make sure that works
+    // TODO: Try zooming the camera
     Sprender_Camera camera = Sprender_Camera_Create(640, 360, 1, 1);
+    // Sampler State
+    FNA3D_SamplerState samplerState;
+    memset(&samplerState, 0, sizeof(samplerState));
+    samplerState.addressU = FNA3D_TEXTUREADDRESSMODE_CLAMP;
+    samplerState.addressV = FNA3D_TEXTUREADDRESSMODE_CLAMP;
+    samplerState.addressW = FNA3D_TEXTUREADDRESSMODE_WRAP;
+    samplerState.filter = FNA3D_TEXTUREFILTER_POINT;
+    samplerState.maxAnisotropy = 4;
+    samplerState.maxMipLevel = 0;
+    samplerState.mipMapLevelOfDetailBias = 0;
     
     // We're gonna render this many frames
-    for(int i = 0; i < 1; i++)
+    for(int i = 0; i < 60; i++)
     {
+        FNA3D_SetViewport(sprender->fna3d.device, &viewport);
+        
         FNA3D_SetRenderTargets(
             sprender->fna3d.device,
             NULL,
@@ -55,8 +77,6 @@ int main()
             FNA3D_DEPTHFORMAT_NONE,
             0
         );
-        
-        FNA3D_SetViewport(sprender->fna3d.device, &viewport);
         
         FNA3D_Clear(
             sprender->fna3d.device,
@@ -80,9 +100,110 @@ int main()
             &stateChanges
         );
         
-        // TODO: SpriteBatch add vertices
+        Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
         
-        // TODO: SpriteBatch end
+        Sprender_SpriteBatch_DrawQuad(
+            &sprender->spriteBatch,
+            texture.asset,
+            (Sprender_Quad){
+                .topLeft = { 0.25f, 0.25f, },
+                .topRight = { 0.75f, 0.25f, },
+                .bottomLeft = { 0.25f, 0.75f, },
+                .bottomRight = { 0.75f, 0.75f, },
+            },
+            (Sprender_Quad){
+                .topLeft = { 32, 33, },
+                .topRight = { 64, 33, },
+                .bottomLeft = { 32, 65, },
+                .bottomRight = { 64, 65, },
+            },
+            0xFFFFFFFF
+        );
+        //*
+        Sprender_SpriteBatch_DrawQuad(
+            &sprender->spriteBatch,
+            texture2.asset,
+            (Sprender_Quad){
+                .topLeft = { 0, 0, },
+                .topRight = { 1, 0, },
+                .bottomLeft = { 0, 1, },
+                .bottomRight = { 1, 1, },
+            },
+            (Sprender_Quad){
+                .topLeft = { 0, 0, },
+                .topRight = { 8, 0, },
+                .bottomLeft = { 0, 8, },
+                .bottomRight = { 8, 8, },
+            },
+            0xFFFFFFFF
+        );
+        //*/
+        
+        Sprender_SpriteBatch_End(&sprender->spriteBatch);
+        
+        // DO DRAWING STUFF
+        FNA3D_SetVertexBufferData(
+            sprender->fna3d.device,
+            sprender->fna3d.vertexBufferBinding.vertexBuffer,
+            0,
+            sprender->spriteBatch.vertices,
+            sizeof(Sprender_Vertex) * sprender->spriteBatch.verticesThisBatch,
+            1,
+            1,
+            FNA3D_SETDATAOPTIONS_DISCARD
+        );
+        FNA3D_ApplyVertexBufferBindings(
+            sprender->fna3d.device,
+            &sprender->fna3d.vertexBufferBinding,
+            1,
+            0,
+            0
+        );
+        
+        FNA3D_Texture* thisTexture = NULL;
+        int thisTextureStartsAt = 0;
+        
+        // FIXME: O(n^2)! Is there any solution?
+        // Maybe textures shouldn't have a record each row, but just for each time it changes?
+        // It would still be worst-case O(n^2) but at least it wouldn't be O(n^2) every time.
+        // Can't set vertex buffer until we know how many vertices there are this frame, so it
+        // must be O(n^2) worst-case.
+        // FIXME: i += 6? i += 3?
+        for(int i = 0; i < sprender->spriteBatch.verticesThisBatch; i++)
+        {
+            if(thisTexture == NULL || thisTexture != sprender->spriteBatch.textures[i])
+            {
+                // Do this only if we've already got vertices to draw
+                if(i > 0)
+                {
+                    FNA3D_DrawPrimitives(
+                        sprender->fna3d.device,
+                        FNA3D_PRIMITIVETYPE_TRIANGLELIST,
+                        thisTextureStartsAt,
+                        (i - thisTextureStartsAt) / 3
+                    );
+                    
+                    thisTextureStartsAt = i;
+                }
+                
+                thisTexture = sprender->spriteBatch.textures[thisTextureStartsAt];
+                
+                FNA3D_VerifySampler(
+                    sprender->fna3d.device,
+                    0,
+                    thisTexture,
+                    &samplerState
+                );
+            }
+        }
+        
+        FNA3D_DrawPrimitives(
+            sprender->fna3d.device,
+            FNA3D_PRIMITIVETYPE_TRIANGLELIST,
+            thisTextureStartsAt,
+            (sprender->spriteBatch.verticesThisBatch - thisTextureStartsAt) / 3
+        );
+        // END DO DRAWING STUFF
         
         FNA3D_SwapBuffers(
             sprender->fna3d.device,
@@ -91,7 +212,7 @@ int main()
             sprender->window
         );
         
-        SDL_Delay(1000);
+        SDL_Delay(16);
     }
     
     Sprender_Destroy(sprender);

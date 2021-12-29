@@ -3,6 +3,7 @@
 #include "Float2D.h"
 #include "Int2D.h"
 
+// TODO: Implement Camera rotation one day
 typedef struct Sprender_Camera
 {
 	Sprender_Int2D resolution;

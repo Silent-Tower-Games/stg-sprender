@@ -55,6 +55,9 @@ Sprender* Sprender_Create(
         sprender->maxSprites * 6 * sizeof(Sprender_Vertex) // Maximum number of sprites * 6 vertices per sprite * bytes per vertex
     );
     
+    // Initialize FNA3D
+    Sprender_FNA3D_SetValues(&sprender->fna3d);
+    
     // Create SpriteBatch
     sprender->spriteBatch = Sprender_SpriteBatch_Create(sprender->maxSprites * 6);
     
