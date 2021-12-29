@@ -24,6 +24,7 @@ int main()
     
     Sprender_Texture texture = Sprender_Texture_NewBlank(
         sprender->fna3d.device,
+        (FNA3D_Vec4){ 1, 1, 1, 0.2f, },
         32,
         16,
         4,
@@ -31,6 +32,7 @@ int main()
     );
     Sprender_Texture texture2 = Sprender_Texture_NewBlank(
         sprender->fna3d.device,
+        (FNA3D_Vec4){ 1, 1, 1, 1, },
         16,
         32,
         4,

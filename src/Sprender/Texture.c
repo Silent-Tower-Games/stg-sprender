@@ -20,13 +20,19 @@ Sprender_Texture Sprender_Texture_NewFromData(FNA3D_Device* device, int width, i
     return texture;
 }
 
-Sprender_Texture Sprender_Texture_NewBlank(FNA3D_Device* device, int width, int height, int channels, char isRenderTarget)
+Sprender_Texture Sprender_Texture_NewBlank(FNA3D_Device* device, FNA3D_Vec4 color, int width, int height, int channels, char isRenderTarget)
 {
     size_t size = width * height * channels;
     size_t sizeWithType = sizeof(unsigned char) * size;
     
     unsigned char* pixels = malloc(sizeWithType);
-    memset(pixels, 0xFF, sizeWithType);
+    for(int i = 0; i < size; i += 4)
+    {
+        pixels[i + 0] = 0xFF * color.x;
+        pixels[i + 1] = 0xFF * color.y;
+        pixels[i + 2] = 0xFF * color.z;
+        pixels[i + 3] = 0xFF * color.w;
+    }
     
     Sprender_Texture texture = Sprender_Texture_NewFromData(device, width, height, pixels, channels, isRenderTarget);
     

@@ -12,4 +12,4 @@ typedef struct Sprender_Texture
 
 Sprender_Texture Sprender_Texture_NewFromData(FNA3D_Device* device, int width, int height, unsigned char* pixels, int channels, char isRenderTarget);
 
-Sprender_Texture Sprender_Texture_NewBlank(FNA3D_Device* device, int width, int height, int channels, char isRenderTarget);
+Sprender_Texture Sprender_Texture_NewBlank(FNA3D_Device* device, FNA3D_Vec4 color, int width, int height, int channels, char isRenderTarget);
