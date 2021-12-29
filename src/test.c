@@ -24,7 +24,7 @@ int main()
     
     Sprender_Texture texture = Sprender_Texture_NewBlank(
         sprender->fna3d.device,
-        (FNA3D_Vec4){ 1, 1, 1, 0.2f, },
+        (FNA3D_Vec4){ 1, 1, 1, 0.5f, },
         32,
         16,
         4,
@@ -37,6 +37,10 @@ int main()
         32,
         4,
         0
+    );
+    Sprender_Texture textureLogo = Sprender_Texture_Load(
+        sprender->fna3d.device,
+        "assets/images/logo.png"
     );
     
     // TODO: Make this not ugly!
@@ -140,6 +144,25 @@ int main()
             0xFFFFFFFF
         );
         //*/
+        //*
+        Sprender_SpriteBatch_DrawQuad(
+            &sprender->spriteBatch,
+            textureLogo.asset,
+            (Sprender_Quad){
+                .topLeft = { 0, 0, },
+                .topRight = { 1, 0, },
+                .bottomLeft = { 0, 1, },
+                .bottomRight = { 1, 1, },
+            },
+            (Sprender_Quad){
+                .topLeft = { 64, 64, },
+                .topRight = { 256, 64, },
+                .bottomLeft = { 64, 128, },
+                .bottomRight = { 256, 128, },
+            },
+            0xFFFFFFFF
+        );
+        //*/
         
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
         
@@ -214,6 +237,8 @@ int main()
             sprender->window
         );
         
+        camera.zoom.X += 0.01f;
+        //camera.zoom.Y += 0.01f;
         SDL_Delay(16);
     }
     

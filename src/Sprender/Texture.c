@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <FNA3D.h>
@@ -35,6 +36,24 @@ Sprender_Texture Sprender_Texture_NewBlank(FNA3D_Device* device, FNA3D_Vec4 colo
     }
     
     Sprender_Texture texture = Sprender_Texture_NewFromData(device, width, height, pixels, channels, isRenderTarget);
+    
+    stbi_image_free(pixels);
+    
+    return texture;
+}
+
+Sprender_Texture Sprender_Texture_Load(FNA3D_Device* device, const char* filename)
+{
+    Sprender_Int2D size;
+    int channels;
+    
+    unsigned char* pixels = stbi_load(filename, &size.X, &size.Y, &channels, 4);
+    
+    assert(pixels != NULL);
+    
+    Sprender_Texture texture = Sprender_Texture_NewFromData(device, size.X, size.Y, pixels, channels, 0);
+    texture.size = size;
+    texture.tilesize = size;
     
     stbi_image_free(pixels);
     
