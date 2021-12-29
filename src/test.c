@@ -59,16 +59,6 @@ int main()
     // TODO: Try moving the camera & make sure that works
     // TODO: Try zooming the camera
     Sprender_Camera camera = Sprender_Camera_Create(640, 360, 1, 1);
-    // Sampler State
-    FNA3D_SamplerState samplerState;
-    memset(&samplerState, 0, sizeof(samplerState));
-    samplerState.addressU = FNA3D_TEXTUREADDRESSMODE_CLAMP;
-    samplerState.addressV = FNA3D_TEXTUREADDRESSMODE_CLAMP;
-    samplerState.addressW = FNA3D_TEXTUREADDRESSMODE_WRAP;
-    samplerState.filter = FNA3D_TEXTUREFILTER_POINT;
-    samplerState.maxAnisotropy = 4;
-    samplerState.maxMipLevel = 0;
-    samplerState.mipMapLevelOfDetailBias = 0;
     
     // We're gonna render this many frames
     for(int i = 0; i < 60; i++)
@@ -166,79 +156,10 @@ int main()
         
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
         
-        // DO DRAWING STUFF
-        FNA3D_SetVertexBufferData(
-            sprender->fna3d.device,
-            sprender->fna3d.vertexBufferBinding.vertexBuffer,
-            0,
-            sprender->spriteBatch.vertices,
-            sizeof(Sprender_Vertex) * sprender->spriteBatch.verticesThisBatch,
-            1,
-            1,
-            FNA3D_SETDATAOPTIONS_DISCARD
-        );
-        FNA3D_ApplyVertexBufferBindings(
-            sprender->fna3d.device,
-            &sprender->fna3d.vertexBufferBinding,
-            1,
-            0,
-            0
-        );
+        Sprender_RenderSprites(sprender);
         
-        FNA3D_Texture* thisTexture = NULL;
-        int thisTextureStartsAt = 0;
+        Sprender_Close();
         
-        // FIXME: O(n^2)! Is there any solution?
-        // Maybe textures shouldn't have a record each row, but just for each time it changes?
-        // It would still be worst-case O(n^2) but at least it wouldn't be O(n^2) every time.
-        // Can't set vertex buffer until we know how many vertices there are this frame, so it
-        // must be O(n^2) worst-case.
-        // FIXME: i += 6? i += 3?
-        for(int i = 0; i < sprender->spriteBatch.verticesThisBatch; i++)
-        {
-            if(thisTexture == NULL || thisTexture != sprender->spriteBatch.textures[i])
-            {
-                // Do this only if we've already got vertices to draw
-                if(i > 0)
-                {
-                    FNA3D_DrawPrimitives(
-                        sprender->fna3d.device,
-                        FNA3D_PRIMITIVETYPE_TRIANGLELIST,
-                        thisTextureStartsAt,
-                        (i - thisTextureStartsAt) / 3
-                    );
-                    
-                    thisTextureStartsAt = i;
-                }
-                
-                thisTexture = sprender->spriteBatch.textures[thisTextureStartsAt];
-                
-                FNA3D_VerifySampler(
-                    sprender->fna3d.device,
-                    0,
-                    thisTexture,
-                    &samplerState
-                );
-            }
-        }
-        
-        FNA3D_DrawPrimitives(
-            sprender->fna3d.device,
-            FNA3D_PRIMITIVETYPE_TRIANGLELIST,
-            thisTextureStartsAt,
-            (sprender->spriteBatch.verticesThisBatch - thisTextureStartsAt) / 3
-        );
-        // END DO DRAWING STUFF
-        
-        FNA3D_SwapBuffers(
-            sprender->fna3d.device,
-            NULL,
-            NULL,
-            sprender->window
-        );
-        
-        camera.zoom.X += 0.01f;
-        //camera.zoom.Y += 0.01f;
         SDL_Delay(16);
     }
     
