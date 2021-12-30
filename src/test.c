@@ -15,7 +15,7 @@ int main()
     Sprender* sprender = Sprender_Create(
         "Sprender Test",
         640, 360, // window size
-        "Vulkan",
+        "OpenGL",
         10000, // 10k sprite maximum
         0
     );
@@ -95,12 +95,6 @@ int main()
                 {
                     quit = 1;
                 } break;
-                
-                case SDL_KEYDOWN:
-                {
-                    position.X += 1;
-                    sprender->defaultRenderMode.camera.position.X += 1;
-                } break;
             }
         }
         
@@ -114,21 +108,21 @@ int main()
         
         Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
         
-        Sprender_SpriteBatch_DrawQuad(
+        Sprender_SpriteBatch_DrawFrame(
             &sprender->spriteBatch,
-            textureLogo.asset,
-            (Sprender_Quad){
-                .topLeft = { 0, 0, },
-                .topRight = { 1, 0, },
-                .bottomLeft = { 0, 1, },
-                .bottomRight = { 1, 1, },
-            },
-            (Sprender_Quad){
-                .topLeft = { 64, 64, },
-                .topRight = { 256, 64, },
-                .bottomLeft = { 64, 128, },
-                .bottomRight = { 256, 128, },
-            },
+            &textureLogo,
+            (Sprender_Int2D){ 0, 0, },
+            (Sprender_Float2D){ 0, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0xFFFFFFFF
+        );
+        
+        Sprender_SpriteBatch_DrawFrame(
+            &sprender->spriteBatch,
+            &textureSpriteSheet,
+            (Sprender_Int2D){ 0, 0, },
+            (Sprender_Float2D){ -128, -80, },
+            (Sprender_Float2D){ 10.0f, 10.0f, },
             0xFFFFFFFF
         );
         

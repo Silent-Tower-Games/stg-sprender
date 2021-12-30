@@ -1,3 +1,4 @@
+#include <FNA3D.h>
 #include "Sprender.h"
 #include "Vertex.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -73,69 +74,8 @@ Sprender* Sprender_Create(
     return sprender;
 }
 
-void Sprender_RenderSprites(Sprender* sprender)
+void Sprender_Open(Sprender* sprender)
 {
-    FNA3D_SetVertexBufferData(
-        sprender->fna3d.device,
-        sprender->fna3d.vertexBufferBinding.vertexBuffer,
-        0,
-        sprender->spriteBatch.vertices,
-        sizeof(Sprender_Vertex) * sprender->spriteBatch.verticesThisBatch,
-        1,
-        1,
-        FNA3D_SETDATAOPTIONS_DISCARD
-    );
-    FNA3D_ApplyVertexBufferBindings(
-        sprender->fna3d.device,
-        &sprender->fna3d.vertexBufferBinding,
-        1,
-        0,
-        0
-    );
-    
-    FNA3D_Texture* thisTexture = NULL;
-    int thisTextureStartsAt = 0;
-    
-    // FIXME: O(n^2)! Is there any solution?
-    // Maybe textures shouldn't have a record each row, but just for each time it changes?
-    // It would still be worst-case O(n^2) but at least it wouldn't be O(n^2) every time.
-    // Can't set vertex buffer until we know how many vertices there are this frame, so it
-    // must be O(n^2) worst-case.
-    // FIXME: i += 6? i += 3?
-    for(int i = 0; i < sprender->spriteBatch.verticesThisBatch; i++)
-    {
-        if(thisTexture == NULL || thisTexture != sprender->spriteBatch.textures[i])
-        {
-            // Do this only if we've already got vertices to draw
-            if(i > 0)
-            {
-                FNA3D_DrawPrimitives(
-                    sprender->fna3d.device,
-                    FNA3D_PRIMITIVETYPE_TRIANGLELIST,
-                    thisTextureStartsAt,
-                    (i - thisTextureStartsAt) / 3
-                );
-                
-                thisTextureStartsAt = i;
-            }
-            
-            thisTexture = sprender->spriteBatch.textures[thisTextureStartsAt];
-            
-            FNA3D_VerifySampler(
-                sprender->fna3d.device,
-                0,
-                thisTexture,
-                &sprender->fna3d.samplerState
-            );
-        }
-    }
-    
-    FNA3D_DrawPrimitives(
-        sprender->fna3d.device,
-        FNA3D_PRIMITIVETYPE_TRIANGLELIST,
-        thisTextureStartsAt,
-        (sprender->spriteBatch.verticesThisBatch - thisTextureStartsAt) / 3
-    );
 }
 
 void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMode)
@@ -199,6 +139,71 @@ void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMod
         sprender->shaderSpriteEffect.effect,
         0,
         &stateChanges
+    );
+}
+
+void Sprender_RenderSprites(Sprender* sprender)
+{
+    FNA3D_SetVertexBufferData(
+        sprender->fna3d.device,
+        sprender->fna3d.vertexBufferBinding.vertexBuffer,
+        0,
+        sprender->spriteBatch.vertices,
+        sizeof(Sprender_Vertex) * sprender->spriteBatch.verticesThisBatch,
+        1,
+        1,
+        FNA3D_SETDATAOPTIONS_DISCARD
+    );
+    FNA3D_ApplyVertexBufferBindings(
+        sprender->fna3d.device,
+        &sprender->fna3d.vertexBufferBinding,
+        1,
+        0,
+        0
+    );
+    
+    FNA3D_Texture* thisTexture = NULL;
+    int thisTextureStartsAt = 0;
+    
+    // FIXME: O(n^2)! Is there any solution?
+    // Maybe textures shouldn't have a record each row, but just for each time it changes?
+    // It would still be worst-case O(n^2) but at least it wouldn't be O(n^2) every time.
+    // Can't set vertex buffer until we know how many vertices there are this frame, so it
+    // must be O(n^2) worst-case.
+    // FIXME: i += 6? i += 3?
+    for(int i = 0; i < sprender->spriteBatch.verticesThisBatch; i++)
+    {
+        if(thisTexture == NULL || thisTexture != sprender->spriteBatch.textures[i])
+        {
+            // Do this only if we've already got vertices to draw
+            if(i > 0)
+            {
+                FNA3D_DrawPrimitives(
+                    sprender->fna3d.device,
+                    FNA3D_PRIMITIVETYPE_TRIANGLELIST,
+                    thisTextureStartsAt,
+                    (i - thisTextureStartsAt) / 3
+                );
+                
+                thisTextureStartsAt = i;
+            }
+            
+            thisTexture = sprender->spriteBatch.textures[thisTextureStartsAt];
+            
+            FNA3D_VerifySampler(
+                sprender->fna3d.device,
+                0,
+                thisTexture,
+                &sprender->fna3d.samplerState
+            );
+        }
+    }
+    
+    FNA3D_DrawPrimitives(
+        sprender->fna3d.device,
+        FNA3D_PRIMITIVETYPE_TRIANGLELIST,
+        thisTextureStartsAt,
+        (sprender->spriteBatch.verticesThisBatch - thisTextureStartsAt) / 3
     );
 }
 
@@ -278,4 +283,19 @@ static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d)
     samplerState.maxMipLevel = 0;
     samplerState.mipMapLevelOfDetailBias = 0;
     fna3d->samplerState = samplerState;
+    
+    FNA3D_DepthStencilState depthStencilState;
+    memset(&depthStencilState, 0, sizeof(depthStencilState));
+    depthStencilState.depthBufferEnable = 0;
+    depthStencilState.stencilEnable = 0;
+    FNA3D_SetDepthStencilState(fna3d->device, &depthStencilState);
+
+    FNA3D_RasterizerState rasterizerState;
+    rasterizerState.cullMode = FNA3D_CULLMODE_NONE;
+    rasterizerState.fillMode = FNA3D_FILLMODE_SOLID;
+    rasterizerState.depthBias = 0;
+    rasterizerState.multiSampleAntiAlias = 1;
+    rasterizerState.scissorTestEnable = 0;
+    rasterizerState.slopeScaleDepthBias = 0;
+    FNA3D_ApplyRasterizerState(fna3d->device, &rasterizerState);
 }
