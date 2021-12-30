@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "RenderMode.h"
-#include "Texture.h"
 
 Sprender_RenderMode Sprender_RenderMode_Create(
     FNA3D_Device* device,
@@ -15,9 +14,12 @@ Sprender_RenderMode Sprender_RenderMode_Create(
     FNA3D_RenderTargetBinding renderTargetBinding;
     memset(&renderTargetBinding, 0, sizeof(renderTargetBinding));
     
+    Sprender_Texture renderTargetTexture;
+    memset(&renderTargetTexture, 0, sizeof(renderTargetTexture));
+    
     if(hasRenderTarget)
     {
-        Sprender_Texture renderTargetTexture = Sprender_Texture_NewBlank(
+        renderTargetTexture = Sprender_Texture_NewBlank(
             device,
             (FNA3D_Vec4){ 0, 0, 0, 1, },
             resolution.X,
@@ -34,6 +36,7 @@ Sprender_RenderMode Sprender_RenderMode_Create(
         .bgColor = bgColor,
         .camera = Sprender_Camera_Create(resolution, (Sprender_Float2D){ 1.0f, 1.0f, }),
         .renderTarget = renderTargetBinding,
+        .renderTargetTexture = renderTargetTexture,
         .resolution = resolution,
         .viewport = (FNA3D_Viewport){
             .w = resolution.X,

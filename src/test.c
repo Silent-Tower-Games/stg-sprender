@@ -69,10 +69,35 @@ int main()
         (FNA3D_Vec4){ 1, 1, 1, 1, },
         1
     );
+    Sprender_RenderMode renderModeHuge = Sprender_RenderMode_Create(
+        sprender->fna3d.device,
+        (Sprender_Int2D){ 1024, 1024, },
+        (Sprender_Int2D){ 0, 0, },
+        (FNA3D_Vec4){ 0, 1, 1, 1, },
+        1
+    );
     
     // We're gonna render this many frames
     for(int i = 0; i < 60; i++)
     {
+        // Render third pass
+        Sprender_Load_RenderMode(sprender, &renderModeHuge);
+        
+        Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
+        
+        Sprender_SpriteBatch_DrawFrame(
+            &sprender->spriteBatch,
+            &textureSpriteSheet,
+            (Sprender_Int2D){ 2, 2, },
+            (Sprender_Float2D){ 0, 0, },
+            (Sprender_Float2D){ 10.0f, 10.0f, },
+            0xFFFFFFFF
+        );
+        
+        Sprender_SpriteBatch_End(&sprender->spriteBatch);
+        
+        Sprender_RenderSprites(sprender);
+        
         // Render first pass
         Sprender_Load_RenderMode(sprender, &renderModeSub);
         
@@ -127,7 +152,7 @@ int main()
         
         Sprender_RenderSprites(sprender);
         
-        // Render third pass
+        // Render fourth pass
         Sprender_Load_RenderMode(sprender, NULL);
         
         Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
@@ -223,12 +248,13 @@ int main()
             0xFFFFFFFF
         );
         //*/
+        
         Sprender_SpriteBatch_DrawFrame(
             &sprender->spriteBatch,
-            &textureSpriteSheet,
-            (Sprender_Int2D){ 2, 2, },
+            &renderModeHuge.renderTargetTexture,
+            (Sprender_Int2D){ 0, 0, },
             (Sprender_Float2D){ 0, 0, },
-            (Sprender_Float2D){ 1.0f, 1.0f, },
+            (Sprender_Float2D){ 0.1f, 0.1f, },
             0xFFFFFFFF
         );
         

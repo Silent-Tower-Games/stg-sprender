@@ -2,6 +2,7 @@
 
 #include <FNA3D.h>
 #include "Camera.h"
+#include "Texture.h"
 
 typedef struct Sprender_RenderMode
 {
@@ -9,6 +10,7 @@ typedef struct Sprender_RenderMode
     Sprender_Int2D resolution;
     Sprender_Camera camera;
     FNA3D_RenderTargetBinding renderTarget;
+    Sprender_Texture renderTargetTexture;
     FNA3D_Viewport viewport;
 } Sprender_RenderMode;
 
