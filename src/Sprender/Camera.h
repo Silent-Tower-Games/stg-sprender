@@ -13,6 +13,6 @@ typedef struct Sprender_Camera
 	float projection[16];
 } Sprender_Camera;
 
-Sprender_Camera Sprender_Camera_Create(float resolutionX, float resolutionY, float zoomX, float zoomY);
+Sprender_Camera Sprender_Camera_Create(Sprender_Int2D resolution, Sprender_Float2D zoom);
 
 void Sprender_Camera_LoadInto(Sprender_Camera* camera, void* dest);

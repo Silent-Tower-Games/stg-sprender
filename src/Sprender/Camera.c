@@ -2,15 +2,13 @@
 #include "Camera.h"
 #include "Matrix.h"
 
-Sprender_Camera Sprender_Camera_Create(float resolutionX, float resolutionY, float zoomX, float zoomY)
+Sprender_Camera Sprender_Camera_Create(Sprender_Int2D resolution, Sprender_Float2D zoom)
 {
     Sprender_Camera camera;
     memset(&camera, 0, sizeof(camera));
     
-    camera.resolution.X = resolutionX;
-    camera.resolution.Y = resolutionY;
-    camera.zoom.X = zoomX;
-    camera.zoom.Y = zoomY;
+    camera.resolution = resolution;
+    camera.zoom = zoom;
     
     return camera;
 }

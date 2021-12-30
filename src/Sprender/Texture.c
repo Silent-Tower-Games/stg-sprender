@@ -37,7 +37,7 @@ Sprender_Texture Sprender_Texture_NewBlank(FNA3D_Device* device, FNA3D_Vec4 colo
     
     Sprender_Texture texture = Sprender_Texture_NewFromData(device, width, height, pixels, channels, isRenderTarget);
     
-    stbi_image_free(pixels);
+    free(pixels);
     
     return texture;
 }
