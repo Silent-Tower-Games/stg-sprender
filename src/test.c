@@ -15,8 +15,7 @@ int main()
     Sprender* sprender = Sprender_Create(
         "Sprender Test",
         640, 360, // window size
-        320, 180, // game resolution
-        NULL,
+        "OpenGL",
         10000, // 10k sprite maximum
         0
     );
@@ -46,34 +45,30 @@ int main()
         "assets/images/logo.png"
     );
     
-    // TODO: Make this not ugly!
-    // Viewport
-    FNA3D_Viewport viewport = {
-        .w = 640,
-        .h = 360,
-        .x = 0,
-        .y = 0,
-        .minDepth = 0.0f,
-        .maxDepth = 1.0f,
-    };
-    // Camera
-    Sprender_Camera camera = Sprender_Camera_Create(
-        (Sprender_Int2D){ 640, 360, },
-        (Sprender_Float2D){ 1.0f, 1.0f, }
-    );
     // Render mode
+    // TODO: Sprender should own the window RenderMode
     Sprender_RenderMode renderMode = Sprender_RenderMode_Create(
         sprender->fna3d.device,
         (Sprender_Int2D){ 640, 360, },
         (Sprender_Int2D){ 0, 0, },
-        (FNA3D_Vec4){ 1, 1, 1, 1, },
+        (FNA3D_Vec4){ 1, 0, 1, 1, },
         0
     );
+    const int w = 25;
+    const int h = 125;
+    const int border = 1;
     Sprender_RenderMode renderModeSub = Sprender_RenderMode_Create(
         sprender->fna3d.device,
-        (Sprender_Int2D){ 24, 24, },
+        (Sprender_Int2D){ w * 2, h * 2, },
         (Sprender_Int2D){ 0, 0, },
         (FNA3D_Vec4){ 0, 1, 0, 1, },
+        1
+    );
+    Sprender_RenderMode renderModeSub2 = Sprender_RenderMode_Create(
+        sprender->fna3d.device,
+        (Sprender_Int2D){ h * 2, w * 2, },
+        (Sprender_Int2D){ 0, 0, },
+        (FNA3D_Vec4){ 0, 1, 1, 1, },
         1
     );
     
@@ -95,12 +90,12 @@ int main()
                 .bottomRight = { 1, 1, },
             },
             (Sprender_Quad){
-                .topLeft = { -8, -8, },
-                .topRight = { 8, -8, },
-                .bottomLeft = { -8, 8, },
-                .bottomRight = { 8, 8, },
+                .topLeft = { -w + border, -h + border, },
+                .topRight = { w - border, -h + border, },
+                .bottomLeft = { -w + border, h - border, },
+                .bottomRight = { w - border, h - border, },
             },
-            0xFFFFFFFF
+            0xFFFF0000
         );
         
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
@@ -108,6 +103,33 @@ int main()
         Sprender_RenderSprites(sprender);
         
         // Render second pass
+        Sprender_RenderMode_Load(sprender, &renderModeSub2);
+        
+        Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
+        
+        Sprender_SpriteBatch_DrawQuad(
+            &sprender->spriteBatch,
+            texture2.asset,
+            (Sprender_Quad){
+                .topLeft = { 0, 0, },
+                .topRight = { 1, 0, },
+                .bottomLeft = { 0, 1, },
+                .bottomRight = { 1, 1, },
+            },
+            (Sprender_Quad){
+                .topLeft = { -h + border, -w + border, },
+                .topRight = { h - border, -w + border, },
+                .bottomLeft = { -h + border, w - border, },
+                .bottomRight = { h - border, w - border, },
+            },
+            0xFFFF0000
+        );
+        
+        Sprender_SpriteBatch_End(&sprender->spriteBatch);
+        
+        Sprender_RenderSprites(sprender);
+        
+        // Render third pass
         Sprender_RenderMode_Load(sprender, &renderMode);
         
         Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
@@ -116,16 +138,34 @@ int main()
             &sprender->spriteBatch,
             renderModeSub.renderTarget.texture,
             (Sprender_Quad){
-                .topLeft = { 0.25f, 0.25f, },
-                .topRight = { 0.75f, 0.25f, },
-                .bottomLeft = { 0.25f, 0.75f, },
-                .bottomRight = { 0.75f, 0.75f, },
+                .topLeft = { 0, 0, },
+                .topRight = { 1, 0, },
+                .bottomLeft = { 0, 1, },
+                .bottomRight = { 1, 1, },
             },
             (Sprender_Quad){
-                .topLeft = { -48, -48, },
-                .topRight = { -24, -48, },
-                .bottomLeft = { -48, -24, },
-                .bottomRight = { -24, -24, },
+                .topLeft = { -w, -h, },
+                .topRight = { w, -h, },
+                .bottomLeft = { -w, h, },
+                .bottomRight = { w, h, },
+            },
+            0xFFFFFFFF
+        );
+        
+        Sprender_SpriteBatch_DrawQuad(
+            &sprender->spriteBatch,
+            renderModeSub2.renderTarget.texture,
+            (Sprender_Quad){
+                .topLeft = { 0, 0, },
+                .topRight = { 1, 0, },
+                .bottomLeft = { 0, 1, },
+                .bottomRight = { 1, 1, },
+            },
+            (Sprender_Quad){
+                .topLeft = { -h - 64, -w, },
+                .topRight = { h - 64, -w, },
+                .bottomLeft = { -h - 64, w, },
+                .bottomRight = { h - 64, w, },
             },
             0xFFFFFFFF
         );
@@ -145,7 +185,7 @@ int main()
                 .bottomLeft = { 32, 65, },
                 .bottomRight = { 64, 65, },
             },
-            0xFFFFFFFF
+            0xFFFF0000
         );
         //*
         Sprender_SpriteBatch_DrawQuad(
@@ -163,7 +203,7 @@ int main()
                 .bottomLeft = { 0, 8, },
                 .bottomRight = { 8, 8, },
             },
-            0xFF00FFFF
+            0xFFFFFF00
         );
         //*/
         //*

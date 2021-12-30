@@ -9,8 +9,6 @@ Sprender* Sprender_Create(
     char* windowTitle,
     int windowWidth,
     int windowHeight,
-    int resolutionWidth,
-    int resolutionHeight,
     char* driver,
     int maxSprites,
     Uint32 flags
@@ -37,6 +35,7 @@ Sprender* Sprender_Create(
     );
     
     // FNA3D create device
+    // TODO: Resizing window
     FNA3D_PresentationParameters presentationParameters;
     memset(&presentationParameters, 0, sizeof(presentationParameters));
     presentationParameters.backBufferWidth = windowWidth;
@@ -191,7 +190,6 @@ static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d)
     vertexDeclaration.elementCount = 3;
     vertexDeclaration.vertexStride = sizeof(Sprender_Vertex);
     vertexDeclaration.elements = vertexElements;
-    
     fna3d->vertexBufferBinding.vertexDeclaration = vertexDeclaration;
     
     FNA3D_SamplerState samplerState;

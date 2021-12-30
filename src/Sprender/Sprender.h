@@ -22,14 +22,13 @@ typedef struct Sprender
     Sprender_Shader shaderSpriteEffect;
     Sprender_SpriteBatch spriteBatch;
     SDL_Window* window;
+    char renderedToWindow;
 } Sprender;
 
 Sprender* Sprender_Create(
     char* windowTitle,
     int windowWidth,
     int windowHeight,
-    int resolutionWidth,
-    int resolutionHeight,
     char* driver,
     int maxSprites,
     Uint32 flags

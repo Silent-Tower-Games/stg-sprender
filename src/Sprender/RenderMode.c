@@ -49,6 +49,16 @@ Sprender_RenderMode Sprender_RenderMode_Create(
 
 void Sprender_RenderMode_Load(Sprender* sprender, Sprender_RenderMode* renderMode)
 {
+    if(renderMode->renderTarget.texture != NULL && sprender->renderedToWindow)
+    {
+        renderMode->viewport.y = sprender->fna3d.presentationParameters.backBufferHeight - renderMode->resolution.Y;
+        sprender->renderedToWindow = 0;
+    }
+    else if(renderMode->renderTarget.texture == NULL)
+    {
+        sprender->renderedToWindow = 1;
+    }
+    
     FNA3D_SetViewport(sprender->fna3d.device, &renderMode->viewport);
     
     if(renderMode->renderTarget.texture == NULL)
