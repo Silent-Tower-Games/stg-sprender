@@ -44,6 +44,12 @@ int main()
         sprender->fna3d.device,
         "assets/images/logo.png"
     );
+    Sprender_Texture textureSpriteSheet = Sprender_Texture_Load(
+        sprender->fna3d.device,
+        "assets/images/8x8.png"
+    );
+    textureSpriteSheet.tilesize.X = 8;
+    textureSpriteSheet.tilesize.Y = 8;
     
     // Render mode
     // TODO: Sprender should own the window RenderMode
@@ -68,7 +74,7 @@ int main()
         sprender->fna3d.device,
         (Sprender_Int2D){ h * 2, w * 2, },
         (Sprender_Int2D){ 0, 0, },
-        (FNA3D_Vec4){ 0, 1, 1, 1, },
+        (FNA3D_Vec4){ 0, 0, 0, 1, },
         1
     );
     
@@ -225,6 +231,14 @@ int main()
             0xFFFFFFFF
         );
         //*/
+        Sprender_SpriteBatch_DrawFrame(
+            &sprender->spriteBatch,
+            &textureSpriteSheet,
+            (Sprender_Int2D){ 2, 2, },
+            (Sprender_Float2D){ 0, 0, },
+            (Sprender_Float2D){ 10.0f, 10.0f, },
+            0xFFFFFFFF
+        );
         
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
         

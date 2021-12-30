@@ -131,6 +131,44 @@ char Sprender_SpriteBatch_DrawQuad(
     );
 }
 
+char Sprender_SpriteBatch_DrawFrame(
+    Sprender_SpriteBatch* spriteBatch,
+    Sprender_Texture* texture,
+    Sprender_Int2D frame,
+    Sprender_Float2D position,
+    Sprender_Float2D scale,
+    uint32_t color
+)
+{
+    const int tilesizeHalfX = (texture->tilesize.X / 2) * scale.X;
+    const int tilesizeHalfY = (texture->tilesize.Y / 2) * scale.Y;
+    Sprender_Quad destination = {
+        .topLeft = { position.X - (tilesizeHalfX), position.Y - (tilesizeHalfY), },
+        .topRight = { position.X + (tilesizeHalfX), position.Y - (tilesizeHalfY), },
+        .bottomLeft = { position.X - (tilesizeHalfX), position.Y + (tilesizeHalfY), },
+        .bottomRight = { position.X + (tilesizeHalfX), position.Y + (tilesizeHalfY), },
+    };
+    
+    const float tilesizeFloatX = 1.0f / ((float)texture->size.X / (float)texture->tilesize.X);
+    const float tilesizeFloatY = 1.0f / ((float)texture->size.Y / (float)texture->tilesize.Y);
+    const float frameX = frame.X * tilesizeFloatX;
+    const float frameY = frame.Y * tilesizeFloatY;
+    Sprender_Quad source = {
+        .topLeft = { frameX, frameY, },
+        .topRight = { frameX + tilesizeFloatX, frameY, },
+        .bottomLeft = { frameX, frameY + tilesizeFloatY, },
+        .bottomRight = { frameX + tilesizeFloatX, frameY + tilesizeFloatY, },
+    };
+    
+    return Sprender_SpriteBatch_DrawQuad(
+        spriteBatch,
+        texture->asset,
+        source,
+        destination,
+        color
+    );
+}
+
 void Sprender_SpriteBatch_Destroy(Sprender_SpriteBatch* spriteBatch)
 {
     free(spriteBatch->vertices);

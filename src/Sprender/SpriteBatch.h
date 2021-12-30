@@ -1,7 +1,10 @@
 #pragma once
 
 #include <FNA3D.h>
+#include "Float2D.h"
+#include "Int2D.h"
 #include "Quad.h"
+#include "Texture.h"
 #include "Vertex.h"
 
 typedef struct Sprender_SpriteBatch
@@ -35,6 +38,15 @@ char Sprender_SpriteBatch_DrawQuad(
     FNA3D_Texture* texture,
     Sprender_Quad source,
     Sprender_Quad destination,
+    uint32_t color
+);
+
+char Sprender_SpriteBatch_DrawFrame(
+    Sprender_SpriteBatch* spriteBatch,
+    Sprender_Texture* texture,
+    Sprender_Int2D frame,
+    Sprender_Float2D position,
+    Sprender_Float2D scale,
     uint32_t color
 );
 
