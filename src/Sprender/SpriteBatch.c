@@ -4,13 +4,15 @@
 #include <FNA3D.h>
 #include "SpriteBatch.h"
 
-Sprender_SpriteBatch Sprender_SpriteBatch_Create(int maxVertices)
+Sprender_SpriteBatch Sprender_SpriteBatch_Create(int maxSprites)
 {
+    const int maxVertices = maxSprites * 6;
+    
     Sprender_SpriteBatch spriteBatch = {
         .opened = 0,
         .maxVertices = maxVertices,
         .verticesThisBatch = 0,
-        .textures = malloc(sizeof(FNA3D_Texture*) * maxVertices),
+        .textures = malloc(sizeof(FNA3D_Texture*) * maxSprites),
         .vertices = malloc(sizeof(Sprender_Vertex) * maxVertices),
     };
     
@@ -52,12 +54,7 @@ char Sprender_SpriteBatch_Draw(
     
     int i = spriteBatch->verticesThisBatch;
     
-    spriteBatch->textures[i + 0] = texture;
-    spriteBatch->textures[i + 1] = texture;
-    spriteBatch->textures[i + 2] = texture;
-    spriteBatch->textures[i + 3] = texture;
-    spriteBatch->textures[i + 4] = texture;
-    spriteBatch->textures[i + 5] = texture;
+    spriteBatch->textures[i / 6] = texture;
     
     spriteBatch->vertices[i + 0] = vertex0;
     spriteBatch->vertices[i + 1] = vertex1;

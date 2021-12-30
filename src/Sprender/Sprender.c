@@ -60,7 +60,7 @@ Sprender* Sprender_Create(
     Sprender_FNA3D_SetValues(&sprender->fna3d);
     
     // Create SpriteBatch
-    sprender->spriteBatch = Sprender_SpriteBatch_Create(sprender->maxSprites * 6);
+    sprender->spriteBatch = Sprender_SpriteBatch_Create(sprender->maxSprites);
     
     // Create default render mode
     sprender->defaultRenderMode = Sprender_RenderMode_Create(
@@ -76,6 +76,7 @@ Sprender* Sprender_Create(
 
 void Sprender_Open(Sprender* sprender)
 {
+    assert(0);
 }
 
 void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMode)
@@ -171,9 +172,12 @@ void Sprender_RenderSprites(Sprender* sprender)
     // Can't set vertex buffer until we know how many vertices there are this frame, so it
     // must be O(n^2) worst-case.
     // FIXME: i += 6? i += 3?
-    for(int i = 0; i < sprender->spriteBatch.verticesThisBatch; i++)
+    int t;
+    for(int i = 0; i < sprender->spriteBatch.verticesThisBatch; i += 6)
     {
-        if(thisTexture == NULL || thisTexture != sprender->spriteBatch.textures[i])
+        t = i / 6;
+        
+        if(thisTexture == NULL || thisTexture != sprender->spriteBatch.textures[t])
         {
             // Do this only if we've already got vertices to draw
             if(i > 0)
@@ -188,7 +192,7 @@ void Sprender_RenderSprites(Sprender* sprender)
                 thisTextureStartsAt = i;
             }
             
-            thisTexture = sprender->spriteBatch.textures[thisTextureStartsAt];
+            thisTexture = sprender->spriteBatch.textures[t];
             
             FNA3D_VerifySampler(
                 sprender->fna3d.device,

@@ -16,7 +16,7 @@ typedef struct Sprender_SpriteBatch
     Sprender_Vertex* vertices;
 } Sprender_SpriteBatch;
 
-Sprender_SpriteBatch Sprender_SpriteBatch_Create(int maxVertices);
+Sprender_SpriteBatch Sprender_SpriteBatch_Create(int maxSprites);
 
 void Sprender_SpriteBatch_Begin(Sprender_SpriteBatch* spriteBatch);
 
