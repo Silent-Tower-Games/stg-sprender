@@ -43,6 +43,8 @@ char Sprender_SpriteBatch_Draw(
 {
     assert(spriteBatch->opened == 1);
     
+    // TODO: Sprite culling
+    
     if(spriteBatch->verticesThisBatch + 6 > spriteBatch->maxVertices)
     {
         return 0;

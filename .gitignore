@@ -1,10 +1,11 @@
 .vscode/c_cpp_properties.json
 .vscode/settings.json
 .vscode/tasks.json
-libFNA3D.so.0
 *.o
 *.so
+*.so.0
 *.a
 *.dll
+FNA3D_Vulkan_PipelineCache.blob
 main
 valgrind.txt
