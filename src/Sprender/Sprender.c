@@ -88,7 +88,7 @@ void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMod
     
     if(renderMode->renderTarget.texture != NULL && sprender->renderedToWindow)
     {
-        renderMode->viewport.y = sprender->fna3d.presentationParameters.backBufferHeight - renderMode->resolution.Y;
+        //renderMode->viewport.y = sprender->fna3d.presentationParameters.backBufferHeight - renderMode->resolution.Y;
         sprender->renderedToWindow = 0;
     }
     else if(renderMode->renderTarget.texture == NULL)
@@ -159,19 +159,13 @@ void Sprender_RenderSprites(Sprender* sprender)
         sprender->fna3d.device,
         &sprender->fna3d.vertexBufferBinding,
         1,
-        0,
+        1,
         0
     );
     
     FNA3D_Texture* thisTexture = NULL;
     int thisTextureStartsAt = 0;
     
-    // FIXME: O(n^2)! Is there any solution?
-    // Maybe textures shouldn't have a record each row, but just for each time it changes?
-    // It would still be worst-case O(n^2) but at least it wouldn't be O(n^2) every time.
-    // Can't set vertex buffer until we know how many vertices there are this frame, so it
-    // must be O(n^2) worst-case.
-    // FIXME: i += 6? i += 3?
     int t;
     for(int i = 0; i < sprender->spriteBatch.verticesThisBatch; i += 6)
     {
