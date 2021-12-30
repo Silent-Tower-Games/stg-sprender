@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdlib.h>
 #include <string.h>
 #include "RenderMode.h"
 #include "Texture.h"
@@ -45,65 +46,6 @@ Sprender_RenderMode Sprender_RenderMode_Create(
     };
     
     return renderMode;
-}
-
-void Sprender_RenderMode_Load(Sprender* sprender, Sprender_RenderMode* renderMode)
-{
-    if(renderMode->renderTarget.texture != NULL && sprender->renderedToWindow)
-    {
-        renderMode->viewport.y = sprender->fna3d.presentationParameters.backBufferHeight - renderMode->resolution.Y;
-        sprender->renderedToWindow = 0;
-    }
-    else if(renderMode->renderTarget.texture == NULL)
-    {
-        sprender->renderedToWindow = 1;
-    }
-    
-    FNA3D_SetViewport(sprender->fna3d.device, &renderMode->viewport);
-    
-    if(renderMode->renderTarget.texture == NULL)
-    {
-        FNA3D_SetRenderTargets(
-            sprender->fna3d.device,
-            NULL,
-            0,
-            NULL,
-            FNA3D_DEPTHFORMAT_NONE,
-            0
-        );
-    }
-    else
-    {
-        FNA3D_SetRenderTargets(
-            sprender->fna3d.device,
-            &renderMode->renderTarget,
-            1,
-            NULL,
-            FNA3D_DEPTHFORMAT_NONE,
-            0
-        );
-    }
-    
-    FNA3D_Clear(
-        sprender->fna3d.device,
-        FNA3D_CLEAROPTIONS_TARGET,
-        &renderMode->bgColor,
-        0,
-        0
-    );
-    
-    MOJOSHADER_effectParam* shaderMatrix = Sprender_Shader_ParamGet(&sprender->shaderSpriteEffect, "MatrixTransform");
-    assert(shaderMatrix != NULL);
-    Sprender_Camera_LoadInto(&renderMode->camera, shaderMatrix->value.values);
-    
-    MOJOSHADER_effectStateChanges stateChanges;
-    memset(&stateChanges, 0, sizeof(stateChanges));
-    FNA3D_ApplyEffect(
-        sprender->fna3d.device,
-        sprender->shaderSpriteEffect.effect,
-        0,
-        &stateChanges
-    );
 }
 
 void Sprender_RenderMode_Destroy(Sprender_RenderMode* renderMode)

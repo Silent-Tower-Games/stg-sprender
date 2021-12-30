@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <FNA3D.h>
+#include "RenderMode.h"
 #include "Shader.h"
 #include "SpriteBatch.h"
 
@@ -23,6 +24,7 @@ typedef struct Sprender
     Sprender_SpriteBatch spriteBatch;
     SDL_Window* window;
     char renderedToWindow;
+    Sprender_RenderMode defaultRenderMode;
 } Sprender;
 
 Sprender* Sprender_Create(
@@ -35,6 +37,8 @@ Sprender* Sprender_Create(
 );
 
 void Sprender_RenderSprites(Sprender* sprender);
+
+void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMode);
 
 void Sprender_Close(Sprender* sprender);
 

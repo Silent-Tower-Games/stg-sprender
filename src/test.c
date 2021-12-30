@@ -52,14 +52,6 @@ int main()
     textureSpriteSheet.tilesize.Y = 8;
     
     // Render mode
-    // TODO: Sprender should own the window RenderMode
-    Sprender_RenderMode renderMode = Sprender_RenderMode_Create(
-        sprender->fna3d.device,
-        (Sprender_Int2D){ 640, 360, },
-        (Sprender_Int2D){ 0, 0, },
-        (FNA3D_Vec4){ 1, 0, 1, 1, },
-        0
-    );
     const int w = 25;
     const int h = 125;
     const int border = 1;
@@ -74,7 +66,7 @@ int main()
         sprender->fna3d.device,
         (Sprender_Int2D){ h * 2, w * 2, },
         (Sprender_Int2D){ 0, 0, },
-        (FNA3D_Vec4){ 0, 0, 0, 1, },
+        (FNA3D_Vec4){ 1, 1, 1, 1, },
         1
     );
     
@@ -82,7 +74,7 @@ int main()
     for(int i = 0; i < 60; i++)
     {
         // Render first pass
-        Sprender_RenderMode_Load(sprender, &renderModeSub);
+        Sprender_Load_RenderMode(sprender, &renderModeSub);
         
         Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
         
@@ -109,7 +101,7 @@ int main()
         Sprender_RenderSprites(sprender);
         
         // Render second pass
-        Sprender_RenderMode_Load(sprender, &renderModeSub2);
+        Sprender_Load_RenderMode(sprender, &renderModeSub2);
         
         Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
         
@@ -136,7 +128,7 @@ int main()
         Sprender_RenderSprites(sprender);
         
         // Render third pass
-        Sprender_RenderMode_Load(sprender, &renderMode);
+        Sprender_Load_RenderMode(sprender, NULL);
         
         Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
         
@@ -236,7 +228,7 @@ int main()
             &textureSpriteSheet,
             (Sprender_Int2D){ 2, 2, },
             (Sprender_Float2D){ 0, 0, },
-            (Sprender_Float2D){ 10.0f, 10.0f, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
             0xFFFFFFFF
         );
         

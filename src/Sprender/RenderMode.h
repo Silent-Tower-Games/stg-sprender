@@ -2,7 +2,6 @@
 
 #include <FNA3D.h>
 #include "Camera.h"
-#include "Sprender.h"
 
 typedef struct Sprender_RenderMode
 {
@@ -20,7 +19,5 @@ Sprender_RenderMode Sprender_RenderMode_Create(
     FNA3D_Vec4 bgColor,
     char hasRenderTarget
 );
-
-void Sprender_RenderMode_Load(Sprender* sprender, Sprender_RenderMode* renderMode);
 
 void Sprender_RenderMode_Destroy(Sprender_RenderMode* renderMode);
