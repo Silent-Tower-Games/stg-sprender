@@ -12,19 +12,21 @@ typedef struct Sprender_SpriteBatch
     char opened;
     int maxVertices;
     int verticesThisBatch;
-    FNA3D_Texture** textures;
+    Sprender_Texture* texture;
     Sprender_Vertex* vertices;
 } Sprender_SpriteBatch;
 
 Sprender_SpriteBatch Sprender_SpriteBatch_Create(int maxSprites);
 
-void Sprender_SpriteBatch_Begin(Sprender_SpriteBatch* spriteBatch);
+void Sprender_SpriteBatch_Begin(
+    Sprender_SpriteBatch* spriteBatch,
+    Sprender_Texture* texture
+);
 
 void Sprender_SpriteBatch_End(Sprender_SpriteBatch* spriteBatch);
 
-char Sprender_SpriteBatch_Draw(
+char Sprender_SpriteBatch_Stage(
     Sprender_SpriteBatch* spriteBatch,
-    FNA3D_Texture* texture,
     Sprender_Vertex vertex0,
     Sprender_Vertex vertex1,
     Sprender_Vertex vertex2,
@@ -33,18 +35,16 @@ char Sprender_SpriteBatch_Draw(
     Sprender_Vertex vertex5
 );
 
-char Sprender_SpriteBatch_DrawQuad(
+char Sprender_SpriteBatch_StageQuad(
     Sprender_SpriteBatch* spriteBatch,
-    FNA3D_Texture* texture,
     Sprender_Quad source,
     Sprender_Quad destination,
     float depth,
     uint32_t color
 );
 
-char Sprender_SpriteBatch_DrawFrame(
+char Sprender_SpriteBatch_StageFrame(
     Sprender_SpriteBatch* spriteBatch,
-    Sprender_Texture* texture,
     Sprender_Int2D frame,
     Sprender_Float2D position,
     Sprender_Float2D scale,

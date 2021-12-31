@@ -8,8 +8,9 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
-// TODO: Texture swapping occurs explicitly in the API
 // TODO: Index buffer
+// TODO: NULL-safety
+// TODO: Comments
 
 int main()
 {
@@ -18,7 +19,7 @@ int main()
     Sprender* sprender = Sprender_Create(
         "Sprender Test",
         640, 360, // window size
-        "OpenGL",
+        "Vulkan",
         10000, // 10k sprite maximum
         0
     );
@@ -109,11 +110,13 @@ int main()
         // Render to RT
         Sprender_Load_RenderMode(sprender, &renderModeSub2);
         
-        Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
-        
-        Sprender_SpriteBatch_DrawFrame(
+        Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,
-            &textureSpriteSheet,
+            &textureSpriteSheet
+        );
+        
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
             (Sprender_Int2D){ 0, 0, },
             (Sprender_Float2D){ i / 10.0f, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
@@ -121,9 +124,8 @@ int main()
             0xFFFFFFFF
         );
         
-        Sprender_SpriteBatch_DrawFrame(
+        Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
-            &textureSpriteSheet,
             (Sprender_Int2D){ 0, 1, },
             (Sprender_Float2D){ 16, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
@@ -138,11 +140,13 @@ int main()
         // Render to backbuffer
         Sprender_Load_RenderMode(sprender, NULL);
         
-        Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
-        
-        Sprender_SpriteBatch_DrawFrame(
+        Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,
-            &textureSpriteSheet,
+            &textureSpriteSheet
+        );
+        
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
             (Sprender_Int2D){ 0, 0, },
             (Sprender_Float2D){ i, 0, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
@@ -150,9 +154,8 @@ int main()
             0xFFFFFFFF
         );
         
-        Sprender_SpriteBatch_DrawFrame(
+        Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
-            &textureSpriteSheet,
             (Sprender_Int2D){ 1, 1, },
             (Sprender_Float2D){ 16, 16, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
@@ -160,9 +163,17 @@ int main()
             0xFFFFFFFF
         );
         
-        Sprender_SpriteBatch_DrawFrame(
+        Sprender_SpriteBatch_End(&sprender->spriteBatch);
+        
+        Sprender_RenderSprites(sprender);
+        
+        Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,
-            &renderModeSub2.renderTargetTexture,
+            &renderModeSub2.renderTargetTexture
+        );
+        
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
             (Sprender_Int2D){ 0, 0, },
             (Sprender_Float2D){ -160, -80, },
             (Sprender_Float2D){ 1.0f, 1.0f, },

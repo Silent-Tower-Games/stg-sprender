@@ -171,45 +171,18 @@ void Sprender_RenderSprites(Sprender* sprender)
         0
     );
     
-    FNA3D_Texture* thisTexture = NULL;
-    int thisTextureStartsAt = 0;
-    
-    int t;
-    for(int i = 0; i < sprender->spriteBatch.verticesThisBatch; i += 6)
-    {
-        t = i / 6;
-        
-        if(thisTexture == NULL || thisTexture != sprender->spriteBatch.textures[t])
-        {
-            // Do this only if we've already got vertices to draw
-            if(i > 0)
-            {
-                FNA3D_DrawPrimitives(
-                    sprender->fna3d.device,
-                    FNA3D_PRIMITIVETYPE_TRIANGLELIST,
-                    thisTextureStartsAt,
-                    (i - thisTextureStartsAt) / 3
-                );
-                
-                thisTextureStartsAt = i;
-            }
-            
-            thisTexture = sprender->spriteBatch.textures[t];
-            
-            FNA3D_VerifySampler(
-                sprender->fna3d.device,
-                0,
-                thisTexture,
-                &sprender->fna3d.samplerState
-            );
-        }
-    }
+    FNA3D_VerifySampler(
+        sprender->fna3d.device,
+        0,
+        sprender->spriteBatch.texture->asset,
+        &sprender->fna3d.samplerState
+    );
     
     FNA3D_DrawPrimitives(
         sprender->fna3d.device,
         FNA3D_PRIMITIVETYPE_TRIANGLELIST,
-        thisTextureStartsAt,
-        (sprender->spriteBatch.verticesThisBatch - thisTextureStartsAt) / 3
+        0,
+        sprender->spriteBatch.verticesThisBatch / 3
     );
 }
 
@@ -227,7 +200,6 @@ void Sprender_Destroy(Sprender* sprender)
 {
     Sprender_RenderMode_Destroy(&sprender->defaultRenderMode);
     
-    // FNA3D Destroy
     FNA3D_AddDisposeVertexBuffer(sprender->fna3d.device, sprender->fna3d.vertexBufferBinding.vertexBuffer);
     FNA3D_DestroyDevice(sprender->fna3d.device);
     
