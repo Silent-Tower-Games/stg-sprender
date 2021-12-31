@@ -114,8 +114,8 @@ void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMod
             sprender->fna3d.device,
             &renderMode->renderTarget,
             1,
-            NULL,
-            FNA3D_DEPTHFORMAT_NONE,
+            renderMode->depthRenderbuffer,
+            FNA3D_DEPTHFORMAT_D16,
             0
         );
     }

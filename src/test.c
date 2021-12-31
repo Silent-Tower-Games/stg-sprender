@@ -8,7 +8,6 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
-// TODO: Depth in vertexes
 // TODO: Texture swapping occurs explicitly in the API
 // TODO: Index buffer
 
@@ -19,7 +18,7 @@ int main()
     Sprender* sprender = Sprender_Create(
         "Sprender Test",
         640, 360, // window size
-        "Vulkan",
+        "OpenGL",
         10000, // 10k sprite maximum
         0
     );
@@ -107,7 +106,36 @@ int main()
             break;
         }
         
-        // Render third pass
+        // Render to RT
+        Sprender_Load_RenderMode(sprender, &renderModeSub2);
+        
+        Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
+        
+        Sprender_SpriteBatch_DrawFrame(
+            &sprender->spriteBatch,
+            &textureSpriteSheet,
+            (Sprender_Int2D){ 0, 0, },
+            (Sprender_Float2D){ i / 10.0f, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0.5f,
+            0xFFFFFFFF
+        );
+        
+        Sprender_SpriteBatch_DrawFrame(
+            &sprender->spriteBatch,
+            &textureSpriteSheet,
+            (Sprender_Int2D){ 0, 1, },
+            (Sprender_Float2D){ 16, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            (i / 2) % 2,
+            0xFFFFFFFF
+        );
+        
+        Sprender_SpriteBatch_End(&sprender->spriteBatch);
+        
+        Sprender_RenderSprites(sprender);
+        
+        // Render to backbuffer
         Sprender_Load_RenderMode(sprender, NULL);
         
         Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
@@ -129,6 +157,16 @@ int main()
             (Sprender_Float2D){ 16, 16, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
             i % 2,
+            0xFFFFFFFF
+        );
+        
+        Sprender_SpriteBatch_DrawFrame(
+            &sprender->spriteBatch,
+            &renderModeSub2.renderTargetTexture,
+            (Sprender_Int2D){ 0, 0, },
+            (Sprender_Float2D){ -160, -80, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            1.0f,
             0xFFFFFFFF
         );
         
