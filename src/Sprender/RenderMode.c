@@ -46,6 +46,13 @@ Sprender_RenderMode Sprender_RenderMode_Create(
             .minDepth = 0.0f,
             .maxDepth = 1.0f,
         },
+        .depthRenderbuffer = FNA3D_GenDepthStencilRenderbuffer(
+            device,
+            resolution.X,
+            resolution.Y,
+            FNA3D_DEPTHFORMAT_D16,
+            0
+        ),
     };
     
     return renderMode;

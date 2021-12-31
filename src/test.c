@@ -8,9 +8,13 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
+// TODO: Depth in vertexes
+// TODO: Texture swapping occurs explicitly in the API
+// TODO: Index buffer
+
 int main()
 {
-    printf("Hello, World!\n");
+    printf("Hello, World! %d\n", sizeof(float));
     
     Sprender* sprender = Sprender_Create(
         "Sprender Test",
@@ -104,202 +108,29 @@ int main()
         }
         
         // Render third pass
-        Sprender_Load_RenderMode(sprender, &renderModeHuge);
-        
-        Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
-        
-        Sprender_SpriteBatch_DrawFrame(
-            &sprender->spriteBatch,
-            &textureSpriteSheet,
-            (Sprender_Int2D){ 2, 2, },
-            (Sprender_Float2D){ 0, 0, },
-            (Sprender_Float2D){ 100.0f, 100.0f, },
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        
-        Sprender_RenderSprites(sprender);
-        
-        // Render first pass
-        Sprender_Load_RenderMode(sprender, &renderModeSub);
-        
-        Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
-        
-        Sprender_SpriteBatch_DrawQuad(
-            &sprender->spriteBatch,
-            texture2.asset,
-            (Sprender_Quad){
-                .topLeft = { 0, 0, },
-                .topRight = { 1, 0, },
-                .bottomLeft = { 0, 1, },
-                .bottomRight = { 1, 1, },
-            },
-            (Sprender_Quad){
-                .topLeft = { -w + border, -h + border, },
-                .topRight = { w - border, -h + border, },
-                .bottomLeft = { -w + border, h - border, },
-                .bottomRight = { w - border, h - border, },
-            },
-            0xFFFF0000
-        );
-        
-        Sprender_SpriteBatch_DrawFrame(
-            &sprender->spriteBatch,
-            &textureSpriteSheet,
-            (Sprender_Int2D){ 0, 0, },
-            (Sprender_Float2D){ 0, 0, },
-            (Sprender_Float2D){ 1.0f, 1.0f, },
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        
-        Sprender_RenderSprites(sprender);
-        
-        // Render second pass
-        Sprender_Load_RenderMode(sprender, &renderModeSub2);
-        
-        Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
-        
-        Sprender_SpriteBatch_DrawQuad(
-            &sprender->spriteBatch,
-            texture2.asset,
-            (Sprender_Quad){
-                .topLeft = { 0, 0, },
-                .topRight = { 1, 0, },
-                .bottomLeft = { 0, 1, },
-                .bottomRight = { 1, 1, },
-            },
-            (Sprender_Quad){
-                .topLeft = { -h + border, -w + border, },
-                .topRight = { h - border, -w + border, },
-                .bottomLeft = { -h + border, w - border, },
-                .bottomRight = { h - border, w - border, },
-            },
-            0xFFFF0000
-        );
-        
-        Sprender_SpriteBatch_DrawFrame(
-            &sprender->spriteBatch,
-            &textureSpriteSheet,
-            (Sprender_Int2D){ 0, 0, },
-            (Sprender_Float2D){ 0, 0, },
-            (Sprender_Float2D){ 1.0f, 1.0f, },
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        
-        Sprender_RenderSprites(sprender);
-        
-        // Render fourth pass
         Sprender_Load_RenderMode(sprender, NULL);
         
         Sprender_SpriteBatch_Begin(&sprender->spriteBatch);
         
-        Sprender_SpriteBatch_DrawQuad(
-            &sprender->spriteBatch,
-            renderModeSub.renderTarget.texture,
-            (Sprender_Quad){
-                .topLeft = { 0, 0, },
-                .topRight = { 1, 0, },
-                .bottomLeft = { 0, 1, },
-                .bottomRight = { 1, 1, },
-            },
-            (Sprender_Quad){
-                .topLeft = { -w, -h, },
-                .topRight = { w, -h, },
-                .bottomLeft = { -w, h, },
-                .bottomRight = { w, h, },
-            },
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_DrawQuad(
-            &sprender->spriteBatch,
-            renderModeSub2.renderTarget.texture,
-            (Sprender_Quad){
-                .topLeft = { 0, 0, },
-                .topRight = { 1, 0, },
-                .bottomLeft = { 0, 1, },
-                .bottomRight = { 1, 1, },
-            },
-            (Sprender_Quad){
-                .topLeft = { -h - 64, -w - 64, },
-                .topRight = { h - 64, -w - 64, },
-                .bottomLeft = { -h - 64, w - 64, },
-                .bottomRight = { h - 64, w - 64, },
-            },
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_DrawQuad(
-            &sprender->spriteBatch,
-            texture.asset,
-            (Sprender_Quad){
-                .topLeft = { 0.25f, 0.25f, },
-                .topRight = { 0.75f, 0.25f, },
-                .bottomLeft = { 0.25f, 0.75f, },
-                .bottomRight = { 0.75f, 0.75f, },
-            },
-            (Sprender_Quad){
-                .topLeft = { 32, 33, },
-                .topRight = { 64, 33, },
-                .bottomLeft = { 32, 65, },
-                .bottomRight = { 64, 65, },
-            },
-            0xFFFF0000
-        );
-        /*
-        Sprender_SpriteBatch_DrawQuad(
-            &sprender->spriteBatch,
-            texture2.asset,
-            (Sprender_Quad){
-                .topLeft = { 0, 0, },
-                .topRight = { 1, 0, },
-                .bottomLeft = { 0, 1, },
-                .bottomRight = { 1, 1, },
-            },
-            (Sprender_Quad){
-                .topLeft = { 0, 0, },
-                .topRight = { 8, 0, },
-                .bottomLeft = { 0, 8, },
-                .bottomRight = { 8, 8, },
-            },
-            0xFFFFFF00
-        );
-        //*/
-        //*
-        Sprender_SpriteBatch_DrawQuad(
-            &sprender->spriteBatch,
-            textureLogo.asset,
-            (Sprender_Quad){
-                .topLeft = { 0, 0, },
-                .topRight = { 1, 0, },
-                .bottomLeft = { 0, 1, },
-                .bottomRight = { 1, 1, },
-            },
-            (Sprender_Quad){
-                .topLeft = { 64, 64, },
-                .topRight = { 256, 64, },
-                .bottomLeft = { 64, 128, },
-                .bottomRight = { 256, 128, },
-            },
-            0xFFFFFFFF
-        );
-        //*/
-        
-        //*
         Sprender_SpriteBatch_DrawFrame(
             &sprender->spriteBatch,
-            &renderModeHuge.renderTargetTexture,
+            &textureSpriteSheet,
             (Sprender_Int2D){ 0, 0, },
-            (Sprender_Float2D){ -128, 80, },
-            (Sprender_Float2D){ 0.1f, 0.1f, },
+            (Sprender_Float2D){ i, 0, },
+            (Sprender_Float2D){ 8.0f, 8.0f, },
+            0.5f,
             0xFFFFFFFF
         );
-        //*/
+        
+        Sprender_SpriteBatch_DrawFrame(
+            &sprender->spriteBatch,
+            &textureSpriteSheet,
+            (Sprender_Int2D){ 1, 1, },
+            (Sprender_Float2D){ 16, 16, },
+            (Sprender_Float2D){ 8.0f, 8.0f, },
+            i % 2,
+            0xFFFFFFFF
+        );
         
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
         

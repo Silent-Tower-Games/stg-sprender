@@ -73,6 +73,7 @@ char Sprender_SpriteBatch_DrawQuad(
     FNA3D_Texture* texture,
     Sprender_Quad source,
     Sprender_Quad destination,
+    float depth,
     uint32_t color
 )
 {
@@ -84,6 +85,7 @@ char Sprender_SpriteBatch_DrawQuad(
             .color = color,
             .x = destination.topLeft.X,
             .y = destination.topLeft.Y,
+            .z = depth,
             .u = source.topLeft.X,
             .v = source.topLeft.Y,
         },
@@ -92,6 +94,7 @@ char Sprender_SpriteBatch_DrawQuad(
             .color = color,
             .x = destination.topRight.X,
             .y = destination.topRight.Y,
+            .z = depth,
             .u = source.topRight.X,
             .v = source.topRight.Y,
         },
@@ -100,6 +103,7 @@ char Sprender_SpriteBatch_DrawQuad(
             .color = color,
             .x = destination.bottomRight.X,
             .y = destination.bottomRight.Y,
+            .z = depth,
             .u = source.bottomRight.X,
             .v = source.bottomRight.Y,
         },
@@ -108,6 +112,7 @@ char Sprender_SpriteBatch_DrawQuad(
             .color = color,
             .x = destination.bottomRight.X,
             .y = destination.bottomRight.Y,
+            .z = depth,
             .u = source.bottomRight.X,
             .v = source.bottomRight.Y,
         },
@@ -116,6 +121,7 @@ char Sprender_SpriteBatch_DrawQuad(
             .color = color,
             .x = destination.bottomLeft.X,
             .y = destination.bottomLeft.Y,
+            .z = depth,
             .u = source.bottomLeft.X,
             .v = source.bottomLeft.Y,
         },
@@ -124,6 +130,7 @@ char Sprender_SpriteBatch_DrawQuad(
             .color = color,
             .x = destination.topLeft.X,
             .y = destination.topLeft.Y,
+            .z = depth,
             .u = source.topLeft.X,
             .v = source.topLeft.Y,
         }
@@ -136,6 +143,7 @@ char Sprender_SpriteBatch_DrawFrame(
     Sprender_Int2D frame,
     Sprender_Float2D position,
     Sprender_Float2D scale,
+    float depth,
     uint32_t color
 )
 {
@@ -164,6 +172,7 @@ char Sprender_SpriteBatch_DrawFrame(
         texture->asset,
         source,
         destination,
+        depth,
         color
     );
 }

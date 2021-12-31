@@ -45,6 +45,7 @@ Sprender* Sprender_Create(
     presentationParameters.deviceWindowHandle = sprender->window;
     presentationParameters.backBufferFormat = FNA3D_SURFACEFORMAT_COLOR;
     presentationParameters.presentationInterval = FNA3D_PRESENTINTERVAL_IMMEDIATE; // vsync is _DEFAULT, not _IMMEDIATE
+    presentationParameters.depthStencilFormat = FNA3D_DEPTHFORMAT_D16;
     sprender->fna3d.presentationParameters = presentationParameters;
     
     sprender->fna3d.device = FNA3D_CreateDevice(&sprender->fna3d.presentationParameters, 0);
@@ -96,16 +97,14 @@ void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMod
         sprender->renderedToWindow = 1;
     }
     
-    FNA3D_SetViewport(sprender->fna3d.device, &renderMode->viewport);
-    
     if(renderMode->renderTarget.texture == NULL)
     {
         FNA3D_SetRenderTargets(
             sprender->fna3d.device,
             NULL,
             0,
-            NULL,
-            FNA3D_DEPTHFORMAT_NONE,
+            renderMode->depthRenderbuffer,
+            FNA3D_DEPTHFORMAT_D16,
             0
         );
     }
@@ -121,9 +120,18 @@ void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMod
         );
     }
     
+    FNA3D_SetViewport(sprender->fna3d.device, &renderMode->viewport);
+    
     FNA3D_Clear(
         sprender->fna3d.device,
         FNA3D_CLEAROPTIONS_TARGET,
+        &renderMode->bgColor,
+        0,
+        0
+    );
+    FNA3D_Clear(
+        sprender->fna3d.device,
+        FNA3D_CLEAROPTIONS_DEPTHBUFFER,
         &renderMode->bgColor,
         0,
         0
@@ -253,13 +261,13 @@ static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d)
     FNA3D_VertexElement* vertexElements = fna3d->vertexElements;
     vertexElements[0].offset = 0;
     vertexElements[0].usageIndex = 0;
-    vertexElements[0].vertexElementFormat = FNA3D_VERTEXELEMENTFORMAT_VECTOR2;
+    vertexElements[0].vertexElementFormat = FNA3D_VERTEXELEMENTFORMAT_VECTOR3;
     vertexElements[0].vertexElementUsage = FNA3D_VERTEXELEMENTUSAGE_POSITION;
-    vertexElements[1].offset = sizeof(float) * 2;
+    vertexElements[1].offset = sizeof(float) * 3;
     vertexElements[1].usageIndex = 0;
     vertexElements[1].vertexElementFormat = FNA3D_VERTEXELEMENTFORMAT_VECTOR2;
     vertexElements[1].vertexElementUsage = FNA3D_VERTEXELEMENTUSAGE_TEXTURECOORDINATE;
-    vertexElements[2].offset = sizeof(float) * 4;
+    vertexElements[2].offset = sizeof(float) * 5;
     vertexElements[2].usageIndex = 0;
     vertexElements[2].vertexElementFormat = FNA3D_VERTEXELEMENTFORMAT_COLOR;
     vertexElements[2].vertexElementUsage = FNA3D_VERTEXELEMENTUSAGE_COLOR;
@@ -284,10 +292,12 @@ static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d)
     
     FNA3D_DepthStencilState depthStencilState;
     memset(&depthStencilState, 0, sizeof(depthStencilState));
-    depthStencilState.depthBufferEnable = 0;
-    depthStencilState.stencilEnable = 0;
+    depthStencilState.depthBufferEnable = 1;
+    depthStencilState.depthBufferFunction = FNA3D_COMPAREFUNCTION_GREATEREQUAL;
+    depthStencilState.stencilEnable = 1;
+    depthStencilState.depthBufferWriteEnable = 1;
     FNA3D_SetDepthStencilState(fna3d->device, &depthStencilState);
-
+    
     FNA3D_RasterizerState rasterizerState;
     rasterizerState.cullMode = FNA3D_CULLMODE_NONE;
     rasterizerState.fillMode = FNA3D_FILLMODE_SOLID;

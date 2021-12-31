@@ -12,6 +12,7 @@ typedef struct Sprender_RenderMode
     FNA3D_RenderTargetBinding renderTarget;
     Sprender_Texture renderTargetTexture;
     FNA3D_Viewport viewport;
+    FNA3D_Renderbuffer* depthRenderbuffer;
 } Sprender_RenderMode;
 
 Sprender_RenderMode Sprender_RenderMode_Create(

@@ -38,6 +38,7 @@ char Sprender_SpriteBatch_DrawQuad(
     FNA3D_Texture* texture,
     Sprender_Quad source,
     Sprender_Quad destination,
+    float depth,
     uint32_t color
 );
 
@@ -47,6 +48,7 @@ char Sprender_SpriteBatch_DrawFrame(
     Sprender_Int2D frame,
     Sprender_Float2D position,
     Sprender_Float2D scale,
+    float depth,
     uint32_t color
 );
 
