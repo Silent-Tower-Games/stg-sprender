@@ -63,8 +63,6 @@ char Sprender_SpriteBatch_Stage(
 {
     assert(spriteBatch->opened == 1);
     
-    // TODO: Sprite culling
-    
     if(spriteBatch->indicesThisBatch + 6 > spriteBatch->maxIndices)
     {
         return 0;

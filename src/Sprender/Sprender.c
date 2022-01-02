@@ -65,8 +65,6 @@ Sprender* Sprender_Create(
 void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscreen)
 {
     // FNA3D create device
-    // TODO: Resizing window
-    // TODO: Fullscreen
     FNA3D_PresentationParameters presentationParameters;
     memset(&presentationParameters, 0, sizeof(presentationParameters));
     presentationParameters.backBufferWidth = windowSize.X;

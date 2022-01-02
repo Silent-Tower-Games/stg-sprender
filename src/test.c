@@ -9,7 +9,6 @@
 #include "Sprender/Texture.h"
 
 // TODO: Shaders for rendermode
-// TODO: Sprite culling
 // TODO: NULL-safety
 // TODO: Comments
 
@@ -167,7 +166,7 @@ int main()
         
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
-            (Sprender_Int2D){ 0, 0, },
+            (Sprender_Int2D){ (i / 30) % 2, 0, },
             (Sprender_Float2D){ i, 0, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
             0.75f,
