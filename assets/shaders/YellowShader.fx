@@ -1,4 +1,5 @@
 Texture2D SpriteTexture;
+float magnitude;
 
 sampler2D SpriteTextureSampler = sampler_state
 {
@@ -16,7 +17,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float4 color = tex2D(SpriteTextureSampler, input.TextureCoordinates) * input.Color;
 	
-	color.b = 0;
+	color.b *= magnitude;
 	
 	return color;
 }

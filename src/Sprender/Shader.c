@@ -60,3 +60,22 @@ MOJOSHADER_effectParam* Sprender_Shader_ParamGet(Sprender_Shader* shader, const 
     
     return NULL;
 }
+
+char Sprender_Shader_ParamCopy(Sprender_Shader* shader, const char* key, void* payload, size_t size)
+{
+    MOJOSHADER_effectParam* param = Sprender_Shader_ParamGet(shader, key);
+    
+    if(param == NULL)
+    {
+        return 0;
+    }
+    
+    memcpy(param->value.values, payload, size);
+    
+    return 1;
+}
+
+void Sprender_Shader_Free(FNA3D_Device* device, Sprender_Shader* shader)
+{
+    FNA3D_AddDisposeEffect(device, shader->effect);
+}

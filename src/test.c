@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include "Sprender/Camera.h"
@@ -11,8 +12,16 @@
 // TODO: NULL-safety
 // TODO: Comments
 
+int yellowTicker = 0;
 char shouldBeYellow(Sprender_Shader* shader)
 {
+    float magnitude = fabs(sin((float)yellowTicker / 50));
+    printf("%1.2f\n", magnitude);
+    
+    yellowTicker++;
+    
+    Sprender_Shader_ParamCopy(shader, "magnitude", &magnitude, sizeof(float));
+    
     return 1;
 }
 
@@ -249,7 +258,7 @@ int main()
             (Sprender_Float2D){ 0, 0, },
             (Sprender_Float2D){ 1000.0f, 1000.0f, },
             0.0f,
-            0xFF999999
+            0xFF990000
         );
         
         Sprender_SpriteBatch_End(&sprender->spriteBatch);

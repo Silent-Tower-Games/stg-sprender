@@ -27,3 +27,7 @@ Sprender_Shader Sprender_Shader_Load(
 );
 
 MOJOSHADER_effectParam* Sprender_Shader_ParamGet(Sprender_Shader* shader, const char* key);
+
+char Sprender_Shader_ParamCopy(Sprender_Shader* shader, const char* key, void* payload, size_t size);
+
+void Sprender_Shader_Free(FNA3D_Device* device, Sprender_Shader* shader);
