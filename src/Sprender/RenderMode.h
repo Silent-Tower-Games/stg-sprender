@@ -36,6 +36,7 @@ Sprender_RenderMode Sprender_RenderMode_Create(
 /**
  * @brief Free all memory allocated by the render mode.
  * 
+ * @param device FNA3D device
  * @param renderMode your render mode
  */
-void Sprender_RenderMode_Destroy(Sprender_RenderMode* renderMode);
+void Sprender_RenderMode_Destroy(FNA3D_Device* device, Sprender_RenderMode* renderMode);

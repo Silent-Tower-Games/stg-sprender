@@ -80,3 +80,8 @@ Sprender_Texture Sprender_Texture_Load(FNA3D_Device* device, const char* filenam
     
     return texture;
 }
+
+void Sprender_Texture_Destroy(FNA3D_Device* device, Sprender_Texture* texture)
+{
+    FNA3D_AddDisposeTexture(device, texture->asset);
+}

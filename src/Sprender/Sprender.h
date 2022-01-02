@@ -34,6 +34,7 @@ typedef struct Sprender
  * @param windowTitle the window's title string, to appear in the title bar
  * @param windowSize width & height of the window
  * @param resolution the game's resolution
+ * @param spriteEffectShaderFilename location of the SpriteEffect.fxb shader file
  * @param driver optionally give a preferred graphics driver; "OpenGL", "Vulkan", "DirectX", or "Metal"
  * @param maxSprites maximum number of sprites allowed; this memory will be pre-allocated
  * @param flags additional to pass to SDL_Init. `SDL_INIT_VIDEO` is already being used
@@ -43,6 +44,7 @@ Sprender* Sprender_Create(
     char* windowTitle,
     Sprender_Int2D windowSize,
     Sprender_Int2D resolution,
+    char* spriteEffectShaderFilename,
     char* driver,
     int maxSprites,
     Uint32 flags

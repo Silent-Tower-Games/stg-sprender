@@ -9,42 +9,34 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
-int yellowTicker = 0;
-char shouldBeYellow(Sprender_Shader* shader)
-{
-    float magnitude = fabs(sin((float)yellowTicker / 100));
-    
-    yellowTicker++;
-    
-    Sprender_Shader_ParamCopy(shader, "magnitude", &magnitude, sizeof(float));
-    
-    return 1;
-}
+// TODO: Destroy functions for everything; valgrind, etc
+
+/**
+ * @brief Example of a shader callable function. Fades the screen into yellow & back to normal.
+ * 
+ * @param shader the shader that this function is applied to
+ * @return char returns 1 to use shader this frame, 0 to skip it
+ */
+char yellowShaderStep(Sprender_Shader* shader);
 
 int main()
 {
+    printf("Hello, World!\n");
+    
     Sprender* sprender = Sprender_Create(
         "Sprender Example",
         (Sprender_Int2D){ 960, 540, }, // window size
         (Sprender_Int2D){ 320, 180, }, // game resolution
+        "assets/shaders/SpriteEffect.fxb", // SpriteEffect filename
         NULL, // let FNA3D choose the graphics driver
         10000, // 10k sprite maximum
         0 // not passing in any SDL flags
     );
     
-    Sprender_Shader shader = Sprender_Shader_Load(sprender->fna3d.device, "assets/shaders/SpriteEffect.fxb", NULL);
-    sprender->shaderSpriteEffect = shader;
+    // YellowShader.fx
+    Sprender_Shader shaderYellow = Sprender_Shader_Load(sprender->fna3d.device, "assets/shaders/YellowShader.fxb", yellowShaderStep);
     
-    Sprender_Shader shaderYellow = Sprender_Shader_Load(sprender->fna3d.device, "assets/shaders/YellowShader.fxb", shouldBeYellow);
-    
-    Sprender_Texture texture = Sprender_Texture_NewBlank(
-        sprender->fna3d.device,
-        (FNA3D_Vec4){ 1, 0, 1, 0.5f, },
-        32,
-        16,
-        0
-    );
-    Sprender_Texture texture2 = Sprender_Texture_NewBlank(
+    Sprender_Texture textureBlankWhite = Sprender_Texture_NewBlank(
         sprender->fna3d.device,
         (FNA3D_Vec4){ 1, 1, 1, 1, },
         16,
@@ -59,45 +51,28 @@ int main()
         sprender->fna3d.device,
         "assets/images/8x8.png"
     );
+    // Set the tile size of the sprite sheet
     textureSpriteSheet.tilesize.X = 8;
     textureSpriteSheet.tilesize.Y = 8;
     
     // Render mode
     const int w = 6;
     const int h = 32;
-    const int border = 1;
-    Sprender_RenderMode renderModeSub = Sprender_RenderMode_Create(
-        sprender->fna3d.device,
-        (Sprender_Int2D){ w * 2, h * 2, },
-        (Sprender_Int2D){ 0, 0, },
-        (FNA3D_Vec4){ 0, 1, 0, 1, },
-        1
-    );
-    Sprender_RenderMode renderModeSub2 = Sprender_RenderMode_Create(
+    Sprender_RenderMode renderModeTest = Sprender_RenderMode_Create(
         sprender->fna3d.device,
         (Sprender_Int2D){ h * 2, w * 2, },
         (Sprender_Int2D){ 0, 0, },
         (FNA3D_Vec4){ 1, 1, 1, 1, },
         1
     );
-    Sprender_RenderMode renderModeHuge = Sprender_RenderMode_Create(
-        sprender->fna3d.device,
-        (Sprender_Int2D){ 1024, 1024, },
-        (Sprender_Int2D){ 0, 0, },
-        (FNA3D_Vec4){ 0, 1, 1, 1, },
-        1
-    );
     
-    Sprender_Float2D position = {
-        .X = 0,
-        .Y = 0,
-    };
-    
-    // We're gonna render this many frames
     char quit = 0;
     char isFullscreen = 0;
-    for(int i = 0; i > -60; i++)
+    int i = 0;
+    while(1)
     {
+        i++;
+        
         SDL_Event event;
         while(SDL_PollEvent(&event))
         {
@@ -131,11 +106,10 @@ int main()
             break;
         }
         
-        //*
         // Render to RT
         Sprender_Load(
             sprender,
-            &renderModeSub2,
+            &renderModeTest,
             NULL,
             0
         );
@@ -222,7 +196,7 @@ int main()
         
         Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,
-            &renderModeSub2.renderTargetTexture
+            &renderModeTest.renderTargetTexture
         );
         
         Sprender_SpriteBatch_StageFrame(
@@ -240,7 +214,7 @@ int main()
         
         Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,
-            &texture2
+            &textureBlankWhite
         );
         
         Sprender_SpriteBatch_StageFrame(
@@ -255,14 +229,28 @@ int main()
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
         
         Sprender_RenderSprites(sprender);
-        //*/
         
         Sprender_Close(sprender);
         
         SDL_Delay(16);
     }
     
+    Sprender_Shader_Destroy(sprender->fna3d.device, &shaderYellow);
+    Sprender_Texture_Destroy(sprender->fna3d.device, &textureBlankWhite);
+    Sprender_Texture_Destroy(sprender->fna3d.device, &textureSpriteSheet);
+    Sprender_Texture_Destroy(sprender->fna3d.device, &textureLogo);
+    Sprender_RenderMode_Destroy(sprender->fna3d.device, &renderModeTest);
     Sprender_Destroy(sprender);
     
     return 0;
+}
+
+int yellowShaderStep_Ticker = 0;
+char yellowShaderStep(Sprender_Shader* shader)
+{
+    float magnitude = fabs(sin((float)(++yellowShaderStep_Ticker) / 100));
+    
+    Sprender_Shader_ParamCopy(shader, "magnitude", &magnitude, sizeof(float));
+    
+    return 1;
 }

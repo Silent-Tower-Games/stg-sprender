@@ -59,9 +59,9 @@ Sprender_RenderMode Sprender_RenderMode_Create(
     return renderMode;
 }
 
-void Sprender_RenderMode_Destroy(Sprender_RenderMode* renderMode)
+void Sprender_RenderMode_Destroy(FNA3D_Device* device, Sprender_RenderMode* renderMode)
 {
     assert(renderMode != NULL);
     
-    free(renderMode->renderTarget.texture);
+    Sprender_Texture_Destroy(device, &renderMode->renderTargetTexture);
 }

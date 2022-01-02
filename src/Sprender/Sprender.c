@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <FNA3D.h>
 #include <math.h>
 #include "Int2D.h"
@@ -12,6 +13,7 @@ Sprender* Sprender_Create(
     char* windowTitle,
     Sprender_Int2D windowSize,
     Sprender_Int2D resolution,
+    char* spriteEffectShaderFilename,
     char* driver,
     int maxSprites,
     Uint32 flags
@@ -61,6 +63,9 @@ Sprender* Sprender_Create(
     // Create SpriteBatch
     sprender->spriteBatch = Sprender_SpriteBatch_Create(sprender->maxSprites);
     
+    // Load SpriteEffect shader
+    sprender->shaderSpriteEffect = Sprender_Shader_Load(sprender->fna3d.device, spriteEffectShaderFilename, NULL);
+    
     return sprender;
 }
 
@@ -98,7 +103,7 @@ void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscr
     }
     
     // Create default render mode
-    Sprender_RenderMode_Destroy(&sprender->defaultRenderMode);
+    Sprender_RenderMode_Destroy(sprender->fna3d.device, &sprender->defaultRenderMode);
     const Sprender_Int2D resolutionOffBy = {
         .X = windowSize.X % sprender->resolution.X,
         .Y = windowSize.Y % sprender->resolution.Y,
@@ -264,7 +269,7 @@ void Sprender_Destroy(Sprender* sprender)
 {
     assert(sprender != NULL);
     
-    Sprender_RenderMode_Destroy(&sprender->defaultRenderMode);
+    Sprender_RenderMode_Destroy(sprender->fna3d.device, &sprender->defaultRenderMode);
     
     FNA3D_AddDisposeIndexBuffer(sprender->fna3d.device, sprender->fna3d.indexBuffer);
     FNA3D_AddDisposeVertexBuffer(sprender->fna3d.device, sprender->fna3d.vertexBufferBinding.vertexBuffer);

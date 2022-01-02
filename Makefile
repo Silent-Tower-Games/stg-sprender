@@ -52,7 +52,7 @@ clean:
 
 .PHONY=valgrind
 valgrind:
-	valgrind ./main -v --leak-check=full 2> valgrind.txt
+	valgrind ./main --leak-check=full 1> valgrind.txt
 
 .PHONY=apitrace
 apitrace:

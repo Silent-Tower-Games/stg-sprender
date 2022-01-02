@@ -88,7 +88,7 @@ char Sprender_Shader_ParamCopy(Sprender_Shader* shader, const char* key, void* p
     return 1;
 }
 
-void Sprender_Shader_Free(FNA3D_Device* device, Sprender_Shader* shader)
+void Sprender_Shader_Destroy(FNA3D_Device* device, Sprender_Shader* shader)
 {
     assert(device != NULL);
     assert(shader != NULL);

@@ -56,3 +56,11 @@ Sprender_Texture Sprender_Texture_NewBlank(
  * @return Sprender_Texture newly loaded texture
  */
 Sprender_Texture Sprender_Texture_Load(FNA3D_Device* device, const char* filename);
+
+/**
+ * @brief Free all memory loaded by the texture.
+ * 
+ * @param device FNA3D device
+ * @param texture your texture
+ */
+void Sprender_Texture_Destroy(FNA3D_Device* device, Sprender_Texture* texture);
