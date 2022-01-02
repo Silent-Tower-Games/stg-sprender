@@ -200,7 +200,7 @@ void Sprender_RenderSprites(Sprender* sprender)
         sprender->fna3d.indexBuffer,
         0,
         sprender->spriteBatch.indices,
-        sizeof(Sprender_Vertex) * sprender->spriteBatch.indicesThisBatch,
+        sizeof(int) * sprender->spriteBatch.indicesThisBatch,
         FNA3D_SETDATAOPTIONS_DISCARD
     );
     FNA3D_ApplyVertexBufferBindings(
@@ -220,14 +220,14 @@ void Sprender_RenderSprites(Sprender* sprender)
     
     FNA3D_DrawIndexedPrimitives(
         sprender->fna3d.device,
-        FNA3D_PRIMITIVETYPE_TRIANGLELIST,
-        0,
-        sprender->spriteBatch.verticesThisBatch,
-        0,
-        sprender->spriteBatch.verticesThisBatch / 4,
-        sprender->spriteBatch.indicesThisBatch,
-        sprender->fna3d.indexBuffer,
-        sizeof(int)
+        FNA3D_PRIMITIVETYPE_TRIANGLELIST, // primitiveType: The primitive topology of the vertex data.
+        0, // baseVertex: The starting offset to read from the vertex buffer.
+        0, // minVertexIndex: The lowest index value expected from the index buffer.
+        sprender->spriteBatch.verticesThisBatch, // numVertices: The highest offset expected from the index buffer.
+        0, // startIndex: The starting offset to read from the index buffer.
+        sprender->spriteBatch.verticesThisBatch / 3, // primitiveCount: The number of primitives to draw.
+        sprender->fna3d.indexBuffer, // indices: The index buffer to bind for this draw call.
+        FNA3D_INDEXELEMENTSIZE_32BIT // indexElementSize: The size of the index type for this index buffer.
     );
 }
 
