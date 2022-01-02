@@ -185,14 +185,6 @@ void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMod
 
 void Sprender_RenderSprites(Sprender* sprender)
 {
-    FNA3D_SetIndexBufferData(
-        sprender->fna3d.device,
-        sprender->fna3d.indexBuffer,
-        0,
-        sprender->spriteBatch.indices,
-        sizeof(Sprender_Vertex) * sprender->spriteBatch.indicesThisBatch,
-        FNA3D_SETDATAOPTIONS_DISCARD
-    );
     FNA3D_SetVertexBufferData(
         sprender->fna3d.device,
         sprender->fna3d.vertexBufferBinding.vertexBuffer,
@@ -201,6 +193,14 @@ void Sprender_RenderSprites(Sprender* sprender)
         sizeof(Sprender_Vertex) * sprender->spriteBatch.verticesThisBatch,
         1,
         1,
+        FNA3D_SETDATAOPTIONS_DISCARD
+    );
+    FNA3D_SetIndexBufferData(
+        sprender->fna3d.device,
+        sprender->fna3d.indexBuffer,
+        0,
+        sprender->spriteBatch.indices,
+        sizeof(Sprender_Vertex) * sprender->spriteBatch.indicesThisBatch,
         FNA3D_SETDATAOPTIONS_DISCARD
     );
     FNA3D_ApplyVertexBufferBindings(
