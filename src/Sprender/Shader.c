@@ -51,7 +51,11 @@ Sprender_Shader Sprender_Shader_Load(
     fread(code, 1, codeSize, effectFile);
     fclose(effectFile);
     
-    return Sprender_Shader_Create(device, code, codeSize, callable);
+    Sprender_Shader shader = Sprender_Shader_Create(device, code, codeSize, callable);
+    
+    free(code);
+    
+    return shader;
 }
 
 MOJOSHADER_effectParam* Sprender_Shader_ParamGet(Sprender_Shader* shader, const char* key)

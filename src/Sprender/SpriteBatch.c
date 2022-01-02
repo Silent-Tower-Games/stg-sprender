@@ -178,4 +178,5 @@ void Sprender_SpriteBatch_Destroy(Sprender_SpriteBatch* spriteBatch)
     assert(spriteBatch != NULL);
     
     free(spriteBatch->vertices);
+    free(spriteBatch->indices);
 }

@@ -63,5 +63,6 @@ void Sprender_RenderMode_Destroy(FNA3D_Device* device, Sprender_RenderMode* rend
 {
     assert(renderMode != NULL);
     
+    FNA3D_AddDisposeRenderbuffer(device, renderMode->depthRenderbuffer);
     Sprender_Texture_Destroy(device, &renderMode->renderTargetTexture);
 }
