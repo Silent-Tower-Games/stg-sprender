@@ -91,6 +91,7 @@ int main()
     
     // We're gonna render this many frames
     char quit = 0;
+    char isFullscreen = 0;
     for(int i = 0; i > -60; i++)
     {
         SDL_Event event;
@@ -109,7 +110,12 @@ int main()
                     {
                         case SDLK_SPACE:
                         {
-                            printf("ok\n");
+                            Sprender_Resize(sprender, (Sprender_Int2D){
+                                isFullscreen ? 640 : 1920,
+                                isFullscreen ? 360 : 1080,
+                            }, !isFullscreen);
+                            
+                            isFullscreen = !isFullscreen;
                         } break;
                     }
                 } break;

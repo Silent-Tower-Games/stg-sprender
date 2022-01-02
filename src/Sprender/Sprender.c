@@ -22,6 +22,7 @@ Sprender* Sprender_Create(
     
     Sprender* sprender = calloc(1, sizeof(Sprender));
     sprender->maxSprites = maxSprites;
+    sprender->resolution = resolution;
     
     if(driver != NULL)
     {
@@ -37,20 +38,7 @@ Sprender* Sprender_Create(
         FNA3D_PrepareWindowAttributes()
     );
     
-    // FNA3D create device
-    // TODO: Resizing window
-    // TODO: Fullscreen
-    FNA3D_PresentationParameters presentationParameters;
-    memset(&presentationParameters, 0, sizeof(presentationParameters));
-    presentationParameters.backBufferWidth = windowSize.X;
-    presentationParameters.backBufferHeight = windowSize.Y;
-    presentationParameters.deviceWindowHandle = sprender->window;
-    presentationParameters.backBufferFormat = FNA3D_SURFACEFORMAT_COLOR;
-    presentationParameters.presentationInterval = FNA3D_PRESENTINTERVAL_IMMEDIATE; // vsync is _DEFAULT, not _IMMEDIATE
-    presentationParameters.depthStencilFormat = FNA3D_DEPTHFORMAT_D16;
-    sprender->fna3d.presentationParameters = presentationParameters;
-    
-    sprender->fna3d.device = FNA3D_CreateDevice(&sprender->fna3d.presentationParameters, 0);
+    Sprender_Resize(sprender, windowSize, 0);
     
     sprender->fna3d.vertexBufferBinding.vertexBuffer = FNA3D_GenVertexBuffer(
         sprender->fna3d.device,
@@ -65,10 +53,47 @@ Sprender* Sprender_Create(
     // Create SpriteBatch
     sprender->spriteBatch = Sprender_SpriteBatch_Create(sprender->maxSprites);
     
+    return sprender;
+}
+
+void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscreen)
+{
+    // FNA3D create device
+    // TODO: Resizing window
+    // TODO: Fullscreen
+    FNA3D_PresentationParameters presentationParameters;
+    memset(&presentationParameters, 0, sizeof(presentationParameters));
+    presentationParameters.backBufferWidth = windowSize.X;
+    presentationParameters.backBufferHeight = windowSize.Y;
+    presentationParameters.deviceWindowHandle = sprender->window;
+    presentationParameters.backBufferFormat = FNA3D_SURFACEFORMAT_COLOR;
+    presentationParameters.presentationInterval = FNA3D_PRESENTINTERVAL_IMMEDIATE; // vsync is _DEFAULT, not _IMMEDIATE
+    presentationParameters.depthStencilFormat = FNA3D_DEPTHFORMAT_D16;
+    sprender->fna3d.presentationParameters = presentationParameters;
+    
+    SDL_SetWindowFullscreen(
+        sprender->window,
+        fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0
+    );
+    
+    if(sprender->fna3d.device == NULL)
+    {
+        sprender->fna3d.device = FNA3D_CreateDevice(&sprender->fna3d.presentationParameters, 0);
+    }
+    else
+    {
+        FNA3D_ResetBackbuffer(sprender->fna3d.device, &presentationParameters);
+        
+        SDL_SetWindowSize(sprender->window, windowSize.X, windowSize.Y);
+        
+        SDL_SetWindowPosition(sprender->window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    }
+    
     // Create default render mode
+    Sprender_RenderMode_Destroy(&sprender->defaultRenderMode);
     const Sprender_Int2D resolutionOffBy = {
-        .X = windowSize.X % resolution.X,
-        .Y = windowSize.Y % resolution.Y,
+        .X = windowSize.X % sprender->resolution.X,
+        .Y = windowSize.Y % sprender->resolution.Y,
     };
     sprender->defaultRenderMode = Sprender_RenderMode_Create(
         sprender->fna3d.device,
@@ -77,15 +102,8 @@ Sprender* Sprender_Create(
         (FNA3D_Vec4){ 0, 0, 0, 1, },
         0
     );
-    sprender->defaultRenderMode.camera.zoom.X = fmin(((float)windowSize.X / resolution.X), ((float)windowSize.Y / resolution.Y));
+    sprender->defaultRenderMode.camera.zoom.X = fmin(((float)windowSize.X / sprender->resolution.X), ((float)windowSize.Y / sprender->resolution.Y));
     sprender->defaultRenderMode.camera.zoom.Y = sprender->defaultRenderMode.camera.zoom.X;
-    
-    return sprender;
-}
-
-void Sprender_Open(Sprender* sprender)
-{
-    assert(0);
 }
 
 void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMode)

@@ -25,6 +25,7 @@ typedef struct Sprender
     SDL_Window* window;
     char renderedToWindow;
     Sprender_RenderMode defaultRenderMode;
+    Sprender_Int2D resolution;
 } Sprender;
 
 Sprender* Sprender_Create(
@@ -35,6 +36,8 @@ Sprender* Sprender_Create(
     int maxSprites,
     Uint32 flags
 );
+
+void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscreen);
 
 void Sprender_RenderSprites(Sprender* sprender);
 
