@@ -1,4 +1,6 @@
 #include <FNA3D.h>
+#include <math.h>
+#include "Int2D.h"
 #include "Sprender.h"
 #include "Vertex.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -8,8 +10,8 @@ static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d);
 
 Sprender* Sprender_Create(
     char* windowTitle,
-    int windowWidth,
-    int windowHeight,
+    Sprender_Int2D windowSize,
+    Sprender_Int2D resolution,
     char* driver,
     int maxSprites,
     Uint32 flags
@@ -30,8 +32,8 @@ Sprender* Sprender_Create(
         windowTitle,
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        windowWidth,
-        windowHeight,
+        windowSize.X,
+        windowSize.Y,
         FNA3D_PrepareWindowAttributes()
     );
     
@@ -40,8 +42,8 @@ Sprender* Sprender_Create(
     // TODO: Fullscreen
     FNA3D_PresentationParameters presentationParameters;
     memset(&presentationParameters, 0, sizeof(presentationParameters));
-    presentationParameters.backBufferWidth = windowWidth;
-    presentationParameters.backBufferHeight = windowHeight;
+    presentationParameters.backBufferWidth = windowSize.X;
+    presentationParameters.backBufferHeight = windowSize.Y;
     presentationParameters.deviceWindowHandle = sprender->window;
     presentationParameters.backBufferFormat = FNA3D_SURFACEFORMAT_COLOR;
     presentationParameters.presentationInterval = FNA3D_PRESENTINTERVAL_IMMEDIATE; // vsync is _DEFAULT, not _IMMEDIATE
@@ -64,13 +66,19 @@ Sprender* Sprender_Create(
     sprender->spriteBatch = Sprender_SpriteBatch_Create(sprender->maxSprites);
     
     // Create default render mode
+    const Sprender_Int2D resolutionOffBy = {
+        .X = windowSize.X % resolution.X,
+        .Y = windowSize.Y % resolution.Y,
+    };
     sprender->defaultRenderMode = Sprender_RenderMode_Create(
         sprender->fna3d.device,
-        (Sprender_Int2D){ windowWidth, windowHeight, },
-        (Sprender_Int2D){ 0, 0, },
+        (Sprender_Int2D){ windowSize.X - resolutionOffBy.X, windowSize.Y - resolutionOffBy.Y, },
+        (Sprender_Int2D){ resolutionOffBy.X / 2, resolutionOffBy.Y / 2, },
         (FNA3D_Vec4){ 0, 0, 0, 1, },
         0
     );
+    sprender->defaultRenderMode.camera.zoom.X = fmin(((float)windowSize.X / resolution.X), ((float)windowSize.Y / resolution.Y));
+    sprender->defaultRenderMode.camera.zoom.Y = sprender->defaultRenderMode.camera.zoom.X;
     
     return sprender;
 }

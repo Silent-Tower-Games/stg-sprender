@@ -29,8 +29,8 @@ typedef struct Sprender
 
 Sprender* Sprender_Create(
     char* windowTitle,
-    int windowWidth,
-    int windowHeight,
+    Sprender_Int2D windowSize,
+    Sprender_Int2D resolution,
     char* driver,
     int maxSprites,
     Uint32 flags

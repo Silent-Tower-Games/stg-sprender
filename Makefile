@@ -2,14 +2,13 @@ CC=gcc
 CFLAGS=-pedantic -O3
 INCLUDE_PATHS=
 LIBRARY_PATHS=
-LIBS=
 SDL2=`sdl2-config --libs`
 
 .PHONY=application
 application:
 	make lib
 	make objs
-	${CC} ${CFLAGS} src/test.o -o main ${SDL2} -L`pwd` ${LIBRARY_PATHS} -lsprender ${LIBS} -Wl,-rpath=./
+	${CC} ${CFLAGS} src/test.o -o main ${SDL2} -L`pwd` ${LIBRARY_PATHS} -lsprender -lFNA3D -lm -Wl,-rpath=./
 
 .PHONY=application-static
 application-static:

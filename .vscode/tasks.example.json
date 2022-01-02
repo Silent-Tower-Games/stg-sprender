@@ -7,8 +7,7 @@
             "args": [
                 "CFLAGS=\"-g -pedantic\"",
                 "INCLUDE_PATHS=\"-I/FNA3D/include -I/FNA3D/MojoShader\"",
-                "LIBRARY_PATHS=\"-L/FNA3D\"",
-                "LIBS=\"-lFNA3D\""
+                "LIBRARY_PATHS=\"-L/FNA3D\""
             ],
             "group": {
                 "kind": "build",

@@ -9,6 +9,8 @@
 #include "Sprender/Texture.h"
 
 // TODO: Index buffer
+// TODO: Resizing
+// TODO: Fullscreen
 // TODO: NULL-safety
 // TODO: Comments
 
@@ -18,8 +20,9 @@ int main()
     
     Sprender* sprender = Sprender_Create(
         "Sprender Test",
-        640, 360, // window size
-        "Vulkan",
+        (Sprender_Int2D){ 960, 540, }, // window size
+        (Sprender_Int2D){ 320, 180, }, // game resolution
+        "OpenGL",
         10000, // 10k sprite maximum
         0
     );
@@ -99,6 +102,17 @@ int main()
                 {
                     quit = 1;
                 } break;
+                
+                case SDL_KEYDOWN:
+                {
+                    switch(event.key.keysym.sym)
+                    {
+                        case SDLK_SPACE:
+                        {
+                            printf("ok\n");
+                        } break;
+                    }
+                } break;
             }
         }
         
@@ -120,7 +134,7 @@ int main()
             (Sprender_Int2D){ 0, 0, },
             (Sprender_Float2D){ i / 10.0f, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
-            0.5f,
+            0.75f,
             0xFFFFFFFF
         );
         
@@ -129,7 +143,7 @@ int main()
             (Sprender_Int2D){ 0, 1, },
             (Sprender_Float2D){ 16, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
-            (i / 2) % 2,
+            (i / 2) % 2 ? 0.5f : 1.0f,
             0xFFFFFFFF
         );
         
@@ -150,16 +164,34 @@ int main()
             (Sprender_Int2D){ 0, 0, },
             (Sprender_Float2D){ i, 0, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
-            0.5f,
+            0.75f,
             0xFFFFFFFF
         );
         
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
             (Sprender_Int2D){ 1, 1, },
-            (Sprender_Float2D){ 16, 16, },
+            (Sprender_Float2D){ 0, 0, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
-            i % 2,
+            i % 2 ? 0.5f : 1.0f,
+            0xFFFFFFFF
+        );
+        
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
+            (Sprender_Int2D){ 1, 0, },
+            (Sprender_Float2D){ -160, 16, },
+            (Sprender_Float2D){ 8.0f, 8.0f, },
+            i % 2 ? 0.5f : 1.0f,
+            0xFFFFFFFF
+        );
+        
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
+            (Sprender_Int2D){ 1, 0, },
+            (Sprender_Float2D){ -160, -90, },
+            (Sprender_Float2D){ 8.0f, 8.0f, },
+            i % 2 ? 0.5f : 1.0f,
             0xFFFFFFFF
         );
         
@@ -175,10 +207,28 @@ int main()
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
             (Sprender_Int2D){ 0, 0, },
-            (Sprender_Float2D){ -160, -80, },
+            (Sprender_Float2D){ -160, -40, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
             1.0f,
             0xFFFFFFFF
+        );
+        
+        Sprender_SpriteBatch_End(&sprender->spriteBatch);
+        
+        Sprender_RenderSprites(sprender);
+        
+        Sprender_SpriteBatch_Begin(
+            &sprender->spriteBatch,
+            &texture2
+        );
+        
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
+            (Sprender_Int2D){ 0, 0, },
+            (Sprender_Float2D){ 0, 0, },
+            (Sprender_Float2D){ 1000.0f, 1000.0f, },
+            0.0f,
+            0xFF999999
         );
         
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
