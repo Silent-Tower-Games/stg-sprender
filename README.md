@@ -90,3 +90,9 @@ int main()
 Shaders must be compiled by the `fxc.exe` tool found in the [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=8109). Alternatively, you can use `efb.exe` from [Effect-Build](https://github.com/GlaireDaggers/Effect-Build/releases/tag/v0.1).
 
 They should be written in HLSL, regardless of the platform you intended to support. FNA3D contains a library called MojoShader that takes care of cross-compatibility.
+
+# Thanks
+
+Thanks to...
+- The SDL developers
+- The FNA developers; especially cosmonaut, who contributed to the API design
