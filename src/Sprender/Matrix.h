@@ -24,8 +24,25 @@ typedef struct Sprender_Matrix
 	;
 } Sprender_Matrix;
 
+/**
+ * @brief Create an empty matrix.
+ * 
+ * @return Sprender_Matrix empty matrix
+ */
 Sprender_Matrix Sprender_Matrix_Create();
 
+/**
+ * @brief Turn your matrix into a transform (e.g. float array).
+ * 
+ * @param matrix your matrix
+ * @param transform float array pointer
+ */
 void Sprender_Matrix_ToTransform(Sprender_Matrix* matrix, float* transform);
 
+/**
+ * @brief Create a matrix from a camera object.
+ * 
+ * @param camera camera object
+ * @return Sprender_Matrix camera matrix
+ */
 Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera);

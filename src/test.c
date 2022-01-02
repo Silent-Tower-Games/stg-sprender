@@ -9,8 +9,6 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
-// TODO: Comments
-
 int yellowTicker = 0;
 char shouldBeYellow(Sprender_Shader* shader)
 {
@@ -48,7 +46,6 @@ int main()
         (FNA3D_Vec4){ 1, 0, 1, 0.5f, },
         32,
         16,
-        4,
         0
     );
     Sprender_Texture texture2 = Sprender_Texture_NewBlank(
@@ -56,7 +53,6 @@ int main()
         (FNA3D_Vec4){ 1, 1, 1, 1, },
         16,
         32,
-        4,
         0
     );
     Sprender_Texture textureLogo = Sprender_Texture_Load(

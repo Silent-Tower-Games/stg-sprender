@@ -26,7 +26,6 @@ Sprender_RenderMode Sprender_RenderMode_Create(
             (FNA3D_Vec4){ 0, 0, 0, 1, },
             resolution.X,
             resolution.Y,
-            4,
             1
         );
         

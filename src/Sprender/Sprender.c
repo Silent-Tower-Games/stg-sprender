@@ -122,7 +122,7 @@ void Sprender_Load(
 )
 {
     assert(sprender != NULL);
-    assert(shaders <= 0 || shaders != NULL);
+    assert(shadersCount <= 0 || shaders != NULL);
     
     if(renderMode == NULL)
     {
