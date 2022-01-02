@@ -95,4 +95,4 @@ They should be written in HLSL, regardless of the platform you intended to suppo
 
 Thanks to...
 - The SDL developers
-- The FNA developers; especially cosmonaut, who contributed to the API design
+- The FNA developers; especially cosmonaut, who helped with getting FNA3D working & the API design
