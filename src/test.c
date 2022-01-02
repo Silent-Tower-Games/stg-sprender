@@ -12,8 +12,7 @@
 int yellowTicker = 0;
 char shouldBeYellow(Sprender_Shader* shader)
 {
-    float magnitude = fabs(sin((float)yellowTicker / 50));
-    printf("%1.2f\n", magnitude);
+    float magnitude = fabs(sin((float)yellowTicker / 100));
     
     yellowTicker++;
     
@@ -24,18 +23,15 @@ char shouldBeYellow(Sprender_Shader* shader)
 
 int main()
 {
-    printf("Hello, World! %d\n", sizeof(float));
-    
     Sprender* sprender = Sprender_Create(
-        "Sprender Test",
+        "Sprender Example",
         (Sprender_Int2D){ 960, 540, }, // window size
         (Sprender_Int2D){ 320, 180, }, // game resolution
-        "OpenGL",
+        NULL, // let FNA3D choose the graphics driver
         10000, // 10k sprite maximum
-        0
+        0 // not passing in any SDL flags
     );
     
-    // TODO: Test multiple shaders
     Sprender_Shader shader = Sprender_Shader_Load(sprender->fna3d.device, "assets/shaders/SpriteEffect.fxb", NULL);
     sprender->shaderSpriteEffect = shader;
     
@@ -163,7 +159,7 @@ int main()
             (Sprender_Int2D){ 0, 1, },
             (Sprender_Float2D){ 16, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
-            (i / 2) % 2 ? 0.5f : 1.0f,
+            (i / 30) % 2 ? 0.5f : 1.0f,
             0xFFFFFFFF
         );
         
@@ -198,7 +194,7 @@ int main()
             (Sprender_Int2D){ 1, 1, },
             (Sprender_Float2D){ 0, 0, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
-            i % 2 ? 0.5f : 1.0f,
+            (i / 30) % 2 ? 0.5f : 1.0f,
             0xFFFFFFFF
         );
         
@@ -207,7 +203,7 @@ int main()
             (Sprender_Int2D){ 1, 0, },
             (Sprender_Float2D){ -160, 16, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
-            i % 2 ? 0.5f : 1.0f,
+            (i / 30) % 2 ? 0.5f : 1.0f,
             0xFFFFFFFF
         );
         
@@ -216,7 +212,7 @@ int main()
             (Sprender_Int2D){ 1, 0, },
             (Sprender_Float2D){ -160, -90, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
-            i % 2 ? 0.5f : 1.0f,
+            (i / 30) % 2 ? 0.5f : 1.0f,
             0xFFFFFFFF
         );
         

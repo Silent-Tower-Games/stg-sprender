@@ -75,7 +75,7 @@ void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscr
     presentationParameters.backBufferHeight = windowSize.Y;
     presentationParameters.deviceWindowHandle = sprender->window;
     presentationParameters.backBufferFormat = FNA3D_SURFACEFORMAT_COLOR;
-    presentationParameters.presentationInterval = FNA3D_PRESENTINTERVAL_IMMEDIATE; // vsync is _DEFAULT, not _IMMEDIATE
+    presentationParameters.presentationInterval = FNA3D_PRESENTINTERVAL_IMMEDIATE;
     presentationParameters.depthStencilFormat = FNA3D_DEPTHFORMAT_D16;
     sprender->fna3d.presentationParameters = presentationParameters;
     
