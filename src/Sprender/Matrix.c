@@ -1,5 +1,6 @@
-#include "Matrix.h"
+#include <assert.h>
 #include <string.h>
+#include "Matrix.h"
 
 Sprender_Matrix Sprender_Matrix_Create()
 {
@@ -16,6 +17,9 @@ Sprender_Matrix Sprender_Matrix_Create()
 
 void Sprender_Matrix_ToTransform(Sprender_Matrix* matrix, float* transform)
 {
+    assert(matrix != NULL);
+    assert(transform != NULL);
+    
     transform[0] = matrix->M11;
     transform[1] = matrix->M12;
     transform[2] = matrix->M13;
@@ -36,6 +40,8 @@ void Sprender_Matrix_ToTransform(Sprender_Matrix* matrix, float* transform)
 
 Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
 {
+    assert(camera != NULL);
+    
     Sprender_Matrix matrix = Sprender_Matrix_Create();
     
     matrix.M11 = (2.0f / camera->resolution.X) * (camera->zoom.X);

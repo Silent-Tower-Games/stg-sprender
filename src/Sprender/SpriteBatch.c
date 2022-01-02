@@ -39,8 +39,10 @@ void Sprender_SpriteBatch_Begin(
     Sprender_Texture* texture
 )
 {
+    assert(spriteBatch != NULL);
     assert(spriteBatch->opened == 0);
     assert(texture != NULL);
+    
     spriteBatch->opened = 1;
     spriteBatch->texture = texture;
     spriteBatch->verticesThisBatch = 0;
@@ -49,7 +51,9 @@ void Sprender_SpriteBatch_Begin(
 
 void Sprender_SpriteBatch_End(Sprender_SpriteBatch* spriteBatch)
 {
+    assert(spriteBatch != NULL);
     assert(spriteBatch->opened == 1);
+    
     spriteBatch->opened = 0;
 }
 
@@ -61,6 +65,7 @@ char Sprender_SpriteBatch_Stage(
     Sprender_Vertex vertex3
 )
 {
+    assert(spriteBatch != NULL);
     assert(spriteBatch->opened == 1);
     
     if(spriteBatch->indicesThisBatch + 6 > spriteBatch->maxIndices)
@@ -170,5 +175,7 @@ char Sprender_SpriteBatch_StageFrame(
 
 void Sprender_SpriteBatch_Destroy(Sprender_SpriteBatch* spriteBatch)
 {
+    assert(spriteBatch != NULL);
+    
     free(spriteBatch->vertices);
 }

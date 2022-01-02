@@ -9,7 +9,6 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
-// TODO: NULL-safety
 // TODO: Comments
 
 int yellowTicker = 0;

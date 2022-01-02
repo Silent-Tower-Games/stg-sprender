@@ -12,6 +12,9 @@ Sprender_Shader Sprender_Shader_Create(
     char (*callable)()
 )
 {
+    assert(device != NULL);
+    assert(code != NULL);
+    
     Sprender_Shader shader;
     memset(&shader, 0, sizeof(shader));
     
@@ -34,6 +37,9 @@ Sprender_Shader Sprender_Shader_Load(
     char (*callable)(Sprender_Shader*)
 )
 {
+    assert(device != NULL);
+    assert(filename != NULL);
+    
     FILE* effectFile = fopen(filename, "rb");
     
     assert(effectFile != NULL);
@@ -50,6 +56,9 @@ Sprender_Shader Sprender_Shader_Load(
 
 MOJOSHADER_effectParam* Sprender_Shader_ParamGet(Sprender_Shader* shader, const char* key)
 {
+    assert(shader != NULL);
+    assert(key != NULL);
+    
     for(int i = 0; i < shader->data->param_count; i++)
     {
         if(strcmp(key, shader->data->params[i].value.name) == 0)
@@ -63,6 +72,10 @@ MOJOSHADER_effectParam* Sprender_Shader_ParamGet(Sprender_Shader* shader, const 
 
 char Sprender_Shader_ParamCopy(Sprender_Shader* shader, const char* key, void* payload, size_t size)
 {
+    assert(shader != NULL);
+    assert(key != NULL);
+    assert(payload != NULL);
+    
     MOJOSHADER_effectParam* param = Sprender_Shader_ParamGet(shader, key);
     
     if(param == NULL)
@@ -77,5 +90,8 @@ char Sprender_Shader_ParamCopy(Sprender_Shader* shader, const char* key, void* p
 
 void Sprender_Shader_Free(FNA3D_Device* device, Sprender_Shader* shader)
 {
+    assert(device != NULL);
+    assert(shader != NULL);
+    
     FNA3D_AddDisposeEffect(device, shader->effect);
 }

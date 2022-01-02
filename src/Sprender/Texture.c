@@ -5,8 +5,18 @@
 #include "../vendor/stb_image.h"
 #include "Texture.h"
 
-Sprender_Texture Sprender_Texture_NewFromData(FNA3D_Device* device, int width, int height, unsigned char* pixels, int channels, char isRenderTarget)
+Sprender_Texture Sprender_Texture_NewFromData(
+    FNA3D_Device* device,
+    int width,
+    int height,
+    unsigned char* pixels,
+    int channels,
+    char isRenderTarget
+)
 {
+    assert(device != NULL);
+    assert(pixels != NULL);
+    
     Sprender_Texture texture;
     memset(&texture, 0, sizeof(Sprender_Texture));
     
@@ -21,8 +31,17 @@ Sprender_Texture Sprender_Texture_NewFromData(FNA3D_Device* device, int width, i
     return texture;
 }
 
-Sprender_Texture Sprender_Texture_NewBlank(FNA3D_Device* device, FNA3D_Vec4 color, int width, int height, int channels, char isRenderTarget)
+Sprender_Texture Sprender_Texture_NewBlank(
+    FNA3D_Device* device,
+    FNA3D_Vec4 color,
+    int width,
+    int height,
+    int channels,
+    char isRenderTarget
+)
 {
+    assert(device != NULL);
+    
     size_t size = width * height * channels;
     size_t sizeWithType = sizeof(unsigned char) * size;
     
@@ -44,6 +63,9 @@ Sprender_Texture Sprender_Texture_NewBlank(FNA3D_Device* device, FNA3D_Vec4 colo
 
 Sprender_Texture Sprender_Texture_Load(FNA3D_Device* device, const char* filename)
 {
+    assert(device != NULL);
+    assert(filename != NULL);
+    
     Sprender_Int2D size;
     int channels;
     

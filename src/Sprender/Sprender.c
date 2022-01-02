@@ -17,6 +17,8 @@ Sprender* Sprender_Create(
     Uint32 flags
 )
 {
+    assert(windowTitle != NULL);
+    
     // SDL init & create window
     SDL_Init(SDL_INIT_VIDEO | flags);
     
@@ -64,6 +66,8 @@ Sprender* Sprender_Create(
 
 void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscreen)
 {
+    assert(sprender != NULL);
+    
     // FNA3D create device
     FNA3D_PresentationParameters presentationParameters;
     memset(&presentationParameters, 0, sizeof(presentationParameters));
@@ -117,6 +121,9 @@ void Sprender_Load(
     int shadersCount
 )
 {
+    assert(sprender != NULL);
+    assert(shaders <= 0 || shaders != NULL);
+    
     if(renderMode == NULL)
     {
         renderMode = &sprender->defaultRenderMode;
@@ -177,7 +184,7 @@ void Sprender_Load(
     
     for(int i = 0; i < shadersCount; i++)
     {
-        if(!shaders[i].callable(&shaders[i]))
+        if(shaders[i].callable != NULL && !shaders[i].callable(&shaders[i]))
         {
             continue;
         }
@@ -193,6 +200,8 @@ void Sprender_Load(
 
 void Sprender_RenderSprites(Sprender* sprender)
 {
+    assert(sprender != NULL);
+    
     FNA3D_SetVertexBufferData(
         sprender->fna3d.device,
         sprender->fna3d.vertexBufferBinding.vertexBuffer,
@@ -241,6 +250,8 @@ void Sprender_RenderSprites(Sprender* sprender)
 
 void Sprender_Close(Sprender* sprender)
 {
+    assert(sprender != NULL);
+    
     FNA3D_SwapBuffers(
         sprender->fna3d.device,
         NULL,
@@ -251,6 +262,8 @@ void Sprender_Close(Sprender* sprender)
 
 void Sprender_Destroy(Sprender* sprender)
 {
+    assert(sprender != NULL);
+    
     Sprender_RenderMode_Destroy(&sprender->defaultRenderMode);
     
     FNA3D_AddDisposeIndexBuffer(sprender->fna3d.device, sprender->fna3d.indexBuffer);
@@ -266,6 +279,8 @@ void Sprender_Destroy(Sprender* sprender)
 
 static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d)
 {
+    assert(fna3d != NULL);
+    
     // BlendState
     memset(&fna3d->blendState, 0, sizeof(fna3d->blendState));
     fna3d->blendState.alphaBlendFunction = FNA3D_BLENDFUNCTION_ADD;

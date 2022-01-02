@@ -11,6 +11,8 @@ Sprender_RenderMode Sprender_RenderMode_Create(
     char hasRenderTarget
 )
 {
+    assert(device);
+    
     FNA3D_RenderTargetBinding renderTargetBinding;
     memset(&renderTargetBinding, 0, sizeof(renderTargetBinding));
     
@@ -60,5 +62,7 @@ Sprender_RenderMode Sprender_RenderMode_Create(
 
 void Sprender_RenderMode_Destroy(Sprender_RenderMode* renderMode)
 {
+    assert(renderMode != NULL);
+    
     free(renderMode->renderTarget.texture);
 }
