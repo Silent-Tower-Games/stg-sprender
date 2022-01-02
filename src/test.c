@@ -8,7 +8,6 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
-// TODO: Index buffer
 // TODO: Shaders for rendermode
 // TODO: Sprite culling
 // TODO: NULL-safety
