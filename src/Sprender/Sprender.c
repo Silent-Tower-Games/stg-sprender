@@ -119,16 +119,6 @@ void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMod
         renderMode = &sprender->defaultRenderMode;
     }
     
-    if(renderMode->renderTarget.texture != NULL && sprender->renderedToWindow)
-    {
-        //renderMode->viewport.y = sprender->fna3d.presentationParameters.backBufferHeight - renderMode->resolution.Y;
-        sprender->renderedToWindow = 0;
-    }
-    else if(renderMode->renderTarget.texture == NULL)
-    {
-        sprender->renderedToWindow = 1;
-    }
-    
     if(renderMode->renderTarget.texture == NULL)
     {
         FNA3D_SetRenderTargets(
@@ -200,7 +190,7 @@ void Sprender_RenderSprites(Sprender* sprender)
         sprender->fna3d.indexBuffer,
         0,
         sprender->spriteBatch.indices,
-        sizeof(int) * sprender->spriteBatch.indicesThisBatch,
+        sizeof(uint32_t) * sprender->spriteBatch.indicesThisBatch,
         FNA3D_SETDATAOPTIONS_DISCARD
     );
     FNA3D_ApplyVertexBufferBindings(
@@ -220,14 +210,14 @@ void Sprender_RenderSprites(Sprender* sprender)
     
     FNA3D_DrawIndexedPrimitives(
         sprender->fna3d.device,
-        FNA3D_PRIMITIVETYPE_TRIANGLELIST, // primitiveType: The primitive topology of the vertex data.
-        0, // baseVertex: The starting offset to read from the vertex buffer.
-        0, // minVertexIndex: The lowest index value expected from the index buffer.
-        sprender->spriteBatch.verticesThisBatch, // numVertices: The highest offset expected from the index buffer.
-        0, // startIndex: The starting offset to read from the index buffer.
-        sprender->spriteBatch.verticesThisBatch / 3, // primitiveCount: The number of primitives to draw.
-        sprender->fna3d.indexBuffer, // indices: The index buffer to bind for this draw call.
-        FNA3D_INDEXELEMENTSIZE_32BIT // indexElementSize: The size of the index type for this index buffer.
+        FNA3D_PRIMITIVETYPE_TRIANGLELIST,
+        0,
+        0,
+        sprender->spriteBatch.verticesThisBatch,
+        0,
+        sprender->spriteBatch.verticesThisBatch / 2,
+        sprender->fna3d.indexBuffer,
+        FNA3D_INDEXELEMENTSIZE_32BIT
     );
 }
 

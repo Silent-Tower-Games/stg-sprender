@@ -24,7 +24,6 @@ typedef struct Sprender
     Sprender_Shader shaderSpriteEffect;
     Sprender_SpriteBatch spriteBatch;
     SDL_Window* window;
-    char renderedToWindow;
     Sprender_RenderMode defaultRenderMode;
     Sprender_Int2D resolution;
 } Sprender;

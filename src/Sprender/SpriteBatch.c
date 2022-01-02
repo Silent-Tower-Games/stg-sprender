@@ -28,7 +28,7 @@ Sprender_SpriteBatch Sprender_SpriteBatch_Create(int maxSprites)
         spriteBatch.indices[j + 2] = x + 2;
         spriteBatch.indices[j + 3] = x + 2;
         spriteBatch.indices[j + 4] = x + 3;
-        spriteBatch.indices[j + 5] = x + 0;
+        spriteBatch.indices[j + 5] = x + 1;
     }
     
     return spriteBatch;

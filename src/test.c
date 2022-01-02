@@ -23,7 +23,7 @@ int main()
         (Sprender_Int2D){ 960, 540, }, // window size
         (Sprender_Int2D){ 320, 180, }, // game resolution
         "OpenGL",
-        12, // 10k sprite maximum
+        10000, // 10k sprite maximum
         0
     );
     
@@ -127,7 +127,7 @@ int main()
             break;
         }
         
-        /*
+        //*
         // Render to RT
         Sprender_Load_RenderMode(sprender, &renderModeSub2);
         
@@ -242,45 +242,6 @@ int main()
         
         Sprender_RenderSprites(sprender);
         //*/
-        
-        // Render to backbuffer
-        Sprender_Load_RenderMode(sprender, NULL);
-        
-        Sprender_SpriteBatch_Begin(
-            &sprender->spriteBatch,
-            &textureSpriteSheet
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ 0, 0, },
-            (Sprender_Float2D){ 0, 0, },
-            (Sprender_Float2D){ 8.0f, 8.0f, },
-            0.75f,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ 0, 0, },
-            (Sprender_Float2D){ 100, 0, },
-            (Sprender_Float2D){ 8.0f, 8.0f, },
-            0.75f,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ 0, 0, },
-            (Sprender_Float2D){ -100, 0, },
-            (Sprender_Float2D){ 8.0f, 8.0f, },
-            0.75f,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        
-        Sprender_RenderSprites(sprender);
         
         Sprender_Close(sprender);
         
