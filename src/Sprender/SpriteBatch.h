@@ -10,10 +10,12 @@
 typedef struct Sprender_SpriteBatch
 {
     char opened;
-    int maxVertices;
+    int maxIndices;
     int verticesThisBatch;
+    int indicesThisBatch;
     Sprender_Texture* texture;
     Sprender_Vertex* vertices;
+    int* indices;
 } Sprender_SpriteBatch;
 
 Sprender_SpriteBatch Sprender_SpriteBatch_Create(int maxSprites);
@@ -30,9 +32,7 @@ char Sprender_SpriteBatch_Stage(
     Sprender_Vertex vertex0,
     Sprender_Vertex vertex1,
     Sprender_Vertex vertex2,
-    Sprender_Vertex vertex3,
-    Sprender_Vertex vertex4,
-    Sprender_Vertex vertex5
+    Sprender_Vertex vertex3
 );
 
 char Sprender_SpriteBatch_StageQuad(

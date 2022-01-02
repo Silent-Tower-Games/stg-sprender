@@ -10,6 +10,7 @@ typedef struct Sprender_FNA3D
 {
     FNA3D_Device* device;
     FNA3D_BlendState blendState;
+    FNA3D_Buffer* indexBuffer;
     FNA3D_PresentationParameters presentationParameters;
     FNA3D_SamplerState samplerState;
     FNA3D_VertexBufferBinding vertexBufferBinding;

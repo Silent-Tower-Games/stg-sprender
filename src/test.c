@@ -9,8 +9,8 @@
 #include "Sprender/Texture.h"
 
 // TODO: Index buffer
-// TODO: Resizing
-// TODO: Fullscreen
+// TODO: Shaders for rendermode
+// TODO: Sprite culling
 // TODO: NULL-safety
 // TODO: Comments
 
@@ -23,7 +23,7 @@ int main()
         (Sprender_Int2D){ 960, 540, }, // window size
         (Sprender_Int2D){ 320, 180, }, // game resolution
         "OpenGL",
-        10000, // 10k sprite maximum
+        12, // 10k sprite maximum
         0
     );
     
