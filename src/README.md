@@ -13,6 +13,7 @@ int main()
         "Sprender Example",
         (Sprender_Int2D){ 960, 540, }, // window size
         (Sprender_Int2D){ 320, 180, }, // game resolution
+        "SpriteEffect.fbx", // path to the SpriteEffect compiled shader
         NULL, // let FNA3D choose the graphics driver
               // you could also use e.g. "OpenGL", "Vulkan", etc.
         10000, // 10k sprite maximum
@@ -81,3 +82,11 @@ int main()
     return 0;
 }
 ```
+
+# How To Use
+
+## Shaders
+
+Shaders must be compiled by the `fxc.exe` tool found in the [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=8109). Alternatively, you can use `efb.exe` from [Effect-Build](https://github.com/GlaireDaggers/Effect-Build/releases/tag/v0.1).
+
+They should be written in HLSL, regardless of the platform you intended to support. FNA3D contains a library called MojoShader that takes care of cross-compatibility.
