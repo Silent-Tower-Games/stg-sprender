@@ -99,38 +99,38 @@ char Sprender_SpriteBatch_StageQuad(
         // topLeft
         (Sprender_Vertex){
             .color = color,
-            .x = destination.topLeft.X,
-            .y = destination.topLeft.Y,
+            .x = destination.left,
+            .y = destination.top,
             .z = depth,
-            .u = source.topLeft.X,
-            .v = source.topLeft.Y,
+            .u = source.left,
+            .v = source.top,
         },
         // topRight
         (Sprender_Vertex){
             .color = color,
-            .x = destination.topRight.X,
-            .y = destination.topRight.Y,
+            .x = destination.right,
+            .y = destination.top,
             .z = depth,
-            .u = source.topRight.X,
-            .v = source.topRight.Y,
+            .u = source.right,
+            .v = source.top,
         },
         // bottomLeft
         (Sprender_Vertex){
             .color = color,
-            .x = destination.bottomLeft.X,
-            .y = destination.bottomLeft.Y,
+            .x = destination.left,
+            .y = destination.bottom,
             .z = depth,
-            .u = source.bottomLeft.X,
-            .v = source.bottomLeft.Y,
+            .u = source.left,
+            .v = source.bottom,
         },
         // bottomRight
         (Sprender_Vertex){
             .color = color,
-            .x = destination.bottomRight.X,
-            .y = destination.bottomRight.Y,
+            .x = destination.right,
+            .y = destination.bottom,
             .z = depth,
-            .u = source.bottomRight.X,
-            .v = source.bottomRight.Y,
+            .u = source.right,
+            .v = source.bottom,
         }
     );
 }
@@ -147,10 +147,10 @@ char Sprender_SpriteBatch_StageFrame(
     const int tilesizeHalfX = (spriteBatch->texture->tilesize.X / 2) * scale.X;
     const int tilesizeHalfY = (spriteBatch->texture->tilesize.Y / 2) * scale.Y;
     Sprender_Quad destination = {
-        .topLeft = { position.X - (tilesizeHalfX), position.Y - (tilesizeHalfY), },
-        .topRight = { position.X + (tilesizeHalfX), position.Y - (tilesizeHalfY), },
-        .bottomLeft = { position.X - (tilesizeHalfX), position.Y + (tilesizeHalfY), },
-        .bottomRight = { position.X + (tilesizeHalfX), position.Y + (tilesizeHalfY), },
+        .left = position.X - tilesizeHalfX,
+        .right = position.X + tilesizeHalfX,
+        .top = position.Y - tilesizeHalfY,
+        .bottom = position.Y + tilesizeHalfY,
     };
     
     const float tilesizeFloatX = 1.0f / ((float)spriteBatch->texture->size.X / (float)spriteBatch->texture->tilesize.X);
@@ -158,10 +158,10 @@ char Sprender_SpriteBatch_StageFrame(
     const float frameX = frame.X * tilesizeFloatX;
     const float frameY = frame.Y * tilesizeFloatY;
     Sprender_Quad source = {
-        .topLeft = { frameX, frameY, },
-        .topRight = { frameX + tilesizeFloatX, frameY, },
-        .bottomLeft = { frameX, frameY + tilesizeFloatY, },
-        .bottomRight = { frameX + tilesizeFloatX, frameY + tilesizeFloatY, },
+        .left = frameX,
+        .right = frameX + tilesizeFloatX,
+        .top = frameY,
+        .bottom = frameY + tilesizeFloatY,
     };
     
     return Sprender_SpriteBatch_StageQuad(

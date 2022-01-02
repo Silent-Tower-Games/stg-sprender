@@ -4,8 +4,8 @@
 
 typedef struct Sprender_Quad
 {
-    Sprender_Float2D topLeft;
-    Sprender_Float2D topRight;
-    Sprender_Float2D bottomLeft;
-    Sprender_Float2D bottomRight;
+    float left;
+    float right;
+    float top;
+    float bottom;
 } Sprender_Quad;
