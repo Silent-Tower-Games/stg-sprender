@@ -15,7 +15,6 @@ typedef struct Sprender_SpriteBatch
     int indicesThisBatch;
     Sprender_Texture* texture;
     Sprender_Vertex* vertices;
-    // TODO: uint32_t
     uint32_t* indices;
 } Sprender_SpriteBatch;
 

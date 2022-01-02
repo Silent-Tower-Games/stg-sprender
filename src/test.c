@@ -8,9 +8,13 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
-// TODO: Shaders for rendermode
 // TODO: NULL-safety
 // TODO: Comments
+
+char shouldBeYellow(Sprender_Shader* shader)
+{
+    return 1;
+}
 
 int main()
 {
@@ -26,8 +30,10 @@ int main()
     );
     
     // TODO: Test multiple shaders
-    Sprender_Shader shader = Sprender_Shader_Load(sprender->fna3d.device, "SpriteEffect", "assets/shaders/SpriteEffect.fxb");
+    Sprender_Shader shader = Sprender_Shader_Load(sprender->fna3d.device, "assets/shaders/SpriteEffect.fxb", NULL);
     sprender->shaderSpriteEffect = shader;
+    
+    Sprender_Shader shaderYellow = Sprender_Shader_Load(sprender->fna3d.device, "assets/shaders/YellowShader.fxb", shouldBeYellow);
     
     Sprender_Texture texture = Sprender_Texture_NewBlank(
         sprender->fna3d.device,
@@ -127,7 +133,12 @@ int main()
         
         //*
         // Render to RT
-        Sprender_Load_RenderMode(sprender, &renderModeSub2);
+        Sprender_Load(
+            sprender,
+            &renderModeSub2,
+            NULL,
+            0
+        );
         
         Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,
@@ -157,7 +168,12 @@ int main()
         Sprender_RenderSprites(sprender);
         
         // Render to backbuffer
-        Sprender_Load_RenderMode(sprender, NULL);
+        Sprender_Load(
+            sprender,
+            NULL,
+            &shaderYellow,
+            1
+        );
         
         Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,

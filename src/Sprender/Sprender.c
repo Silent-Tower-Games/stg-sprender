@@ -110,7 +110,12 @@ void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscr
     sprender->defaultRenderMode.camera.zoom.Y = sprender->defaultRenderMode.camera.zoom.X;
 }
 
-void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMode)
+void Sprender_Load(
+    Sprender* sprender,
+    Sprender_RenderMode* renderMode,
+    Sprender_Shader* shaders,
+    int shadersCount
+)
 {
     if(renderMode == NULL)
     {
@@ -169,6 +174,21 @@ void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMod
         0,
         &stateChanges
     );
+    
+    for(int i = 0; i < shadersCount; i++)
+    {
+        if(!shaders[i].callable(&shaders[i]))
+        {
+            continue;
+        }
+        
+        FNA3D_ApplyEffect(
+            sprender->fna3d.device,
+            shaders[i].effect,
+            0,
+            &stateChanges
+        );
+    }
 }
 
 void Sprender_RenderSprites(Sprender* sprender)

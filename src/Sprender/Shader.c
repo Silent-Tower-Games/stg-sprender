@@ -5,12 +5,17 @@
 #include <FNA3D.h>
 #include "Shader.h"
 
-Sprender_Shader Sprender_Shader_Create(FNA3D_Device* device, char* name, uint8_t* code, uint32_t codeSize)
+Sprender_Shader Sprender_Shader_Create(
+    FNA3D_Device* device,
+    uint8_t* code,
+    uint32_t codeSize,
+    char (*callable)()
+)
 {
     Sprender_Shader shader;
     memset(&shader, 0, sizeof(shader));
     
-    shader.name = name;
+    shader.callable = callable;
     
     FNA3D_CreateEffect(
         device,
@@ -23,7 +28,11 @@ Sprender_Shader Sprender_Shader_Create(FNA3D_Device* device, char* name, uint8_t
     return shader;
 }
 
-Sprender_Shader Sprender_Shader_Load(FNA3D_Device* device, char* name, char* filename)
+Sprender_Shader Sprender_Shader_Load(
+    FNA3D_Device* device,
+    char* filename,
+    char (*callable)(Sprender_Shader*)
+)
 {
     FILE* effectFile = fopen(filename, "rb");
     
@@ -36,7 +45,7 @@ Sprender_Shader Sprender_Shader_Load(FNA3D_Device* device, char* name, char* fil
     fread(code, 1, codeSize, effectFile);
     fclose(effectFile);
     
-    return Sprender_Shader_Create(device, name, code, codeSize);
+    return Sprender_Shader_Create(device, code, codeSize, callable);
 }
 
 MOJOSHADER_effectParam* Sprender_Shader_ParamGet(Sprender_Shader* shader, const char* key)

@@ -8,13 +8,22 @@
 
 typedef struct Sprender_Shader
 {
-    char* name;
     FNA3D_Effect* effect;
     MOJOSHADER_effect* data;
+    char (*callable)(void*);
 } Sprender_Shader;
 
-Sprender_Shader Sprender_Shader_Create(FNA3D_Device* device, char* name, uint8_t* code, uint32_t codeSize);
+Sprender_Shader Sprender_Shader_Create(
+    FNA3D_Device* device,
+    uint8_t* code,
+    uint32_t codeSize,
+    char (*callable)()
+);
 
-Sprender_Shader Sprender_Shader_Load(FNA3D_Device* device, char* name, char* filename);
+Sprender_Shader Sprender_Shader_Load(
+    FNA3D_Device* device,
+    char* filename,
+    char (*callable)(Sprender_Shader*)
+);
 
 MOJOSHADER_effectParam* Sprender_Shader_ParamGet(Sprender_Shader* shader, const char* key);

@@ -41,7 +41,12 @@ void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscr
 
 void Sprender_RenderSprites(Sprender* sprender);
 
-void Sprender_Load_RenderMode(Sprender* sprender, Sprender_RenderMode* renderMode);
+void Sprender_Load(
+    Sprender* sprender,
+    Sprender_RenderMode* renderMode,
+    Sprender_Shader* shaders,
+    int shadersCount
+);
 
 void Sprender_Close(Sprender* sprender);
 
