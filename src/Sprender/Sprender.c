@@ -271,6 +271,7 @@ void Sprender_Destroy(Sprender* sprender)
     
     Sprender_RenderMode_Destroy(sprender->fna3d.device, &sprender->defaultRenderMode);
     
+    FNA3D_AddDisposeEffect(sprender->fna3d.device, sprender->shaderSpriteEffect.effect);
     FNA3D_AddDisposeIndexBuffer(sprender->fna3d.device, sprender->fna3d.indexBuffer);
     FNA3D_AddDisposeVertexBuffer(sprender->fna3d.device, sprender->fna3d.vertexBufferBinding.vertexBuffer);
     FNA3D_DestroyDevice(sprender->fna3d.device);
