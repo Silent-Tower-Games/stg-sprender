@@ -8,4 +8,5 @@
 *.dll
 FNA3D_Vulkan_PipelineCache.blob
 main
+main.exe
 valgrind.txt

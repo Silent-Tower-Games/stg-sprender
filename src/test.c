@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
+#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include "Sprender/Camera.h"
 #include "Sprender/Quad.h"
@@ -19,7 +20,7 @@
  */
 char yellowShaderStep(Sprender_Shader* shader);
 
-int main()
+int main(int argc, char** argv)
 {
     printf("Hello, World!\n");
     
