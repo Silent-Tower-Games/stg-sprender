@@ -1,8 +1,14 @@
+RPATH=-Wl,-rpath=./
+
+ifeq (${CC}, clang)
+RPATH=-Wl,-rpath ./
+endif
+
 .PHONY=application
 application:
 	make lib
 	make objs
-	${CC} ${CFLAGS} src/test.o -o main ${SDL2} ${LIBS} -lsprender -lFNA3D -lm -Wl,-rpath=./
+	${CC} ${CFLAGS} src/test.o -o main ${SDL2} ${LIBS} -lsprender -lFNA3D -lm ${RPATH}
 
 .PHONY=application-static
 application-static:

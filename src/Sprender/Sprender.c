@@ -20,8 +20,7 @@ Sprender* Sprender_Create(
 )
 {
     assert(windowTitle != NULL);
-    
-    // SDL init & create window
+
     SDL_Init(SDL_INIT_VIDEO | flags);
     
     Sprender* sprender = calloc(1, sizeof(Sprender));
@@ -32,6 +31,9 @@ Sprender* Sprender_Create(
     {
         SDL_SetHint("FNA3D_FORCE_DRIVER", driver);
     }
+
+    int FNA3D_Window_Attributes = FNA3D_PrepareWindowAttributes();
+    assert(FNA3D_Window_Attributes != 0);
     
     sprender->window = SDL_CreateWindow(
         windowTitle,
@@ -39,7 +41,7 @@ Sprender* Sprender_Create(
         SDL_WINDOWPOS_UNDEFINED,
         windowSize.X,
         windowSize.Y,
-        FNA3D_PrepareWindowAttributes()
+        FNA3D_Window_Attributes
     );
     
     Sprender_Resize(sprender, windowSize, 0);
