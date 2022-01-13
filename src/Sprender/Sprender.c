@@ -281,6 +281,8 @@ void Sprender_Destroy(Sprender* sprender)
     SDL_DestroyWindow(sprender->window);
     
     free(sprender);
+    
+    SDL_Quit();
 }
 
 static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d)
