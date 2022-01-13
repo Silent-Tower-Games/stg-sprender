@@ -39,6 +39,25 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "type": "shell",
+            "label": "Make macOS",
+            "command": "make",
+            "args": [],
+            "options": {
+                "env": {
+                    "CC": "clang",
+                    "CFLAGS": "-g -pedantic",
+                    "INCS": "-I/usr/local/Cellar/sdl2/2.0.18/include -I/Users/silenttowergames/Documents/C/FNA3D/include -I/Users/silenttowergames/Documents/C/FNA3D/MojoShader",
+                    "LIBS": "-L/usr/local/Cellar/sdl2/2.0.18/lib -L/Users/silenttowergames/Documents/C/FNA3D -L`pwd` -lSDL2 -lFNA3D",
+                    "EXT": "so"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ],
     "version": "2.0.0"

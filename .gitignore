@@ -6,7 +6,9 @@
 *.so.0
 *.a
 *.dll
+*.dylib
 FNA3D_Vulkan_PipelineCache.blob
 main
 main.exe
 valgrind.txt
+.DS_Store
