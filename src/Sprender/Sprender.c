@@ -85,7 +85,7 @@ void Sprender_SetPresentation(Sprender* sprender, Sprender_Int2D windowSize, cha
     presentationParameters.backBufferHeight = windowSize.Y;
     presentationParameters.deviceWindowHandle = sprender->window;
     presentationParameters.backBufferFormat = FNA3D_SURFACEFORMAT_COLOR;
-    presentationParameters.presentationInterval = vsync ? FNA3D_PRESENTINTERVAL_DEFAULT : FNA3D_PRESENTINTERVAL_IMMEDIATE;
+    presentationParameters.presentationInterval = vsync ? FNA3D_PRESENTINTERVAL_ONE : FNA3D_PRESENTINTERVAL_IMMEDIATE;
     presentationParameters.depthStencilFormat = FNA3D_DEPTHFORMAT_D16;
     sprender->fna3d.presentationParameters = presentationParameters;
     
