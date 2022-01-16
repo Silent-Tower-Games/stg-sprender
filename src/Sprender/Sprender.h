@@ -26,6 +26,7 @@ typedef struct Sprender
     SDL_Window* window;
     Sprender_RenderMode defaultRenderMode;
     Sprender_Int2D resolution;
+    char vsync;
 } Sprender;
 
 /**
@@ -37,6 +38,7 @@ typedef struct Sprender
  * @param spriteEffectShaderFilename location of the SpriteEffect.fxb shader file
  * @param driver optionally give a preferred graphics driver; "OpenGL", "Vulkan", "DirectX", or "Metal"
  * @param maxSprites maximum number of sprites allowed; this memory will be pre-allocated
+ * @param vsync whether or not to use vsync
  * @param flags additional to pass to SDL_Init. `SDL_INIT_VIDEO` is already being used
  * @return Sprender* new Sprender object
  */
@@ -47,17 +49,19 @@ Sprender* Sprender_Create(
     char* spriteEffectShaderFilename,
     char* driver,
     int maxSprites,
+    char vsync,
     Uint32 flags
 );
 
 /**
- * @brief Resize the Sprender window.
+ * @brief Set window size, fullscreen, and vsync.
  * 
  * @param sprender your sprender object
  * @param windowSize the new window size
+ * @param vsync whether or not to use vsync
  * @param fullscreen whether or not to go fullscreen
  */
-void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscreen);
+void Sprender_SetPresentation(Sprender* sprender, Sprender_Int2D windowSize, char fullscreen, char vsync);
 
 /**
  * @brief Render all sprites staged by the SpriteBatch.

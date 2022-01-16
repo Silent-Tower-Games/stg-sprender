@@ -16,6 +16,7 @@ Sprender* Sprender_Create(
     char* spriteEffectShaderFilename,
     char* driver,
     int maxSprites,
+    char vsync,
     Uint32 flags
 )
 {
@@ -44,7 +45,7 @@ Sprender* Sprender_Create(
         FNA3D_Window_Attributes
     );
     
-    Sprender_Resize(sprender, windowSize, 0);
+    Sprender_SetPresentation(sprender, windowSize, 0, vsync);
     
     sprender->fna3d.indexBuffer = FNA3D_GenIndexBuffer(
         sprender->fna3d.device,
@@ -71,9 +72,11 @@ Sprender* Sprender_Create(
     return sprender;
 }
 
-void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscreen)
+void Sprender_SetPresentation(Sprender* sprender, Sprender_Int2D windowSize, char fullscreen, char vsync)
 {
     assert(sprender != NULL);
+    
+    sprender->vsync = vsync;
     
     // FNA3D create device
     FNA3D_PresentationParameters presentationParameters;
@@ -82,7 +85,7 @@ void Sprender_Resize(Sprender* sprender, Sprender_Int2D windowSize, char fullscr
     presentationParameters.backBufferHeight = windowSize.Y;
     presentationParameters.deviceWindowHandle = sprender->window;
     presentationParameters.backBufferFormat = FNA3D_SURFACEFORMAT_COLOR;
-    presentationParameters.presentationInterval = FNA3D_PRESENTINTERVAL_IMMEDIATE;
+    presentationParameters.presentationInterval = vsync ? FNA3D_PRESENTINTERVAL_DEFAULT : FNA3D_PRESENTINTERVAL_IMMEDIATE;
     presentationParameters.depthStencilFormat = FNA3D_DEPTHFORMAT_D16;
     sprender->fna3d.presentationParameters = presentationParameters;
     

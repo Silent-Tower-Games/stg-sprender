@@ -31,6 +31,7 @@ int main(int argc, char** argv)
         "assets/shaders/SpriteEffect.fxb", // SpriteEffect filename
         NULL, // let FNA3D choose the graphics driver
         10000, // 10k sprite maximum
+        1, // not vsync
         0 // not passing in any SDL flags
     );
     
@@ -90,12 +91,20 @@ int main(int argc, char** argv)
                     {
                         case SDLK_SPACE:
                         {
-                            Sprender_Resize(sprender, (Sprender_Int2D){
+                            Sprender_SetPresentation(sprender, (Sprender_Int2D){
                                 isFullscreen ? 640 : 1920,
                                 isFullscreen ? 360 : 1080,
-                            }, !isFullscreen);
+                            }, !isFullscreen, sprender->vsync);
                             
                             isFullscreen = !isFullscreen;
+                        } break;
+                        
+                        case SDLK_v:
+                        {
+                            Sprender_SetPresentation(sprender, (Sprender_Int2D){
+                                !isFullscreen ? 640 : 1920,
+                                !isFullscreen ? 360 : 1080,
+                            }, isFullscreen, !sprender->vsync);
                         } break;
                     }
                 } break;
@@ -233,7 +242,10 @@ int main(int argc, char** argv)
         
         Sprender_Close(sprender);
         
-        SDL_Delay(16);
+        if(!sprender->vsync)
+        {
+            SDL_Delay(16);
+        }
     }
     
     Sprender_Shader_Destroy(sprender->fna3d.device, &shaderYellow);
