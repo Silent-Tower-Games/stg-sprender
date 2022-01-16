@@ -51,11 +51,15 @@ int main(int argc, char** argv)
     );
     Sprender_Texture textureSpriteSheet = Sprender_Texture_Load(
         sprender->fna3d.device,
-        "assets/images/8x8.png"
+        "assets/images/8x8-padding.png"
     );
     // Set the tile size of the sprite sheet
     textureSpriteSheet.tilesize.X = 8;
     textureSpriteSheet.tilesize.Y = 8;
+    textureSpriteSheet.padding.X = 1;
+    textureSpriteSheet.padding.Y = 1;
+    textureSpriteSheet.border.X = 1;
+    textureSpriteSheet.border.Y = 1;
     
     // Render mode
     const int w = 6;

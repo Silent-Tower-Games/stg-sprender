@@ -337,7 +337,7 @@ static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d)
     memset(&samplerState, 0, sizeof(samplerState));
     samplerState.addressU = FNA3D_TEXTUREADDRESSMODE_CLAMP;
     samplerState.addressV = FNA3D_TEXTUREADDRESSMODE_CLAMP;
-    samplerState.addressW = FNA3D_TEXTUREADDRESSMODE_WRAP;
+    samplerState.addressW = FNA3D_TEXTUREADDRESSMODE_CLAMP;
     samplerState.filter = FNA3D_TEXTUREFILTER_POINT;
     samplerState.maxAnisotropy = 4;
     samplerState.maxMipLevel = 0;

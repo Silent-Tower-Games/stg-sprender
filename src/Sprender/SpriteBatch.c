@@ -153,15 +153,16 @@ char Sprender_SpriteBatch_StageFrame(
         .bottom = position.Y + tilesizeHalfY,
     };
     
-    const float tilesizeFloatX = 1.0f / ((float)spriteBatch->texture->size.X / (float)spriteBatch->texture->tilesize.X);
-    const float tilesizeFloatY = 1.0f / ((float)spriteBatch->texture->size.Y / (float)spriteBatch->texture->tilesize.Y);
-    const float frameX = frame.X * tilesizeFloatX;
-    const float frameY = frame.Y * tilesizeFloatY;
+    const Sprender_Int2D tilesize = spriteBatch->texture->tilesize;
+    Sprender_Float2D frameUse = {
+        .X = spriteBatch->texture->border.X + (frame.X * (tilesize.X + spriteBatch->texture->padding.X)),
+        .Y = spriteBatch->texture->border.Y + (frame.Y * (tilesize.Y + spriteBatch->texture->padding.Y)),
+    };
     Sprender_Quad source = {
-        .left = frameX,
-        .right = frameX + tilesizeFloatX,
-        .top = frameY,
-        .bottom = frameY + tilesizeFloatY,
+        .left = 1.0f / ((float)spriteBatch->texture->size.X / frameUse.X),
+        .right = 1.0f / ((float)spriteBatch->texture->size.X / (frameUse.X + tilesize.X)),
+        .top = 1.0f / ((float)spriteBatch->texture->size.Y / frameUse.Y),
+        .bottom = 1.0f / ((float)spriteBatch->texture->size.Y / (frameUse.Y + tilesize.Y)),
     };
     
     return Sprender_SpriteBatch_StageQuad(

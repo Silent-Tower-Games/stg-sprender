@@ -28,6 +28,11 @@ Sprender_Texture Sprender_Texture_NewFromData(
     FNA3D_SetTextureData2D(device, asset, 0, 0, width, height, 0, pixels, width * height * channels);
     texture.asset = asset;
     
+    texture.border.X = 0;
+    texture.border.Y = 0;
+    texture.padding.X = 0;
+    texture.padding.Y = 0;
+    
     return texture;
 }
 

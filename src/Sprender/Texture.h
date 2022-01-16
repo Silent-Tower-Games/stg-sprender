@@ -8,6 +8,8 @@ typedef struct Sprender_Texture
     FNA3D_Texture* asset;
     Sprender_Int2D size;
     Sprender_Int2D tilesize;
+    Sprender_Int2D border;
+    Sprender_Int2D padding;
 } Sprender_Texture;
 
 /**
