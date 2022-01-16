@@ -135,10 +135,11 @@ int main(int argc, char** argv)
         
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
-            (Sprender_Int2D){ 0, 0, },
+            (Sprender_Int2D){ 1, 0, },
             (Sprender_Float2D){ i / 10.0f, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
             0.75f,
+            SPRENDER_SPRITEBATCH_FLIP_Y,
             0xFFFFFFFF
         );
         
@@ -148,6 +149,7 @@ int main(int argc, char** argv)
             (Sprender_Float2D){ 16, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
             (i / 30) % 2 ? 0.5f : 1.0f,
+            0,
             0xFFFFFFFF
         );
         
@@ -171,9 +173,10 @@ int main(int argc, char** argv)
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
             (Sprender_Int2D){ (i / 30) % 2, 0, },
-            (Sprender_Float2D){ i, 0, },
+            (Sprender_Float2D){ i - 32, 0, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
             0.75f,
+            SPRENDER_SPRITEBATCH_FLIP_X,
             0xFFFFFFFF
         );
         
@@ -183,6 +186,7 @@ int main(int argc, char** argv)
             (Sprender_Float2D){ 0, 0, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
             (i / 30) % 2 ? 0.5f : 1.0f,
+            0,
             0xFFFFFFFF
         );
         
@@ -192,6 +196,7 @@ int main(int argc, char** argv)
             (Sprender_Float2D){ -160, 16, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
             (i / 30) % 2 ? 0.5f : 1.0f,
+            0,
             0xFFFFFFFF
         );
         
@@ -201,6 +206,7 @@ int main(int argc, char** argv)
             (Sprender_Float2D){ -160, -90, },
             (Sprender_Float2D){ 8.0f, 8.0f, },
             (i / 30) % 2 ? 0.5f : 1.0f,
+            0,
             0xFFFFFFFF
         );
         
@@ -219,6 +225,7 @@ int main(int argc, char** argv)
             (Sprender_Float2D){ -160, -40, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
             1.0f,
+            0,
             0xFFFFFFFF
         );
         
@@ -237,6 +244,7 @@ int main(int argc, char** argv)
             (Sprender_Float2D){ 0, 0, },
             (Sprender_Float2D){ 1000.0f, 1000.0f, },
             0.0f,
+            0,
             0xFF990000
         );
         
@@ -256,6 +264,7 @@ int main(int argc, char** argv)
             (Sprender_Float2D){ 32.0f, 64.0f, }, // destination position
             (Sprender_Float2D){ 36.0f, 18.0f, }, // width/height at desination
             1.0f, // depth
+            SPRENDER_SPRITEBATCH_FLIP_X | SPRENDER_SPRITEBATCH_FLIP_Y, // flip
             0xFFFFFFFF // color
         );
         

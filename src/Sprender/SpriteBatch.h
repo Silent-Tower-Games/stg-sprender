@@ -7,6 +7,9 @@
 #include "Texture.h"
 #include "Vertex.h"
 
+#define SPRENDER_SPRITEBATCH_FLIP_X 1
+#define SPRENDER_SPRITEBATCH_FLIP_Y 2
+
 typedef struct Sprender_SpriteBatch
 {
     char opened;
@@ -88,6 +91,7 @@ char Sprender_SpriteBatch_StageQuad(
  * @param position X & Y coordinates for where to draw the texture
  * @param scale size of the texture; default is 1.0fx1.0f
  * @param depth depth value; will be turned into a 16-bit float
+ * @param flipped whether or not to flip the sprite on X and/or Y axis; bitwise
  * @param color color as an unsigned integer; 0xAABBGGRR
  * @return char whether or not the vertices were added successfully
  */
@@ -97,6 +101,7 @@ char Sprender_SpriteBatch_StageFrame(
     Sprender_Float2D position,
     Sprender_Float2D scale,
     float depth,
+    char flipped,
     uint32_t color
 );
 
@@ -109,6 +114,7 @@ char Sprender_SpriteBatch_StageFrame(
  * @param destinationPosition X & Y coordinates for where to draw the texture
  * @param destinationSize width & height to render the texture at
  * @param depth depth value; will be turned into a 16-bit float
+ * @param flipped whether or not to flip the sprite on X and/or Y axis; bitwise
  * @param color color as an unsigned integer; 0xAABBGGRR
  * @return char whether or not the vertices were added successfully
  */
@@ -119,6 +125,7 @@ char Sprender_SpriteBatch_StageRegion(
     Sprender_Float2D destinationPosition,
     Sprender_Float2D destinationSize,
     float depth,
+    char flipped,
     uint32_t color
 );
 

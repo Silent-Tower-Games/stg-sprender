@@ -141,6 +141,7 @@ char Sprender_SpriteBatch_StageFrame(
     Sprender_Float2D position,
     Sprender_Float2D scale,
     float depth,
+    char flipped,
     uint32_t color
 )
 {
@@ -165,6 +166,29 @@ char Sprender_SpriteBatch_StageFrame(
         .bottom = 1.0f / ((float)spriteBatch->texture->size.Y / (frameUse.Y + tilesize.Y)),
     };
     
+    // If flipped
+    if(flipped != 0)
+    {
+        float hold;
+        
+        // If flipped X
+        if(flipped & 1)
+        {
+            printf("fx\n");
+            hold = source.right;
+            source.right = source.left;
+            source.left = hold;
+        }
+        
+        // If flipped Y
+        if(flipped & 2)
+        {
+            hold = source.bottom;
+            source.bottom = source.top;
+            source.top = hold;
+        }
+    }
+    
     return Sprender_SpriteBatch_StageQuad(
         spriteBatch,
         source,
@@ -181,6 +205,7 @@ char Sprender_SpriteBatch_StageRegion(
     Sprender_Float2D destinationPosition,
     Sprender_Float2D destinationSize,
     float depth,
+    char flipped,
     uint32_t color
 )
 {
@@ -201,6 +226,29 @@ char Sprender_SpriteBatch_StageRegion(
         .top = 1.0f / ((float)spriteBatch->texture->size.Y / sourcePosition.Y),
         .bottom = 1.0f / ((float)spriteBatch->texture->size.Y / (sourcePosition.Y + sourceSize.Y)),
     };
+    
+     // If flipped
+    if(flipped != 0)
+    {
+        float hold;
+        
+        // If flipped X
+        if(flipped & 1)
+        {
+            printf("fx\n");
+            hold = source.right;
+            source.right = source.left;
+            source.left = hold;
+        }
+        
+        // If flipped Y
+        if(flipped & 2)
+        {
+            hold = source.bottom;
+            source.bottom = source.top;
+            source.top = hold;
+        }
+    }
     
     return Sprender_SpriteBatch_StageQuad(
         spriteBatch,
