@@ -235,7 +235,6 @@ char Sprender_SpriteBatch_StageRegion(
         // If flipped X
         if(flipped & 1)
         {
-            printf("fx\n");
             hold = source.right;
             source.right = source.left;
             source.left = hold;
