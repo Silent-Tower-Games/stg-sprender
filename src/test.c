@@ -244,6 +244,25 @@ int main(int argc, char** argv)
         
         Sprender_RenderSprites(sprender);
         
+        Sprender_SpriteBatch_Begin(
+            &sprender->spriteBatch,
+            &textureLogo
+        );
+        
+        Sprender_SpriteBatch_StageRegion(
+            &sprender->spriteBatch,
+            (Sprender_Int2D){ 200, 100, }, // position of region
+            (Sprender_Int2D){ 360, 180, }, // width/height of region
+            (Sprender_Float2D){ 32.0f, 64.0f, }, // destination position
+            (Sprender_Float2D){ 36.0f, 18.0f, }, // width/height at desination
+            1.0f, // depth
+            0xFFFFFFFF // color
+        );
+        
+        Sprender_SpriteBatch_End(&sprender->spriteBatch);
+        
+        Sprender_RenderSprites(sprender);
+        
         Sprender_Close(sprender);
         
         if(!sprender->vsync)

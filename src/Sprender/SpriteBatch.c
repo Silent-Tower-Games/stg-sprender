@@ -174,6 +174,43 @@ char Sprender_SpriteBatch_StageFrame(
     );
 }
 
+char Sprender_SpriteBatch_StageRegion(
+    Sprender_SpriteBatch* spriteBatch,
+    Sprender_Int2D sourcePosition,
+    Sprender_Int2D sourceSize,
+    Sprender_Float2D destinationPosition,
+    Sprender_Float2D destinationSize,
+    float depth,
+    uint32_t color
+)
+{
+    Sprender_Int2D sizeHalf = {
+        .X = destinationSize.X / 2,
+        .Y = destinationSize.Y / 2,
+    };
+    Sprender_Quad destination = {
+        .left = destinationPosition.X - sizeHalf.X,
+        .right = destinationPosition.X + sizeHalf.X,
+        .top = destinationPosition.Y - sizeHalf.Y,
+        .bottom = destinationPosition.Y + sizeHalf.Y,
+    };
+    
+    Sprender_Quad source = {
+        .left = 1.0f / ((float)spriteBatch->texture->size.X / sourcePosition.X),
+        .right = 1.0f / ((float)spriteBatch->texture->size.X / (sourcePosition.X + sourceSize.X)),
+        .top = 1.0f / ((float)spriteBatch->texture->size.Y / sourcePosition.Y),
+        .bottom = 1.0f / ((float)spriteBatch->texture->size.Y / (sourcePosition.Y + sourceSize.Y)),
+    };
+    
+    return Sprender_SpriteBatch_StageQuad(
+        spriteBatch,
+        source,
+        destination,
+        depth,
+        color
+    );
+}
+
 void Sprender_SpriteBatch_Destroy(Sprender_SpriteBatch* spriteBatch)
 {
     assert(spriteBatch != NULL);

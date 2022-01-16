@@ -101,6 +101,28 @@ char Sprender_SpriteBatch_StageFrame(
 );
 
 /**
+ * @brief Stage an arbitrary region of a given texture in the given SpriteBatch.
+ * 
+ * @param spriteBatch your SpriteBatch
+ * @param sourcePosition X & Y coordinates where the texture's region begins
+ * @param sourceSize width & height of the texture's region
+ * @param destinationPosition X & Y coordinates for where to draw the texture
+ * @param destinationSize width & height to render the texture at
+ * @param depth depth value; will be turned into a 16-bit float
+ * @param color color as an unsigned integer; 0xAABBGGRR
+ * @return char whether or not the vertices were added successfully
+ */
+char Sprender_SpriteBatch_StageRegion(
+    Sprender_SpriteBatch* spriteBatch,
+    Sprender_Int2D sourcePosition,
+    Sprender_Int2D sourceSize,
+    Sprender_Float2D destinationPosition,
+    Sprender_Float2D destinationSize,
+    float depth,
+    uint32_t color
+);
+
+/**
  * @brief Free all memory allocated by the SpriteBatch.
  * 
  * @param spriteBatch your SpriteBatch
