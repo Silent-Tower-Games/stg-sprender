@@ -172,16 +172,15 @@ char Sprender_SpriteBatch_StageFrame(
         float hold;
         
         // If flipped X
-        if(flipped & 1)
+        if(flipped & SPRENDER_SPRITEBATCH_FLIP_X)
         {
-            printf("fx\n");
             hold = source.right;
             source.right = source.left;
             source.left = hold;
         }
         
         // If flipped Y
-        if(flipped & 2)
+        if(flipped & SPRENDER_SPRITEBATCH_FLIP_Y)
         {
             hold = source.bottom;
             source.bottom = source.top;

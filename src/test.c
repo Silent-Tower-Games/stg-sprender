@@ -120,43 +120,6 @@ int main(int argc, char** argv)
             break;
         }
         
-        // Render to RT
-        Sprender_Load(
-            sprender,
-            &renderModeTest,
-            NULL,
-            0
-        );
-        
-        Sprender_SpriteBatch_Begin(
-            &sprender->spriteBatch,
-            &textureSpriteSheet
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ 1, 0, },
-            (Sprender_Float2D){ i / 10.0f, 0, },
-            (Sprender_Float2D){ 1.0f, 1.0f, },
-            0.75f,
-            SPRENDER_SPRITEBATCH_FLIP_Y,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ 0, 1, },
-            (Sprender_Float2D){ 16, 0, },
-            (Sprender_Float2D){ 1.0f, 1.0f, },
-            (i / 30) % 2 ? 0.5f : 1.0f,
-            0,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        
-        Sprender_RenderSprites(sprender);
-        
         // Render to backbuffer
         Sprender_Load(
             sprender,
@@ -165,79 +128,11 @@ int main(int argc, char** argv)
             1
         );
         
-        Sprender_SpriteBatch_Begin(
-            &sprender->spriteBatch,
-            &textureSpriteSheet
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ (i / 30) % 2, 0, },
-            (Sprender_Float2D){ i - 32, 0, },
-            (Sprender_Float2D){ 8.0f, 8.0f, },
-            0.75f,
-            SPRENDER_SPRITEBATCH_FLIP_X,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ 1, 1, },
-            (Sprender_Float2D){ 0, 0, },
-            (Sprender_Float2D){ 8.0f, 8.0f, },
-            (i / 30) % 2 ? 0.5f : 1.0f,
-            0,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ 1, 0, },
-            (Sprender_Float2D){ -160, 16, },
-            (Sprender_Float2D){ 8.0f, 8.0f, },
-            (i / 30) % 2 ? 0.5f : 1.0f,
-            0,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ 1, 0, },
-            (Sprender_Float2D){ -160, -90, },
-            (Sprender_Float2D){ 8.0f, 8.0f, },
-            (i / 30) % 2 ? 0.5f : 1.0f,
-            0,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        
-        Sprender_RenderSprites(sprender);
-        
-        Sprender_SpriteBatch_Begin(
-            &sprender->spriteBatch,
-            &renderModeTest.renderTargetTexture
-        );
-        
-        Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
-            (Sprender_Int2D){ 0, 0, },
-            (Sprender_Float2D){ -160, -40, },
-            (Sprender_Float2D){ 1.0f, 1.0f, },
-            1.0f,
-            0,
-            0xFFFFFFFF
-        );
-        
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        
-        Sprender_RenderSprites(sprender);
-        
+        // Blue background
         Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,
             &textureBlankWhite
         );
-        
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
             (Sprender_Int2D){ 0, 0, },
@@ -247,29 +142,51 @@ int main(int argc, char** argv)
             0,
             0xFF990000
         );
-        
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        
         Sprender_RenderSprites(sprender);
         
+        // Sprites
         Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,
-            &textureLogo
+            &textureSpriteSheet
         );
-        
-        Sprender_SpriteBatch_StageRegion(
+        Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
-            (Sprender_Int2D){ 200, 100, }, // position of region
-            (Sprender_Int2D){ 360, 180, }, // width/height of region
-            (Sprender_Float2D){ 32.0f, 64.0f, }, // destination position
-            (Sprender_Float2D){ 36.0f, 18.0f, }, // width/height at desination
-            1.0f, // depth
-            SPRENDER_SPRITEBATCH_FLIP_X | SPRENDER_SPRITEBATCH_FLIP_Y, // flip
-            0xFFFFFFFF // color
+            (Sprender_Int2D){ 1, 0, },
+            (Sprender_Float2D){ 0, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0.75f,
+            0,
+            0xFFFFFFFF
         );
-        
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
+            (Sprender_Int2D){ 6, 3, },
+            (Sprender_Float2D){ 0, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            (i / 30) % 2 ? 0.5f : 1.0f,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
+            (Sprender_Int2D){ 6, 3, },
+            (Sprender_Float2D){ 34, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            (i / 30) % 2 ? 0.5f : 1.0f,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
+            (Sprender_Int2D){ 1, 0, },
+            (Sprender_Float2D){ 32, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0.75f,
+            0,
+            0xFFFFFFFF
+        );
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        
         Sprender_RenderSprites(sprender);
         
         Sprender_Close(sprender);
@@ -294,6 +211,7 @@ int yellowShaderStep_Ticker = 0;
 char yellowShaderStep(Sprender_Shader* shader)
 {
     float magnitude = fabs(sin((float)(++yellowShaderStep_Ticker) / 100));
+    magnitude = 1; // TODO: yellowShaderStep: remove this line
     
     Sprender_Shader_ParamCopy(shader, "magnitude", &magnitude, sizeof(float));
     

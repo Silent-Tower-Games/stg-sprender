@@ -303,7 +303,7 @@ static void Sprender_FNA3D_SetValues(Sprender_FNA3D* fna3d)
     fna3d->blendState.blendFactor = blendFactor;
     fna3d->blendState.colorBlendFunction = FNA3D_BLENDFUNCTION_ADD;
     fna3d->blendState.colorDestinationBlend = FNA3D_BLEND_INVERSESOURCEALPHA;
-    fna3d->blendState.colorSourceBlend = FNA3D_BLEND_SOURCEALPHA;
+    fna3d->blendState.colorSourceBlend = FNA3D_BLEND_ONE;
     fna3d->blendState.colorWriteEnable = FNA3D_COLORWRITECHANNELS_ALL;
     fna3d->blendState.colorWriteEnable1 = FNA3D_COLORWRITECHANNELS_ALL;
     fna3d->blendState.colorWriteEnable2 = FNA3D_COLORWRITECHANNELS_ALL;
