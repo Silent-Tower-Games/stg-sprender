@@ -49,6 +49,7 @@ int main()
         // At position 32x64
         // At a scale of 1x1
         // At a depth of 1.0f (could be any 16-bit value over 0.0f)
+        // Flipping on both the X and Y axes
         // With a white color (0xAABBGGRR, RGBA backwards)
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
@@ -56,6 +57,7 @@ int main()
             (Sprender_Float2D){ 32.0f, 64.0f, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
             1.0f,
+            SPRENDER_SPRITEBATCH_FLIP_X | SPRENDER_SPRITEBATCH_FLIP_Y,
             0xFFFFFFFF
         );
         
@@ -75,6 +77,7 @@ int main()
     }
     
     // Unload your texture
+    Sprender_Texture_Destroy(sprender->fna3d.device, textureLogo);
     
     // Unload all data from the Sprender object
     Sprender_Destroy(sprender);
