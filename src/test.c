@@ -27,7 +27,7 @@ int main(int argc, char** argv)
     Sprender* sprender = Sprender_Create(
         "Sprender Example",
         (Sprender_Int2D){ 960, 540, }, // window size
-        (Sprender_Int2D){ 320, 180, }, // game resolution
+        (Sprender_Int2D){ 80, 45, }, // game resolution
         "assets/shaders/SpriteEffect.fxb", // SpriteEffect filename
         NULL, // let FNA3D choose the graphics driver
         10000, // 10k sprite maximum
@@ -37,6 +37,8 @@ int main(int argc, char** argv)
     
     // YellowShader.fx
     Sprender_Shader shaderYellow = Sprender_Shader_Load(sprender->fna3d.device, "assets/shaders/YellowShader.fxb", yellowShaderStep);
+    // DepthShader.fx
+    Sprender_Shader shaderDepth = Sprender_Shader_Load(sprender->fna3d.device, "assets/shaders/DepthShader.fxb", NULL);
     
     Sprender_Texture textureBlankWhite = Sprender_Texture_NewBlank(
         sprender->fna3d.device,
@@ -61,14 +63,11 @@ int main(int argc, char** argv)
     textureSpriteSheet.border.X = 1;
     textureSpriteSheet.border.Y = 1;
     
-    // Render mode
-    const int w = 6;
-    const int h = 32;
-    Sprender_RenderMode renderModeTest = Sprender_RenderMode_Create(
+    Sprender_RenderMode myRenderTarget = Sprender_RenderMode_Create(
         sprender->fna3d.device,
-        (Sprender_Int2D){ h * 2, w * 2, },
-        (Sprender_Int2D){ 0, 0, },
-        (FNA3D_Vec4){ 1, 1, 1, 1, },
+        (Sprender_Int2D){ 32, 32 },
+        (Sprender_Int2D){ 0, 0 },
+        (FNA3D_Vec4){ 0, 0, 0.5f, 1 },
         1
     );
     
@@ -120,11 +119,12 @@ int main(int argc, char** argv)
             break;
         }
         
-        // Render to backbuffer
+        // Render to target
         Sprender_Load(
             sprender,
-            NULL,
-            &shaderYellow,
+            &myRenderTarget,
+            // This shader applies to the sprite sheet, not the final image
+            &shaderDepth,
             1
         );
         
@@ -140,7 +140,7 @@ int main(int argc, char** argv)
             (Sprender_Float2D){ 1000.0f, 1000.0f, },
             0.0f,
             0,
-            0xFF990000
+            0xFFFFFFFF
         );
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
         Sprender_RenderSprites(sprender);
@@ -153,7 +153,7 @@ int main(int argc, char** argv)
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
             (Sprender_Int2D){ 1, 0, },
-            (Sprender_Float2D){ 0, 0, },
+            (Sprender_Float2D){ -8, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
             0.75f,
             0,
@@ -162,7 +162,7 @@ int main(int argc, char** argv)
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
             (Sprender_Int2D){ 6, 3, },
-            (Sprender_Float2D){ 0, 0, },
+            (Sprender_Float2D){ -8, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
             (i / 30) % 2 ? 0.5f : 1.0f,
             0,
@@ -171,18 +171,42 @@ int main(int argc, char** argv)
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
             (Sprender_Int2D){ 6, 3, },
-            (Sprender_Float2D){ 34, 0, },
+            (Sprender_Float2D){ 10, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
-            (i / 30) % 2 ? 0.5f : 1.0f,
+            (i / 30) % 2 ? 1.0f : 0.5f,
             0,
             0xFFFFFFFF
         );
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
             (Sprender_Int2D){ 1, 0, },
-            (Sprender_Float2D){ 32, 0, },
+            (Sprender_Float2D){ 12, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
             0.75f,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_End(&sprender->spriteBatch);
+        Sprender_RenderSprites(sprender);
+        
+        // Render to backbuffer
+        Sprender_Load(
+            sprender,
+            NULL,
+            // This shader applies to the render target as a whole, since that's the texture we're rendering
+            &shaderYellow,
+            1
+        );
+        Sprender_SpriteBatch_Begin(
+            &sprender->spriteBatch,
+            &myRenderTarget.renderTargetTexture
+        );
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
+            (Sprender_Int2D){ 0, 0 },
+            (Sprender_Float2D){ 0, 0 },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0,
             0,
             0xFFFFFFFF
         );
@@ -201,7 +225,6 @@ int main(int argc, char** argv)
     Sprender_Texture_Destroy(sprender->fna3d.device, &textureBlankWhite);
     Sprender_Texture_Destroy(sprender->fna3d.device, &textureSpriteSheet);
     Sprender_Texture_Destroy(sprender->fna3d.device, &textureLogo);
-    Sprender_RenderMode_Destroy(sprender->fna3d.device, &renderModeTest);
     Sprender_Destroy(sprender);
     
     return 0;
@@ -211,7 +234,6 @@ int yellowShaderStep_Ticker = 0;
 char yellowShaderStep(Sprender_Shader* shader)
 {
     float magnitude = fabs(sin((float)(++yellowShaderStep_Ticker) / 100));
-    magnitude = 1; // TODO: yellowShaderStep: remove this line
     
     Sprender_Shader_ParamCopy(shader, "magnitude", &magnitude, sizeof(float));
     
