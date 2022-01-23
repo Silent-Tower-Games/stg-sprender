@@ -145,8 +145,12 @@ char Sprender_SpriteBatch_StageFrame(
     uint32_t color
 )
 {
-    const int tilesizeHalfX = (spriteBatch->texture->tilesize.X / 2) * scale.X;
-    const int tilesizeHalfY = (spriteBatch->texture->tilesize.Y / 2) * scale.Y;
+    const Sprender_Float2D tilesize ={
+        .X = spriteBatch->texture->tilesize.X * 1.0f,
+        .Y = spriteBatch->texture->tilesize.Y * 1.0f,
+    };
+    const float tilesizeHalfX = (tilesize.X * scale.X) / 2;
+    const float tilesizeHalfY = (tilesize.Y * scale.Y) / 2;
     Sprender_Quad destination = {
         .left = position.X - tilesizeHalfX,
         .right = position.X + tilesizeHalfX,
@@ -154,7 +158,6 @@ char Sprender_SpriteBatch_StageFrame(
         .bottom = position.Y + tilesizeHalfY,
     };
     
-    const Sprender_Int2D tilesize = spriteBatch->texture->tilesize;
     Sprender_Float2D frameUse = {
         .X = spriteBatch->texture->border.X + (frame.X * (tilesize.X + spriteBatch->texture->padding.X)),
         .Y = spriteBatch->texture->border.Y + (frame.Y * (tilesize.Y + spriteBatch->texture->padding.Y)),

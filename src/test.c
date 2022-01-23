@@ -43,8 +43,8 @@ int main(int argc, char** argv)
     Sprender_Texture textureBlankWhite = Sprender_Texture_NewBlank(
         sprender->fna3d.device,
         (FNA3D_Vec4){ 1, 1, 1, 1, },
-        16,
-        32,
+        1,
+        1,
         0
     );
     Sprender_Texture textureLogo = Sprender_Texture_Load(
@@ -140,7 +140,7 @@ int main(int argc, char** argv)
             (Sprender_Float2D){ 1000.0f, 1000.0f, },
             0.0f,
             0,
-            0xFFFFFFFF
+            0xFF990000
         );
         Sprender_SpriteBatch_End(&sprender->spriteBatch);
         Sprender_RenderSprites(sprender);
@@ -200,6 +200,21 @@ int main(int argc, char** argv)
         Sprender_SpriteBatch_Begin(
             &sprender->spriteBatch,
             &myRenderTarget.renderTargetTexture
+        );
+        Sprender_SpriteBatch_StageFrame(
+            &sprender->spriteBatch,
+            (Sprender_Int2D){ 0, 0 },
+            (Sprender_Float2D){ 0, 0 },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_End(&sprender->spriteBatch);
+        Sprender_RenderSprites(sprender);
+        Sprender_SpriteBatch_Begin(
+            &sprender->spriteBatch,
+            &textureBlankWhite
         );
         Sprender_SpriteBatch_StageFrame(
             &sprender->spriteBatch,
