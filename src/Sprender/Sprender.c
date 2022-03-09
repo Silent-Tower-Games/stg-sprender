@@ -15,7 +15,6 @@ Sprender* Sprender_Create(
     Sprender_Int2D resolution,
     char* spriteEffectShaderFilename,
     char* driver,
-    int maxSprites,
     char vsync,
     Uint32 flags
 )
@@ -25,7 +24,6 @@ Sprender* Sprender_Create(
     SDL_Init(SDL_INIT_VIDEO | flags);
     
     Sprender* sprender = calloc(1, sizeof(Sprender));
-    sprender->maxSprites = maxSprites;
     sprender->resolution = resolution;
     
     if(driver != NULL)
@@ -47,24 +45,8 @@ Sprender* Sprender_Create(
     
     Sprender_SetPresentation(sprender, windowSize, 0, vsync);
     
-    sprender->fna3d.indexBuffer = FNA3D_GenIndexBuffer(
-        sprender->fna3d.device,
-        1,
-        FNA3D_BUFFERUSAGE_WRITEONLY,
-        sprender->maxSprites * 6 * sizeof(int)
-    );
-    sprender->fna3d.vertexBufferBinding.vertexBuffer = FNA3D_GenVertexBuffer(
-        sprender->fna3d.device,
-        1,
-        FNA3D_BUFFERUSAGE_WRITEONLY,
-        sprender->maxSprites * 4 * sizeof(Sprender_Vertex) // Maximum number of sprites * 6 vertices per sprite * bytes per vertex
-    );
-    
     // Initialize FNA3D
     Sprender_FNA3D_SetValues(&sprender->fna3d);
-    
-    // Create SpriteBatch
-    sprender->spriteBatch = Sprender_SpriteBatch_Create(sprender->maxSprites);
     
     // Load SpriteEffect shader
     sprender->shaderSpriteEffect = Sprender_Shader_Load(sprender->fna3d.device, spriteEffectShaderFilename, NULL);
@@ -208,28 +190,29 @@ void Sprender_Load(
     }
 }
 
-void Sprender_RenderSprites(Sprender* sprender)
+void Sprender_RenderSprites(Sprender* sprender, Sprender_SpriteBatch* spriteBatch)
 {
     assert(sprender != NULL);
     
     FNA3D_SetVertexBufferData(
         sprender->fna3d.device,
-        sprender->fna3d.vertexBufferBinding.vertexBuffer,
+        spriteBatch->vertexBuffer,
         0,
-        sprender->spriteBatch.vertices,
-        sizeof(Sprender_Vertex) * sprender->spriteBatch.verticesThisBatch,
+        spriteBatch->vertices,
+        sizeof(Sprender_Vertex) * spriteBatch->verticesThisBatch,
         1,
         1,
         FNA3D_SETDATAOPTIONS_DISCARD
     );
     FNA3D_SetIndexBufferData(
         sprender->fna3d.device,
-        sprender->fna3d.indexBuffer,
+        spriteBatch->indexBuffer,
         0,
-        sprender->spriteBatch.indices,
-        sizeof(uint32_t) * sprender->spriteBatch.indicesThisBatch,
+        spriteBatch->indices,
+        sizeof(uint32_t) * spriteBatch->indicesThisBatch,
         FNA3D_SETDATAOPTIONS_DISCARD
     );
+    sprender->fna3d.vertexBufferBinding.vertexBuffer = spriteBatch->vertexBuffer;
     FNA3D_ApplyVertexBufferBindings(
         sprender->fna3d.device,
         &sprender->fna3d.vertexBufferBinding,
@@ -241,7 +224,7 @@ void Sprender_RenderSprites(Sprender* sprender)
     FNA3D_VerifySampler(
         sprender->fna3d.device,
         0,
-        sprender->spriteBatch.texture->asset,
+        spriteBatch->texture->asset,
         &sprender->fna3d.samplerState
     );
     
@@ -250,10 +233,10 @@ void Sprender_RenderSprites(Sprender* sprender)
         FNA3D_PRIMITIVETYPE_TRIANGLELIST,
         0,
         0,
-        sprender->spriteBatch.verticesThisBatch,
+        spriteBatch->verticesThisBatch,
         0,
-        sprender->spriteBatch.verticesThisBatch / 2,
-        sprender->fna3d.indexBuffer,
+        spriteBatch->verticesThisBatch / 2,
+        spriteBatch->indexBuffer,
         FNA3D_INDEXELEMENTSIZE_32BIT
     );
 }
@@ -277,11 +260,7 @@ void Sprender_Destroy(Sprender* sprender)
     Sprender_RenderMode_Destroy(sprender->fna3d.device, &sprender->defaultRenderMode);
     
     FNA3D_AddDisposeEffect(sprender->fna3d.device, sprender->shaderSpriteEffect.effect);
-    FNA3D_AddDisposeIndexBuffer(sprender->fna3d.device, sprender->fna3d.indexBuffer);
-    FNA3D_AddDisposeVertexBuffer(sprender->fna3d.device, sprender->fna3d.vertexBufferBinding.vertexBuffer);
     FNA3D_DestroyDevice(sprender->fna3d.device);
-    
-    Sprender_SpriteBatch_Destroy(&sprender->spriteBatch);
     
     SDL_DestroyWindow(sprender->window);
     

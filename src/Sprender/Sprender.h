@@ -20,9 +20,7 @@ typedef struct Sprender_FNA3D
 typedef struct Sprender
 {
     Sprender_FNA3D fna3d;
-    int maxSprites;
     Sprender_Shader shaderSpriteEffect;
-    Sprender_SpriteBatch spriteBatch;
     SDL_Window* window;
     Sprender_RenderMode defaultRenderMode;
     Sprender_Int2D resolution;
@@ -37,7 +35,6 @@ typedef struct Sprender
  * @param resolution the game's resolution
  * @param spriteEffectShaderFilename location of the SpriteEffect.fxb shader file
  * @param driver optionally give a preferred graphics driver; "OpenGL", "Vulkan", "DirectX", or "Metal"
- * @param maxSprites maximum number of sprites allowed; this memory will be pre-allocated
  * @param vsync whether or not to use vsync
  * @param flags additional to pass to SDL_Init. `SDL_INIT_VIDEO` is already being used
  * @return Sprender* new Sprender object
@@ -48,7 +45,6 @@ Sprender* Sprender_Create(
     Sprender_Int2D resolution,
     char* spriteEffectShaderFilename,
     char* driver,
-    int maxSprites,
     char vsync,
     Uint32 flags
 );
@@ -68,7 +64,7 @@ void Sprender_SetPresentation(Sprender* sprender, Sprender_Int2D windowSize, cha
  * 
  * @param sprender your sprender object
  */
-void Sprender_RenderSprites(Sprender* sprender);
+void Sprender_RenderSprites(Sprender* sprender, Sprender_SpriteBatch* spriteBatch);
 
 /**
  * @brief Load a new RenderMode & set of shaders.

@@ -19,15 +19,19 @@ typedef struct Sprender_SpriteBatch
     Sprender_Texture* texture;
     Sprender_Vertex* vertices;
     uint32_t* indices;
+    FNA3D_Buffer* vertexBuffer;
+    FNA3D_Buffer* indexBuffer;
+    FNA3D_Device* device;
 } Sprender_SpriteBatch;
 
 /**
  * @brief Create a new SpriteBatch.
  * 
+ * @param device FNA3D device
  * @param maxSprites maximum number of sprites
- * @return Sprender_SpriteBatch new SpriteBatch
+ * @return Sprender_SpriteBatch* pointer to new SpriteBatch
  */
-Sprender_SpriteBatch Sprender_SpriteBatch_Create(int maxSprites);
+Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites);
 
 /**
  * @brief Begin staging vertices for the given texture.

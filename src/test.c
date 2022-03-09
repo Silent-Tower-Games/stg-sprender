@@ -30,9 +30,12 @@ int main(int argc, char** argv)
         (Sprender_Int2D){ 80, 45, }, // game resolution
         "assets/shaders/SpriteEffect.fxb", // SpriteEffect filename
         NULL, // let FNA3D choose the graphics driver
-        10000, // 10k sprite maximum
         1, // not vsync
         0 // not passing in any SDL flags
+    );
+    Sprender_SpriteBatch* spriteBatch = Sprender_SpriteBatch_Create(
+        sprender->fna3d.device,
+        10000 // 10k
     );
     
     // YellowShader.fx
@@ -130,11 +133,11 @@ int main(int argc, char** argv)
         
         // Blue background
         Sprender_SpriteBatch_Begin(
-            &sprender->spriteBatch,
+            spriteBatch,
             &textureBlankWhite
         );
         Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
+            spriteBatch,
             (Sprender_Int2D){ 0, 0, },
             (Sprender_Float2D){ 0, 0, },
             (Sprender_Float2D){ 1000.0f, 1000.0f, },
@@ -142,16 +145,16 @@ int main(int argc, char** argv)
             0,
             0xFF990000
         );
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        Sprender_RenderSprites(sprender);
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
         
         // Sprites
         Sprender_SpriteBatch_Begin(
-            &sprender->spriteBatch,
+            spriteBatch,
             &textureSpriteSheet
         );
         Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
+            spriteBatch,
             (Sprender_Int2D){ 1, 0, },
             (Sprender_Float2D){ -8, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
@@ -160,7 +163,7 @@ int main(int argc, char** argv)
             0xFFFFFFFF
         );
         Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
+            spriteBatch,
             (Sprender_Int2D){ 6, 3, },
             (Sprender_Float2D){ -8, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
@@ -169,7 +172,7 @@ int main(int argc, char** argv)
             0xFFFFFFFF
         );
         Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
+            spriteBatch,
             (Sprender_Int2D){ 6, 3, },
             (Sprender_Float2D){ 10, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
@@ -178,7 +181,7 @@ int main(int argc, char** argv)
             0xFFFFFFFF
         );
         Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
+            spriteBatch,
             (Sprender_Int2D){ 1, 0, },
             (Sprender_Float2D){ 12, 0, },
             (Sprender_Float2D){ 1.0f, 1.0f, },
@@ -186,8 +189,8 @@ int main(int argc, char** argv)
             0,
             0xFFFFFFFF
         );
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        Sprender_RenderSprites(sprender);
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
         
         // Render to backbuffer
         Sprender_Load(
@@ -198,11 +201,11 @@ int main(int argc, char** argv)
             1
         );
         Sprender_SpriteBatch_Begin(
-            &sprender->spriteBatch,
+            spriteBatch,
             &myRenderTarget.renderTargetTexture
         );
         Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
+            spriteBatch,
             (Sprender_Int2D){ 0, 0 },
             (Sprender_Float2D){ 0, 0 },
             (Sprender_Float2D){ 1.0f, 1.0f, },
@@ -210,14 +213,14 @@ int main(int argc, char** argv)
             0,
             0xFFFFFFFF
         );
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        Sprender_RenderSprites(sprender);
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
         Sprender_SpriteBatch_Begin(
-            &sprender->spriteBatch,
+            spriteBatch,
             &textureBlankWhite
         );
         Sprender_SpriteBatch_StageFrame(
-            &sprender->spriteBatch,
+            spriteBatch,
             (Sprender_Int2D){ 0, 0 },
             (Sprender_Float2D){ 0, 0 },
             (Sprender_Float2D){ 1.0f, 1.0f, },
@@ -225,8 +228,8 @@ int main(int argc, char** argv)
             0,
             0xFFFFFFFF
         );
-        Sprender_SpriteBatch_End(&sprender->spriteBatch);
-        Sprender_RenderSprites(sprender);
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
         
         Sprender_Close(sprender);
         

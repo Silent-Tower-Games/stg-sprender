@@ -4,31 +4,45 @@
 #include <FNA3D.h>
 #include "SpriteBatch.h"
 
-Sprender_SpriteBatch Sprender_SpriteBatch_Create(int maxSprites)
+Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites)
 {
     const int maxVertices = maxSprites * 4;
     const int maxIndices = maxSprites * 6;
     
-    Sprender_SpriteBatch spriteBatch = {
-        .opened = 0,
-        .maxIndices = maxIndices,
-        .verticesThisBatch = 0,
-        .indicesThisBatch = 0,
-        .texture = NULL,
-        .vertices = malloc(sizeof(Sprender_Vertex) * maxVertices),
-        .indices = malloc(sizeof(int) * maxIndices),
-    };
+    Sprender_SpriteBatch* spriteBatch = malloc(sizeof(Sprender_SpriteBatch));
+    spriteBatch->opened = 0;
+    spriteBatch->maxIndices = maxIndices;
+    spriteBatch->verticesThisBatch = 0;
+    spriteBatch->indicesThisBatch = 0;
+    spriteBatch->texture = NULL;
+    spriteBatch->vertices = malloc(sizeof(Sprender_Vertex) * maxVertices);
+    spriteBatch->indices = malloc(sizeof(int) * maxIndices);
+    spriteBatch->device = device;
+    
+    spriteBatch->vertexBuffer = FNA3D_GenVertexBuffer(
+        device,
+        1,
+        FNA3D_BUFFERUSAGE_WRITEONLY,
+        maxSprites * 4 * sizeof(Sprender_Vertex)
+    );
+    
+    spriteBatch->indexBuffer = FNA3D_GenIndexBuffer(
+        device,
+        1,
+        FNA3D_BUFFERUSAGE_WRITEONLY,
+        maxSprites * 6 * sizeof(int)
+    );
     
     for(int i = 0; i < maxIndices / 6; i ++)
     {
         const int j = i * 6;
         const int x = i * 4;
-        spriteBatch.indices[j + 0] = x + 0;
-        spriteBatch.indices[j + 1] = x + 1;
-        spriteBatch.indices[j + 2] = x + 2;
-        spriteBatch.indices[j + 3] = x + 2;
-        spriteBatch.indices[j + 4] = x + 3;
-        spriteBatch.indices[j + 5] = x + 1;
+        spriteBatch->indices[j + 0] = x + 0;
+        spriteBatch->indices[j + 1] = x + 1;
+        spriteBatch->indices[j + 2] = x + 2;
+        spriteBatch->indices[j + 3] = x + 2;
+        spriteBatch->indices[j + 4] = x + 3;
+        spriteBatch->indices[j + 5] = x + 1;
     }
     
     return spriteBatch;
@@ -264,6 +278,9 @@ void Sprender_SpriteBatch_Destroy(Sprender_SpriteBatch* spriteBatch)
 {
     assert(spriteBatch != NULL);
     
+    FNA3D_AddDisposeIndexBuffer(spriteBatch->device, spriteBatch->indexBuffer);
+    
     free(spriteBatch->vertices);
     free(spriteBatch->indices);
+    free(spriteBatch);
 }
