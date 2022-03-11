@@ -31,7 +31,7 @@ typedef struct Sprender_SpriteBatch
  * @param maxSprites maximum number of sprites
  * @return Sprender_SpriteBatch* pointer to new SpriteBatch
  */
-Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites);
+Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites, char useIndexBuffer);
 
 /**
  * @brief Begin staging vertices for the given texture.

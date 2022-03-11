@@ -35,7 +35,8 @@ int main(int argc, char** argv)
     );
     Sprender_SpriteBatch* spriteBatch = Sprender_SpriteBatch_Create(
         sprender->fna3d.device,
-        10000 // 10k
+        10000, // 10k
+        0 // use an index buffer
     );
     
     // YellowShader.fx
@@ -239,6 +240,7 @@ int main(int argc, char** argv)
         }
     }
     
+    Sprender_SpriteBatch_Destroy(spriteBatch);
     Sprender_Shader_Destroy(sprender->fna3d.device, &shaderYellow);
     Sprender_Texture_Destroy(sprender->fna3d.device, &textureBlankWhite);
     Sprender_Texture_Destroy(sprender->fna3d.device, &textureSpriteSheet);

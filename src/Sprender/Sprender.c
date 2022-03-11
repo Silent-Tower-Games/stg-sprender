@@ -204,14 +204,17 @@ void Sprender_RenderSprites(Sprender* sprender, Sprender_SpriteBatch* spriteBatc
         1,
         FNA3D_SETDATAOPTIONS_DISCARD
     );
-    FNA3D_SetIndexBufferData(
-        sprender->fna3d.device,
-        spriteBatch->indexBuffer,
-        0,
-        spriteBatch->indices,
-        sizeof(uint32_t) * spriteBatch->indicesThisBatch,
-        FNA3D_SETDATAOPTIONS_DISCARD
-    );
+    if(spriteBatch->indexBuffer != NULL)
+    {
+        FNA3D_SetIndexBufferData(
+            sprender->fna3d.device,
+            spriteBatch->indexBuffer,
+            0,
+            spriteBatch->indices,
+            sizeof(uint32_t) * spriteBatch->indicesThisBatch,
+            FNA3D_SETDATAOPTIONS_DISCARD
+        );
+    }
     sprender->fna3d.vertexBufferBinding.vertexBuffer = spriteBatch->vertexBuffer;
     FNA3D_ApplyVertexBufferBindings(
         sprender->fna3d.device,
@@ -228,17 +231,29 @@ void Sprender_RenderSprites(Sprender* sprender, Sprender_SpriteBatch* spriteBatc
         &sprender->fna3d.samplerState
     );
     
-    FNA3D_DrawIndexedPrimitives(
-        sprender->fna3d.device,
-        FNA3D_PRIMITIVETYPE_TRIANGLELIST,
-        0,
-        0,
-        spriteBatch->verticesThisBatch,
-        0,
-        spriteBatch->verticesThisBatch / 2,
-        spriteBatch->indexBuffer,
-        FNA3D_INDEXELEMENTSIZE_32BIT
-    );
+    if(spriteBatch->indexBuffer != NULL)
+    {
+        FNA3D_DrawIndexedPrimitives(
+            sprender->fna3d.device,
+            FNA3D_PRIMITIVETYPE_TRIANGLELIST,
+            0,
+            0,
+            spriteBatch->verticesThisBatch,
+            0,
+            spriteBatch->verticesThisBatch / 2,
+            spriteBatch->indexBuffer,
+            FNA3D_INDEXELEMENTSIZE_32BIT
+        );
+    }
+    else
+    {
+        FNA3D_DrawPrimitives(
+            sprender->fna3d.device,
+            FNA3D_PRIMITIVETYPE_TRIANGLELIST,
+            0,
+            spriteBatch->verticesThisBatch / 3
+        );
+    }
 }
 
 void Sprender_Close(Sprender* sprender)

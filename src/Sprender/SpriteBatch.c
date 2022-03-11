@@ -4,7 +4,7 @@
 #include <FNA3D.h>
 #include "SpriteBatch.h"
 
-Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites)
+Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites, char useIndexBuffer)
 {
     const int maxVertices = maxSprites * 4;
     const int maxIndices = maxSprites * 6;
@@ -16,33 +16,47 @@ Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxS
     spriteBatch->indicesThisBatch = 0;
     spriteBatch->texture = NULL;
     spriteBatch->vertices = malloc(sizeof(Sprender_Vertex) * maxVertices);
-    spriteBatch->indices = malloc(sizeof(int) * maxIndices);
     spriteBatch->device = device;
     
-    spriteBatch->vertexBuffer = FNA3D_GenVertexBuffer(
-        device,
-        1,
-        FNA3D_BUFFERUSAGE_WRITEONLY,
-        maxSprites * 4 * sizeof(Sprender_Vertex)
-    );
-    
-    spriteBatch->indexBuffer = FNA3D_GenIndexBuffer(
-        device,
-        1,
-        FNA3D_BUFFERUSAGE_WRITEONLY,
-        maxSprites * 6 * sizeof(int)
-    );
-    
-    for(int i = 0; i < maxIndices / 6; i ++)
+    if(useIndexBuffer)
     {
-        const int j = i * 6;
-        const int x = i * 4;
-        spriteBatch->indices[j + 0] = x + 0;
-        spriteBatch->indices[j + 1] = x + 1;
-        spriteBatch->indices[j + 2] = x + 2;
-        spriteBatch->indices[j + 3] = x + 2;
-        spriteBatch->indices[j + 4] = x + 3;
-        spriteBatch->indices[j + 5] = x + 1;
+        spriteBatch->vertexBuffer = FNA3D_GenVertexBuffer(
+            device,
+            1,
+            FNA3D_BUFFERUSAGE_WRITEONLY,
+            maxSprites * 4 * sizeof(Sprender_Vertex)
+        );
+        
+        spriteBatch->indices = malloc(sizeof(int) * maxIndices);
+        spriteBatch->indexBuffer = FNA3D_GenIndexBuffer(
+            device,
+            1,
+            FNA3D_BUFFERUSAGE_WRITEONLY,
+            maxSprites * 6 * sizeof(int)
+        );
+        for(int i = 0; i < maxIndices / 6; i ++)
+        {
+            const int j = i * 6;
+            const int x = i * 4;
+            spriteBatch->indices[j + 0] = x + 0;
+            spriteBatch->indices[j + 1] = x + 1;
+            spriteBatch->indices[j + 2] = x + 2;
+            spriteBatch->indices[j + 3] = x + 2;
+            spriteBatch->indices[j + 4] = x + 3;
+            spriteBatch->indices[j + 5] = x + 1;
+        }
+    }
+    else
+    {
+        spriteBatch->vertexBuffer = FNA3D_GenVertexBuffer(
+            device,
+            1,
+            FNA3D_BUFFERUSAGE_WRITEONLY,
+            maxSprites * 6 * sizeof(Sprender_Vertex)
+        );
+        
+        spriteBatch->indices = NULL;
+        spriteBatch->indexBuffer = NULL;
     }
     
     return spriteBatch;
@@ -82,20 +96,41 @@ char Sprender_SpriteBatch_Stage(
     assert(spriteBatch != NULL);
     assert(spriteBatch->opened == 1);
     
-    if(spriteBatch->indicesThisBatch + 6 > spriteBatch->maxIndices)
+    if(spriteBatch->indexBuffer != NULL)
     {
-        return 0;
+        if(spriteBatch->indicesThisBatch + 6 > spriteBatch->maxIndices)
+        {
+            return 0;
+        }
+        
+        int i = spriteBatch->verticesThisBatch;
+        
+        spriteBatch->vertices[i + 0] = vertex0;
+        spriteBatch->vertices[i + 1] = vertex1;
+        spriteBatch->vertices[i + 2] = vertex2;
+        spriteBatch->vertices[i + 3] = vertex3;
+        
+        spriteBatch->verticesThisBatch += 4;
+        spriteBatch->indicesThisBatch += 6;
     }
-    
-    int i = spriteBatch->verticesThisBatch;
-    
-    spriteBatch->vertices[i + 0] = vertex0;
-    spriteBatch->vertices[i + 1] = vertex1;
-    spriteBatch->vertices[i + 2] = vertex2;
-    spriteBatch->vertices[i + 3] = vertex3;
-    
-    spriteBatch->verticesThisBatch += 4;
-    spriteBatch->indicesThisBatch += 6;
+    else
+    {
+        if(spriteBatch->verticesThisBatch + 6 > spriteBatch->maxIndices)
+        {
+            return 0;
+        }
+        
+        int i = spriteBatch->verticesThisBatch;
+        
+        spriteBatch->vertices[i + 0] = vertex0;
+        spriteBatch->vertices[i + 1] = vertex1;
+        spriteBatch->vertices[i + 2] = vertex2;
+        spriteBatch->vertices[i + 3] = vertex2;
+        spriteBatch->vertices[i + 4] = vertex3;
+        spriteBatch->vertices[i + 5] = vertex1;
+        
+        spriteBatch->verticesThisBatch += 6;
+    }
     
     return 1;
 }
