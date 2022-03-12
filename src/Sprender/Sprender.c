@@ -16,12 +16,12 @@ Sprender* Sprender_Create(
     char* spriteEffectShaderFilename,
     char* driver,
     char vsync,
-    Uint32 flags
+    Uint32 SDLflags
 )
 {
     assert(windowTitle != NULL);
 
-    SDL_Init(SDL_INIT_VIDEO | flags);
+    SDL_Init(SDL_INIT_VIDEO | SDLflags);
     
     Sprender* sprender = calloc(1, sizeof(Sprender));
     sprender->resolution = resolution;

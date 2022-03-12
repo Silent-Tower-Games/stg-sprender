@@ -10,11 +10,6 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
-static char* emoji_skull = "\U0001F480";
-static char* emoji_woman = "\U0001F469";
-
-// TODO: Destroy functions for everything; valgrind, etc
-
 /**
  * @brief Example of a shader callable function. Fades the screen into yellow & back to normal.
  * 
@@ -25,7 +20,7 @@ char yellowShaderStep(Sprender_Shader* shader);
 
 int main(int argc, char** argv)
 {
-    printf("Hello, World! %s %s\n", emoji_woman, emoji_skull);
+    printf("Hello, World!\n");
     
     Sprender* sprender = Sprender_Create(
         "Sprender Example",

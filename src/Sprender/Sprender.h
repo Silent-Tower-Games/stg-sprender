@@ -36,7 +36,7 @@ typedef struct Sprender
  * @param spriteEffectShaderFilename location of the SpriteEffect.fxb shader file
  * @param driver optionally give a preferred graphics driver; "OpenGL", "Vulkan", "DirectX", or "Metal"
  * @param vsync whether or not to use vsync
- * @param flags additional to pass to SDL_Init. `SDL_INIT_VIDEO` is already being used
+ * @param SDLflags additional to pass to SDL_Init. `SDL_INIT_VIDEO` is already being used
  * @return Sprender* new Sprender object
  */
 Sprender* Sprender_Create(
@@ -46,7 +46,7 @@ Sprender* Sprender_Create(
     char* spriteEffectShaderFilename,
     char* driver,
     char vsync,
-    Uint32 flags
+    Uint32 SDLflags
 );
 
 /**
