@@ -10,6 +10,9 @@
 #define SPRENDER_SPRITEBATCH_FLIP_X 1
 #define SPRENDER_SPRITEBATCH_FLIP_Y 2
 
+#define SPRENDER_SPRITEBATCH_INDEXBUFFER_USE 1
+#define SPRENDER_SPRITEBATCH_INDEXBUFFER_PREBUILD 2
+
 typedef struct Sprender_SpriteBatch
 {
     char opened;
@@ -22,6 +25,7 @@ typedef struct Sprender_SpriteBatch
     FNA3D_Buffer* vertexBuffer;
     FNA3D_Buffer* indexBuffer;
     FNA3D_Device* device;
+    char prebuiltIndexes;
 } Sprender_SpriteBatch;
 
 /**
@@ -29,9 +33,10 @@ typedef struct Sprender_SpriteBatch
  * 
  * @param device FNA3D device
  * @param maxSprites maximum number of sprites
+ * @param indexBufferConfig bitwise index buffer booleans; whether or not to use one & to prebuild it
  * @return Sprender_SpriteBatch* pointer to new SpriteBatch
  */
-Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites, char useIndexBuffer);
+Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites, char indexBufferConfig);
 
 /**
  * @brief Begin staging vertices for the given texture.
@@ -52,7 +57,23 @@ void Sprender_SpriteBatch_Begin(
 void Sprender_SpriteBatch_End(Sprender_SpriteBatch* spriteBatch);
 
 /**
- * @brief Stage vertices in the given SpriteBatch.
+ * @brief Stage a triangle in the form of three vertices in the given SpriteBatch.
+ * 
+ * @param spriteBatch your SpriteBatch
+ * @param vertex0 vertex A
+ * @param vertex1 vertex B
+ * @param vertex2 vertex C
+ * @return char whether or not the vertices were added successfully
+ */
+char Sprender_SpriteBatch_StageTriangleVerts(
+    Sprender_SpriteBatch* spriteBatch,
+    Sprender_Vertex vertex0,
+    Sprender_Vertex vertex1,
+    Sprender_Vertex vertex2
+);
+
+/**
+ * @brief Stage a quad in the form of four vertices in the given SpriteBatch. Requires no index buffer!
  * 
  * @param spriteBatch your SpriteBatch
  * @param vertex0 top left position
@@ -61,7 +82,7 @@ void Sprender_SpriteBatch_End(Sprender_SpriteBatch* spriteBatch);
  * @param vertex3 bottom right position
  * @return char whether or not the vertices were added successfully
  */
-char Sprender_SpriteBatch_Stage(
+char Sprender_SpriteBatch_StageQuadVerts(
     Sprender_SpriteBatch* spriteBatch,
     Sprender_Vertex vertex0,
     Sprender_Vertex vertex1,

@@ -4,10 +4,12 @@
 #include <FNA3D.h>
 #include "SpriteBatch.h"
 
-Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites, char useIndexBuffer)
+Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxSprites, char indexBufferConfig)
 {
     const int maxVertices = maxSprites * 4;
     const int maxIndices = maxSprites * 6;
+    
+    char useIndexBuffer = indexBufferConfig & SPRENDER_SPRITEBATCH_INDEXBUFFER_USE;
     
     Sprender_SpriteBatch* spriteBatch = malloc(sizeof(Sprender_SpriteBatch));
     spriteBatch->opened = 0;
@@ -17,6 +19,7 @@ Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxS
     spriteBatch->texture = NULL;
     spriteBatch->vertices = malloc(sizeof(Sprender_Vertex) * maxVertices);
     spriteBatch->device = device;
+    spriteBatch->prebuiltIndexes = useIndexBuffer && (indexBufferConfig & SPRENDER_SPRITEBATCH_INDEXBUFFER_PREBUILD);
     
     if(useIndexBuffer)
     {
@@ -34,16 +37,19 @@ Sprender_SpriteBatch* Sprender_SpriteBatch_Create(FNA3D_Device* device, int maxS
             FNA3D_BUFFERUSAGE_WRITEONLY,
             maxSprites * 6 * sizeof(int)
         );
-        for(int i = 0; i < maxIndices / 6; i ++)
+        if(spriteBatch->prebuiltIndexes)
         {
-            const int j = i * 6;
-            const int x = i * 4;
-            spriteBatch->indices[j + 0] = x + 0;
-            spriteBatch->indices[j + 1] = x + 1;
-            spriteBatch->indices[j + 2] = x + 2;
-            spriteBatch->indices[j + 3] = x + 2;
-            spriteBatch->indices[j + 4] = x + 3;
-            spriteBatch->indices[j + 5] = x + 1;
+            for(int i = 0; i < maxIndices / 6; i ++)
+            {
+                const int j = i * 6;
+                const int x = i * 4;
+                spriteBatch->indices[j + 0] = x + 0;
+                spriteBatch->indices[j + 1] = x + 1;
+                spriteBatch->indices[j + 2] = x + 2;
+                spriteBatch->indices[j + 3] = x + 2;
+                spriteBatch->indices[j + 4] = x + 3;
+                spriteBatch->indices[j + 5] = x + 1;
+            }
         }
     }
     else
@@ -85,7 +91,39 @@ void Sprender_SpriteBatch_End(Sprender_SpriteBatch* spriteBatch)
     spriteBatch->opened = 0;
 }
 
-char Sprender_SpriteBatch_Stage(
+char Sprender_SpriteBatch_StageTriangleVerts(
+    Sprender_SpriteBatch* spriteBatch,
+    Sprender_Vertex vertex0,
+    Sprender_Vertex vertex1,
+    Sprender_Vertex vertex2
+)
+{
+    assert(spriteBatch != NULL);
+    assert(spriteBatch->opened == 1);
+    
+    int v = spriteBatch->verticesThisBatch;
+    int i =  spriteBatch->indicesThisBatch;
+    
+    spriteBatch->vertices[v + 0] = vertex0;
+    spriteBatch->vertices[v + 1] = vertex1;
+    spriteBatch->vertices[v + 2] = vertex2;
+    
+    if(
+        spriteBatch->indexBuffer != NULL
+        &&
+        !spriteBatch->prebuiltIndexes
+    )
+    {
+        spriteBatch->indices[i + 0] = v + 0;
+        spriteBatch->indices[i + 1] = v + 1;
+        spriteBatch->indices[i + 2] = v + 2;
+    }
+    
+    spriteBatch->verticesThisBatch += 3;
+    spriteBatch->indicesThisBatch += 3;
+}
+
+char Sprender_SpriteBatch_StageQuadVerts(
     Sprender_SpriteBatch* spriteBatch,
     Sprender_Vertex vertex0,
     Sprender_Vertex vertex1,
@@ -103,12 +141,24 @@ char Sprender_SpriteBatch_Stage(
             return 0;
         }
         
-        int i = spriteBatch->verticesThisBatch;
+        int v = spriteBatch->verticesThisBatch;
         
-        spriteBatch->vertices[i + 0] = vertex0;
-        spriteBatch->vertices[i + 1] = vertex1;
-        spriteBatch->vertices[i + 2] = vertex2;
-        spriteBatch->vertices[i + 3] = vertex3;
+        spriteBatch->vertices[v + 0] = vertex0;
+        spriteBatch->vertices[v + 1] = vertex1;
+        spriteBatch->vertices[v + 2] = vertex2;
+        spriteBatch->vertices[v + 3] = vertex3;
+        
+        if(!spriteBatch->prebuiltIndexes)
+        {
+            int i = spriteBatch->indicesThisBatch;
+            
+            spriteBatch->indices[i + 0] = v + 0;
+            spriteBatch->indices[i + 1] = v + 1;
+            spriteBatch->indices[i + 2] = v + 2;
+            spriteBatch->indices[i + 3] = v + 2;
+            spriteBatch->indices[i + 4] = v + 3;
+            spriteBatch->indices[i + 5] = v + 1;
+        }
         
         spriteBatch->verticesThisBatch += 4;
         spriteBatch->indicesThisBatch += 6;
@@ -143,7 +193,7 @@ char Sprender_SpriteBatch_StageQuad(
     uint32_t color
 )
 {
-    return Sprender_SpriteBatch_Stage(
+    return Sprender_SpriteBatch_StageQuadVerts(
         spriteBatch,
         // topLeft
         (Sprender_Vertex){

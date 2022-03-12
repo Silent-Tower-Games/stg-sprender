@@ -10,6 +10,9 @@
 #include "Sprender/Shader.h"
 #include "Sprender/Texture.h"
 
+static char* emoji_skull = "\U0001F480";
+static char* emoji_woman = "\U0001F469";
+
 // TODO: Destroy functions for everything; valgrind, etc
 
 /**
@@ -22,7 +25,7 @@ char yellowShaderStep(Sprender_Shader* shader);
 
 int main(int argc, char** argv)
 {
-    printf("Hello, World!\n");
+    printf("Hello, World! %s %s\n", emoji_woman, emoji_skull);
     
     Sprender* sprender = Sprender_Create(
         "Sprender Example",
@@ -36,7 +39,7 @@ int main(int argc, char** argv)
     Sprender_SpriteBatch* spriteBatch = Sprender_SpriteBatch_Create(
         sprender->fna3d.device,
         10000, // 10k
-        0 // use an index buffer
+        SPRENDER_SPRITEBATCH_INDEXBUFFER_USE // use an index buffer, don't pre-build it
     );
     
     // YellowShader.fx
@@ -189,6 +192,41 @@ int main(int argc, char** argv)
             0.75f,
             0,
             0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
+        
+        // Rainbow triangle
+        Sprender_SpriteBatch_Begin(
+            spriteBatch,
+            &textureBlankWhite
+        );
+        Sprender_SpriteBatch_StageTriangleVerts(
+            spriteBatch,
+            (Sprender_Vertex){
+                .x = 0,
+                .y = -4,
+                .u = 0,
+                .v = 0,
+                .z = 0.75f,
+                .color = 0xFF0000FF,
+            },
+            (Sprender_Vertex){
+                .x = 4,
+                .y = 4,
+                .u = 1,
+                .v = 0,
+                .z = 0.75f,
+                .color = 0xFF00FF00,
+            },
+            (Sprender_Vertex){
+                .x = -4,
+                .y = 4,
+                .u = 0,
+                .v = 1,
+                .z = 0.75f,
+                .color = 0xFFFF0000,
+            }
         );
         Sprender_SpriteBatch_End(spriteBatch);
         Sprender_RenderSprites(sprender, spriteBatch);
