@@ -265,6 +265,41 @@ int main(int argc, char** argv)
         Sprender_SpriteBatch_End(spriteBatch);
         Sprender_RenderSprites(sprender, spriteBatch);
         
+        // Rainbow triangle
+        Sprender_SpriteBatch_Begin(
+            spriteBatch,
+            &textureBlankWhite
+        );
+        Sprender_SpriteBatch_StageTriangleVerts(
+            spriteBatch,
+            (Sprender_Vertex){
+                .x = 22,
+                .y = -4,
+                .u = 0,
+                .v = 0,
+                .z = 0.75f,
+                .color = 0xFF0000FF,
+            },
+            (Sprender_Vertex){
+                .x = 26,
+                .y = 4,
+                .u = 1,
+                .v = 0,
+                .z = 0.75f,
+                .color = 0xFF00FF00,
+            },
+            (Sprender_Vertex){
+                .x = 18,
+                .y = 4,
+                .u = 0,
+                .v = 1,
+                .z = 0.75f,
+                .color = 0xFFFF0000,
+            }
+        );
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
+        
         Sprender_Close(sprender);
         
         if(!sprender->vsync)
