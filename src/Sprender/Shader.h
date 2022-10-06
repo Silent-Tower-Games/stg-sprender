@@ -40,7 +40,7 @@ Sprender_Shader Sprender_Shader_Create(
  */
 Sprender_Shader Sprender_Shader_Load(
     FNA3D_Device* device,
-    char* filename,
+    const char* filename,
     char (*callable)(Sprender_Shader*)
 );
 
