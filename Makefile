@@ -52,7 +52,7 @@ clean:
 
 .PHONY=valgrind
 valgrind:
-	valgrind --leak-check=full ./main 2> valgrind.txt
+	time valgrind --leak-check=full --track-origins=yes ./main 2> valgrind.txt
 
 .PHONY=apitrace
 apitrace:
