@@ -1,9 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include <FNA3D.h>
 #include "RenderMode.h"
-#include "Shader.h"
 #include "SpriteBatch.h"
 
 typedef struct Sprender_FNA3D
@@ -37,7 +35,8 @@ typedef struct Sprender
  * @param driver optionally give a preferred graphics driver; "OpenGL", "Vulkan", "DirectX", or "Metal"
  * @param vsync whether or not to use vsync
  * @param SDLflags additional to pass to SDL_Init. `SDL_INIT_VIDEO` is already being used
- * @return Sprender* new Sprender object
+ * @return Sprender* 
+ * new Sprender object
  */
 Sprender* Sprender_Create(
     char* windowTitle,

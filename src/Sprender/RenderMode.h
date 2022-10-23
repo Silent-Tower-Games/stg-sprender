@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Shader.h"
+#define _INCL_MOJOSHADER_H_
 #include <FNA3D.h>
 #include "Camera.h"
 #include "Texture.h"

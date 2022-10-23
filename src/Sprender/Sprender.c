@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <FNA3D.h>
 #include <math.h>
 #include "Int2D.h"
 #include "Sprender.h"

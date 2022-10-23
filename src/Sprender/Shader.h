@@ -1,10 +1,10 @@
 #pragma once
 
-#include <FNA3D.h>
 #define MOJOSHADER_NO_VERSION_INCLUDE
 #define MOJOSHADER_EFFECT_SUPPORT
 #include <mojoshader.h>
-#include <mojoshader_effects.h>
+#define _INCL_MOJOSHADER_H_
+#include <FNA3D.h>
 
 typedef struct Sprender_Shader
 {

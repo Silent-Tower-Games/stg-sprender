@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Shader.h"
 #include "RenderMode.h"
 
 Sprender_RenderMode Sprender_RenderMode_Create(

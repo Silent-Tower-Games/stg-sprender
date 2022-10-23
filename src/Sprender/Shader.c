@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <FNA3D.h>
 #include "Shader.h"
 
 Sprender_Shader Sprender_Shader_Create(
