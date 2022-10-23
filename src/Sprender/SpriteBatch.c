@@ -121,6 +121,8 @@ char Sprender_SpriteBatch_StageTriangleVerts(
     
     spriteBatch->verticesThisBatch += 3;
     spriteBatch->indicesThisBatch += 3;
+    
+    return 1;
 }
 
 char Sprender_SpriteBatch_StageQuadVerts(
