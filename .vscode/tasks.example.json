@@ -8,7 +8,7 @@
             "options": {
                 "env": {
                     "CC": "gcc",
-                    "CFLAGS": "-g -pedantic-errors --std=c99 -Wall -Werror",
+                    "CFLAGS": "-g -pedantic-errors --std=c99 -Wall -Werror -Wextra",
                     "INCS": "-I/FNA3D/include -I/FNA3D/MojoShader",
                     "LIBS": "-L/FNA3D -L`pwd`",
                     "SDL2": "`sdl2-config --libs`",
