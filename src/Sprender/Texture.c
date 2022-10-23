@@ -50,7 +50,7 @@ Sprender_Texture Sprender_Texture_NewBlank(
     size_t sizeWithType = sizeof(unsigned char) * size;
     
     unsigned char* pixels = malloc(sizeWithType);
-    for(int i = 0; i < size; i += 4)
+    for(size_t i = 0; i < size; i += 4)
     {
         pixels[i + 0] = 0xFF * color.x;
         pixels[i + 1] = 0xFF * color.y;
