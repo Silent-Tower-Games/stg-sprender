@@ -1,7 +1,7 @@
 #pragma once
 
 #include <FNA3D.h>
-#include "Int2D.h"
+#include <Sprender/Int2D.h>
 
 typedef struct Sprender_Texture
 {

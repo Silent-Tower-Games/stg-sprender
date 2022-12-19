@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Camera.h"
+#include <Sprender/Camera.h>
 
 typedef struct Sprender_Matrix
 {

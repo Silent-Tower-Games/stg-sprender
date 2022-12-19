@@ -2,9 +2,9 @@
 
 #include <SDL2/SDL.h>
 #include <FNA3D.h>
-#include "RenderMode.h"
-#include "Shader.h"
-#include "SpriteBatch.h"
+#include <Sprender/RenderMode.h>
+#include <Sprender/Shader.h>
+#include <Sprender/SpriteBatch.h>
 
 typedef struct Sprender_FNA3D
 {

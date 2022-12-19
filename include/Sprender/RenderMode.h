@@ -1,8 +1,8 @@
 #pragma once
 
 #include <FNA3D.h>
-#include "Camera.h"
-#include "Texture.h"
+#include <Sprender/Camera.h>
+#include <Sprender/Texture.h>
 
 typedef struct Sprender_RenderMode
 {

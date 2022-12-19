@@ -1,11 +1,11 @@
 #pragma once
 
 #include <FNA3D.h>
-#include "Float2D.h"
-#include "Int2D.h"
-#include "Quad.h"
-#include "Texture.h"
-#include "Vertex.h"
+#include <Sprender/Float2D.h>
+#include <Sprender/Int2D.h>
+#include <Sprender/Quad.h>
+#include <Sprender/Texture.h>
+#include <Sprender/Vertex.h>
 
 #define SPRENDER_SPRITEBATCH_FLIP_X 1
 #define SPRENDER_SPRITEBATCH_FLIP_Y 2
