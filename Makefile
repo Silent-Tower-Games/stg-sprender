@@ -1,5 +1,7 @@
 include .env
 
+CFLAGS?=-O2
+
 RPATH?=-Wl,-rpath=./
 INCS=${INC_FNA3D} ${INC_SDL2} ${INC_SPRENDER}
 LIBS=${LIB_FNA3D} ${LIB_SDL2} ${LIB_SPRENDER}
