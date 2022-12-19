@@ -19,7 +19,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Make Linux",
+            "preLaunchTask": "Make",
             "miDebuggerPath": "/usr/bin/gdb"
         },
         {
@@ -40,7 +40,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Make Windows",
+            "preLaunchTask": "Make",
             "miDebuggerPath": "C:\\Software\\mingw64\\bin\\gdb.exe"
         },
         {
@@ -54,7 +54,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb",
-            "preLaunchTask": "Make macOS"
+            "preLaunchTask": "Make"
         }
     ]
 }
