@@ -5,12 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/include",
-                "/home/swan/Programming/Projects/cilent/src",
-                "/home/swan/Programming/Projects/stg-sprender/src",
-                "/home/swan/Programming/Libraries/Debug/FNA3D/include",
-                "/home/swan/Programming/Libraries/Debug/FNA3D/MojoShader",
-                "/home/swan/Programming/Libraries/Debug/flecs-master/include",
-                "/home/swan/Programming/Libraries/Debug/lua-5.4.2/include"
+                "/stg-sprender/include",
+                "/FNA3D/include",
+                "/FNA3D/MojoShader"
             ],
             "cStandard": "c99"
         }
