@@ -1,25 +1,25 @@
-RPATH=-Wl,-rpath=./
+include .env
 
-ifeq (${CC}, clang)
-RPATH=-Wl,-rpath ./
-endif
+RPATH?=-Wl,-rpath=./
+INCS=${INC_FNA3D} ${INC_MOJOSHADER} ${INC_SDL2} ${INC_SPRENDER}
+LIBS=${LIB_FNA3D} ${LIB_SDL2} ${LIB_SPRENDER}
 
 .PHONY=application
 application:
 	make lib
 	make objs
-	${CC} ${CFLAGS} src/test.o -o main ${SDL2} ${LIBS} -lsprender -lFNA3D -lm ${RPATH}
+	${CC} ${CFLAGS} src/test.o -o main ${LIBS} -lsprender -lFNA3D -lm ${RPATH}
 
 .PHONY=application-static
 application-static:
 	make lib-static
 	make objs
-	${CC} ${CFLAGS} src/test.o libsprender.a -o main ${SDL2}
+	${CC} ${CFLAGS} src/test.o libsprender.a -o main
 
 .PHONY=lib
 lib:
 	make objs-lib
-	${CC} ${CFLAGS} src/Sprender/Camera.o src/Sprender/Matrix.o src/Sprender/RenderMode.o src/Sprender/Sprender.o src/Sprender/SpriteBatch.o src/Sprender/Shader.o src/Sprender/Texture.o -shared -o libsprender.${EXT} ${LIBS} ${SDL2}
+	${CC} ${CFLAGS} src/Sprender/Camera.o src/Sprender/Matrix.o src/Sprender/RenderMode.o src/Sprender/Sprender.o src/Sprender/SpriteBatch.o src/Sprender/Shader.o src/Sprender/Texture.o -shared -o libsprender.${EXT} ${LIBS}
 
 .PHONY=lib-static
 lib-static:

@@ -2,58 +2,9 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "Make Linux",
+            "label": "Make",
             "command": "make",
             "args": [],
-            "options": {
-                "env": {
-                    "CC": "gcc",
-                    "CFLAGS": "-g -pedantic",
-                    "INCS": "-I/FNA3D/include -I/FNA3D/MojoShader",
-                    "LIBS": "-L/FNA3D -L`pwd`",
-                    "SDL2": "`sdl2-config --libs`",
-                    "EXT": "so"
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "shell",
-            "label": "Make Windows",
-            "command": "make",
-            "args": [],
-            "options": {
-                "env": {
-                    "CC": "gcc",
-                    "CFLAGS": "-g -pedantic",
-                    "INCS": "-IC:\\Software\\FNA3D\\include -IC:\\Software\\FNA3D\\MojoShader -IC:\\Software\\SDL2-2.0.18\\x86_64-w64-mingw32\\include",
-                    "LIBS": "-LC:\\Software\\FNA3D -LC:\\Software\\stg-sprender -lFNA3D",
-                    "SDL2": "-LC:\\Software\\SDL2-2.0.18\\x86_64-w64-mingw32\\lib -lSDL2",
-                    "EXT": "dll"
-                }
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "shell",
-            "label": "Make macOS",
-            "command": "make",
-            "args": [],
-            "options": {
-                "env": {
-                    "CC": "clang",
-                    "CFLAGS": "-g -pedantic",
-                    "INCS": "-I/usr/local/Cellar/sdl2/2.0.18/include -I/Users/silenttowergames/Documents/C/FNA3D/include -I/Users/silenttowergames/Documents/C/FNA3D/MojoShader",
-                    "LIBS": "-L/usr/local/Cellar/sdl2/2.0.18/lib -L/Users/silenttowergames/Documents/C/FNA3D -L`pwd` -lSDL2 -lFNA3D",
-                    "EXT": "so"
-                }
-            },
             "group": {
                 "kind": "build",
                 "isDefault": true
