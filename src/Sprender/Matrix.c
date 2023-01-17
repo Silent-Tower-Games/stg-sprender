@@ -45,33 +45,17 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
     
     Sprender_Matrix matrix = Sprender_Matrix_Create();
     
-    /*
-    aspect = your screen width / height (iirc)
-    fovY = vertical fov in radians
-    zNear = the closest stuff can get to the eye without clipping
-    zFar = the furthest away stuff can be without clipping
-
-    height = 1 / tan(fovY * 0.5)
-    width = height / aspect
-    invDepth = 1.0 / (zFar - zNear)
-
-    [ width,      0,                              0,      0]
-    [     0, height,                              0,      0]
-    [     0,      0,     -(zFar + zNear) * invDepth,      0]
-    [     0,      0, -(2 * zFar * zNear) * invDepth,      0]
-    */
-    
-    const char is3D = 0;
+    const char is3D = 1;
     
     if (is3D) {
-        const float ar = camera->resolution.X / camera->resolution.Y;
-        const float zNear = 0.01f;
+        const float ar = (float)camera->resolution.X / (float)camera->resolution.Y;
+        const float zNear = 0.0f;
         const float zFar = 1.0f;
         const float zRange = zNear - zFar;
-        const float tanHalfFOV = 0.5f * tanf(1.5708f);
+        const float tanHalfFOV = 0.5f * tanf(1.55f);
         
         matrix.M11 = 1.0f / (tanHalfFOV * ar);
-        matrix.M22 = 1.0f / tanHalfFOV;
+        matrix.M22 = -1.0f / tanHalfFOV;
         matrix.M33 = (-zNear - zFar) / zRange;
         matrix.M34 = 2.0f * zFar * zNear / zRange;
         matrix.M43 = 1.0f;

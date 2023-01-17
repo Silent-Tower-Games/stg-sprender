@@ -134,7 +134,7 @@ int main(int argc, char** argv)
             spriteBatch,
             &textureBlankWhite
         );
-        const float depth = -0.75f;
+        const float depth = 0.0f;
         Sprender_SpriteBatch_StageTriangleVerts(
             spriteBatch,
             (Sprender_Vertex){
