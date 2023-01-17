@@ -44,7 +44,6 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
     assert(camera != NULL);
     
     Sprender_Matrix matrix = Sprender_Matrix_Create();
-    memset(&matrix, 0, sizeof(matrix));
     
     /*
     aspect = your screen width / height (iirc)
@@ -62,21 +61,20 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
     [     0,      0, -(2 * zFar * zNear) * invDepth,      0]
     */
     
-    const char is3D = 1;
+    const char is3D = 0;
     
     if (is3D) {
-        const float aspect = camera->resolution.X / camera->resolution.Y;
-        const float fovY = 1.5708f; // 90deg to rad
+        const float ar = camera->resolution.X / camera->resolution.Y;
         const float zNear = 0.01f;
         const float zFar = 1.0f;
-        const float height = 1 / tanf(fovY * 0.5f);
-        const float width = height / aspect;
-        const float invDepth = 1.0f / (zFar - zNear);
-
-        matrix.M11 = width;
-        matrix.M22 = height;
-        matrix.M33 = -(zFar + zNear) * invDepth;
-        matrix.M43 = -(2 * zFar * zNear) * invDepth;
+        const float zRange = zNear - zFar;
+        const float tanHalfFOV = 0.5f * tanf(1.5708f);
+        
+        matrix.M11 = 1.0f / (tanHalfFOV * ar);
+        matrix.M22 = 1.0f / tanHalfFOV;
+        matrix.M33 = (-zNear - zFar) / zRange;
+        matrix.M34 = 2.0f * zFar * zNear / zRange;
+        matrix.M43 = 1.0f;
     } else {
         matrix.M11 = (2.0f / camera->resolution.X) * (camera->zoom.X);
         matrix.M14 = 0.0f - (2.0f / (camera->resolution.X / camera->position.X / camera->zoom.X));
