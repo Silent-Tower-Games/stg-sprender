@@ -11,6 +11,7 @@ typedef struct Sprender_Camera
 	Sprender_Float3D zoom;
 	float projection[16];
 	char is3D;
+	float fov;
 } Sprender_Camera;
 
 /**

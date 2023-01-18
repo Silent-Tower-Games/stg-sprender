@@ -186,7 +186,7 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
         const float zNear = 0.0f;
         const float zFar = 1.0f;
         const float zRange = zNear - zFar;
-        const float tanHalfFOV = 0.5f * tanf(1.55f);
+        const float tanHalfFOV = 0.5f * tanf(camera->fov);
         
         matrix.M11 = 1.0f / (tanHalfFOV * ar);
         matrix.M22 = -1.0f / tanHalfFOV;

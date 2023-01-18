@@ -72,7 +72,8 @@ int main(int argc, char** argv)
         (FNA3D_Vec4){ 0, 0, 0.5f, 1 },
         1
     );
-    // myRenderTarget.camera.is3D = 1;
+    myRenderTarget.camera.is3D = 1;
+    myRenderTarget.camera.fov = 1.55f;
     
     char quit = 0;
     char isFullscreen = 0;
@@ -83,7 +84,7 @@ int main(int argc, char** argv)
         
         // myRenderTarget.camera.position.X += 0.1f;
         // myRenderTarget.camera.position.Y -= 0.1f;
-        // myRenderTarget.camera.rotation.Z += 0.01f;
+        // myRenderTarget.camera.rotation.X += 0.01f;
         sprender->defaultRenderMode.camera.rotation.Z += 0.01f;
         
         SDL_Event event;
