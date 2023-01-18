@@ -83,7 +83,8 @@ int main(int argc, char** argv)
         
         // myRenderTarget.camera.position.X += 0.1f;
         // myRenderTarget.camera.position.Y -= 0.1f;
-        myRenderTarget.camera.rotation.X += 0.01f;
+        // myRenderTarget.camera.rotation.Z += 0.01f;
+        sprender->defaultRenderMode.camera.rotation.Z += 0.01f;
         
         SDL_Event event;
         while(SDL_PollEvent(&event))

@@ -163,6 +163,24 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
     scale.M11 = camera->zoom.X;
     scale.M22 = camera->zoom.Y;
     
+    Sprender_Matrix rotationX = Sprender_Matrix_Create();
+    rotationX.M22 = cosf(camera->rotation.X);
+    rotationX.M23 = -sinf(camera->rotation.X);
+    rotationX.M32 = sinf(camera->rotation.X);
+    rotationX.M33 = cosf(camera->rotation.X);
+    
+    Sprender_Matrix rotationY = Sprender_Matrix_Create();
+    rotationY.M11 = cosf(camera->rotation.Y);
+    rotationY.M13 = sinf(camera->rotation.Y);
+    rotationY.M31 = -sinf(camera->rotation.Y);
+    rotationY.M33 = cosf(camera->rotation.Y);
+    
+    Sprender_Matrix rotationZ = Sprender_Matrix_Create();
+    rotationZ.M11 = cosf(camera->rotation.Z);
+    rotationZ.M12 = -sinf(camera->rotation.Z);
+    rotationZ.M21 = sinf(camera->rotation.Z);
+    rotationZ.M22 = cosf(camera->rotation.Z);
+    
     if (camera->is3D) {
         const float ar = (float)camera->resolution.X / (float)camera->resolution.Y;
         const float zNear = 0.0f;
@@ -176,12 +194,8 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
         matrix.M34 = 2.0f * zFar * zNear / zRange;
         matrix.M43 = 1.0f;
     } else {
-        matrix.M11 = 2.0f / camera->resolution.X;
-        matrix.M14 = 2.0f / camera->resolution.X;
-        matrix.M22 = -2.0f / camera->resolution.Y;
-        matrix.M24 = 2.0f / camera->resolution.Y;
-        matrix.M33 = 1;
-        matrix.M44 = 1;
+        matrix.M11 = (2.0f / camera->resolution.X);
+        matrix.M22 = -(2.0f / camera->resolution.Y);
     }
     
     matrix = Sprender_Matrix_Multiply(
@@ -191,6 +205,18 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
     matrix = Sprender_Matrix_Multiply(
         matrix,
         scale
+    );
+    matrix = Sprender_Matrix_Multiply(
+        matrix,
+        rotationX
+    );
+    matrix = Sprender_Matrix_Multiply(
+        matrix,
+        rotationY
+    );
+    matrix = Sprender_Matrix_Multiply(
+        matrix,
+        rotationZ
     );
     
     return matrix;
