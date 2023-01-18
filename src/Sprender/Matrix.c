@@ -16,6 +16,116 @@ Sprender_Matrix Sprender_Matrix_Create()
     return matrix;
 }
 
+Sprender_Matrix Sprender_Matrix_Multiply(
+    Sprender_Matrix matrix1,
+    Sprender_Matrix matrix2
+)
+{
+    Sprender_Matrix result;
+    
+    result.M11 = (
+          (matrix1.M11 * matrix2.M11)
+        + (matrix1.M12 * matrix2.M21)
+        + (matrix1.M13 * matrix2.M31)
+        + (matrix1.M14 * matrix2.M41)
+    );
+    result.M12 = (
+          (matrix1.M11 * matrix2.M12)
+        + (matrix1.M12 * matrix2.M22)
+        + (matrix1.M13 * matrix2.M32)
+        + (matrix1.M14 * matrix2.M42)
+    );
+    result.M13 = (
+          (matrix1.M11 * matrix2.M13)
+        + (matrix1.M12 * matrix2.M23)
+        + (matrix1.M13 * matrix2.M33)
+        + (matrix1.M14 * matrix2.M43)
+    );
+    result.M14 = (
+          (matrix1.M11 * matrix2.M14)
+        + (matrix1.M12 * matrix2.M24)
+        + (matrix1.M13 * matrix2.M34)
+        + (matrix1.M14 * matrix2.M44)
+    );
+    
+    result.M21 = (
+          (matrix1.M21 * matrix2.M11)
+        + (matrix1.M22 * matrix2.M21)
+        + (matrix1.M23 * matrix2.M31)
+        + (matrix1.M24 * matrix2.M41)
+    );
+    result.M22 = (
+          (matrix1.M21 * matrix2.M12)
+        + (matrix1.M22 * matrix2.M22)
+        + (matrix1.M23 * matrix2.M32)
+        + (matrix1.M24 * matrix2.M42)
+    );
+    result.M23 = (
+          (matrix1.M21 * matrix2.M13)
+        + (matrix1.M22 * matrix2.M23)
+        + (matrix1.M23 * matrix2.M33)
+        + (matrix1.M24 * matrix2.M43)
+    );
+    result.M24 = (
+          (matrix1.M21 * matrix2.M14)
+        + (matrix1.M22 * matrix2.M24)
+        + (matrix1.M23 * matrix2.M34)
+        + (matrix1.M24 * matrix2.M44)
+    );
+    
+    result.M31 = (
+          (matrix1.M31 * matrix2.M11)
+        + (matrix1.M32 * matrix2.M21)
+        + (matrix1.M33 * matrix2.M31)
+        + (matrix1.M34 * matrix2.M41)
+    );
+    result.M32 = (
+          (matrix1.M31 * matrix2.M12)
+        + (matrix1.M32 * matrix2.M22)
+        + (matrix1.M33 * matrix2.M32)
+        + (matrix1.M34 * matrix2.M42)
+    );
+    result.M33 = (
+          (matrix1.M31 * matrix2.M13)
+        + (matrix1.M32 * matrix2.M23)
+        + (matrix1.M33 * matrix2.M33)
+        + (matrix1.M34 * matrix2.M43)
+    );
+    result.M34 = (
+          (matrix1.M31 * matrix2.M14)
+        + (matrix1.M32 * matrix2.M24)
+        + (matrix1.M33 * matrix2.M34)
+        + (matrix1.M34 * matrix2.M44)
+    );
+    
+    result.M41 = (
+          (matrix1.M41 * matrix2.M11)
+        + (matrix1.M42 * matrix2.M21)
+        + (matrix1.M43 * matrix2.M31)
+        + (matrix1.M44 * matrix2.M41)
+    );
+    result.M42 = (
+          (matrix1.M41 * matrix2.M12)
+        + (matrix1.M42 * matrix2.M22)
+        + (matrix1.M43 * matrix2.M32)
+        + (matrix1.M44 * matrix2.M42)
+    );
+    result.M43 = (
+          (matrix1.M41 * matrix2.M13)
+        + (matrix1.M42 * matrix2.M23)
+        + (matrix1.M43 * matrix2.M33)
+        + (matrix1.M44 * matrix2.M43)
+    );
+    result.M44 = (
+          (matrix1.M41 * matrix2.M14)
+        + (matrix1.M42 * matrix2.M24)
+        + (matrix1.M43 * matrix2.M34)
+        + (matrix1.M44 * matrix2.M44)
+    );
+    
+    return result;
+}
+
 void Sprender_Matrix_ToTransform(Sprender_Matrix* matrix, float* transform)
 {
     assert(matrix != NULL);
@@ -45,9 +155,15 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
     
     Sprender_Matrix matrix = Sprender_Matrix_Create();
     
-    const char is3D = 1;
+    Sprender_Matrix translate = Sprender_Matrix_Create();
+    translate.M14 = -camera->position.X;
+    translate.M24 = -camera->position.Y;
     
-    if (is3D) {
+    Sprender_Matrix scale = Sprender_Matrix_Create();
+    scale.M11 = camera->zoom.X;
+    scale.M22 = camera->zoom.Y;
+    
+    if (camera->is3D) {
         const float ar = (float)camera->resolution.X / (float)camera->resolution.Y;
         const float zNear = 0.0f;
         const float zFar = 1.0f;
@@ -60,13 +176,22 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
         matrix.M34 = 2.0f * zFar * zNear / zRange;
         matrix.M43 = 1.0f;
     } else {
-        matrix.M11 = (2.0f / camera->resolution.X) * (camera->zoom.X);
-        matrix.M14 = 0.0f - (2.0f / (camera->resolution.X / camera->position.X / camera->zoom.X));
-        matrix.M22 = -(2.0f / camera->resolution.Y) * (camera->zoom.Y);
-        matrix.M24 = 0.0f + (2.0f / (camera->resolution.Y / camera->position.Y / camera->zoom.Y));
+        matrix.M11 = 2.0f / camera->resolution.X;
+        matrix.M14 = 2.0f / camera->resolution.X;
+        matrix.M22 = -2.0f / camera->resolution.Y;
+        matrix.M24 = 2.0f / camera->resolution.Y;
         matrix.M33 = 1;
         matrix.M44 = 1;
     }
+    
+    matrix = Sprender_Matrix_Multiply(
+        matrix,
+        translate
+    );
+    matrix = Sprender_Matrix_Multiply(
+        matrix,
+        scale
+    );
     
     return matrix;
 }

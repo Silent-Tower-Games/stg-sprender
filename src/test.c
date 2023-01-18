@@ -72,6 +72,7 @@ int main(int argc, char** argv)
         (FNA3D_Vec4){ 0, 0, 0.5f, 1 },
         1
     );
+    // myRenderTarget.camera.is3D = 1;
     
     char quit = 0;
     char isFullscreen = 0;
@@ -79,6 +80,10 @@ int main(int argc, char** argv)
     while(1)
     {
         i++;
+        
+        // myRenderTarget.camera.position.X += 0.1f;
+        // myRenderTarget.camera.position.Y -= 0.1f;
+        myRenderTarget.camera.rotation.X += 0.01f;
         
         SDL_Event event;
         while(SDL_PollEvent(&event))
@@ -121,44 +126,179 @@ int main(int argc, char** argv)
             break;
         }
         
-        // Render to backbuffer
+        // Render to target
         Sprender_Load(
             sprender,
-            NULL,
-            NULL,
-            0
+            &myRenderTarget,
+            // This shader applies to the sprite sheet, not the final image
+            &shaderDepth,
+            1
         );
+        
+        // Blue background
+        Sprender_SpriteBatch_Begin(
+            spriteBatch,
+            &textureBlankWhite
+        );
+        Sprender_SpriteBatch_StageFrame(
+            spriteBatch,
+            (Sprender_Int2D){ 0, 0, },
+            (Sprender_Float2D){ 0, 0, },
+            (Sprender_Float2D){ 1000.0f, 1000.0f, },
+            0.0f,
+            0,
+            0xFF990000
+        );
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
+        
+        // Sprites
+        Sprender_SpriteBatch_Begin(
+            spriteBatch,
+            &textureSpriteSheet
+        );
+        Sprender_SpriteBatch_StageFrame(
+            spriteBatch,
+            (Sprender_Int2D){ 1, 0, },
+            (Sprender_Float2D){ -8, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0.75f,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_StageFrame(
+            spriteBatch,
+            (Sprender_Int2D){ 6, 3, },
+            (Sprender_Float2D){ -8, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            (i / 30) % 2 ? 0.5f : 1.0f,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_StageFrame(
+            spriteBatch,
+            (Sprender_Int2D){ 6, 3, },
+            (Sprender_Float2D){ 10, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            (i / 30) % 2 ? 1.0f : 0.5f,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_StageFrame(
+            spriteBatch,
+            (Sprender_Int2D){ 1, 0, },
+            (Sprender_Float2D){ 12, 0, },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0.75f,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
         
         // Rainbow triangle
         Sprender_SpriteBatch_Begin(
             spriteBatch,
             &textureBlankWhite
         );
-        const float depth = 0.0f;
         Sprender_SpriteBatch_StageTriangleVerts(
             spriteBatch,
             (Sprender_Vertex){
                 .x = 0,
-                .y = -16,
+                .y = -4,
                 .u = 0,
                 .v = 0,
-                .z = depth,
+                .z = 0.75f,
                 .color = 0xFF0000FF,
             },
             (Sprender_Vertex){
-                .x = -16,
-                .y = 16,
+                .x = 4,
+                .y = 4,
                 .u = 1,
                 .v = 0,
-                .z = depth,
+                .z = 0.75f,
                 .color = 0xFF00FF00,
             },
             (Sprender_Vertex){
-                .x = 16,
-                .y = 16,
+                .x = -4,
+                .y = 4,
                 .u = 0,
                 .v = 1,
-                .z = depth,
+                .z = 0.75f,
+                .color = 0xFFFF0000,
+            }
+        );
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
+        
+        // Render to backbuffer
+        Sprender_Load(
+            sprender,
+            NULL,
+            // This shader applies to the render target as a whole, since that's the texture we're rendering
+            &shaderYellow,
+            1
+        );
+        Sprender_SpriteBatch_Begin(
+            spriteBatch,
+            &myRenderTarget.renderTargetTexture
+        );
+        Sprender_SpriteBatch_StageFrame(
+            spriteBatch,
+            (Sprender_Int2D){ 0, 0 },
+            (Sprender_Float2D){ 0, 0 },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
+        Sprender_SpriteBatch_Begin(
+            spriteBatch,
+            &textureBlankWhite
+        );
+        Sprender_SpriteBatch_StageFrame(
+            spriteBatch,
+            (Sprender_Int2D){ 0, 0 },
+            (Sprender_Float2D){ 0, 0 },
+            (Sprender_Float2D){ 1.0f, 1.0f, },
+            0,
+            0,
+            0xFFFFFFFF
+        );
+        Sprender_SpriteBatch_End(spriteBatch);
+        Sprender_RenderSprites(sprender, spriteBatch);
+        
+        // Rainbow triangle
+        Sprender_SpriteBatch_Begin(
+            spriteBatch,
+            &textureBlankWhite
+        );
+        Sprender_SpriteBatch_StageTriangleVerts(
+            spriteBatch,
+            (Sprender_Vertex){
+                .x = 22,
+                .y = -4,
+                .u = 0,
+                .v = 0,
+                .z = 0.75f,
+                .color = 0xFF0000FF,
+            },
+            (Sprender_Vertex){
+                .x = 26,
+                .y = 4,
+                .u = 1,
+                .v = 0,
+                .z = 0.75f,
+                .color = 0xFF00FF00,
+            },
+            (Sprender_Vertex){
+                .x = 18,
+                .y = 4,
+                .u = 0,
+                .v = 1,
+                .z = 0.75f,
                 .color = 0xFFFF0000,
             }
         );

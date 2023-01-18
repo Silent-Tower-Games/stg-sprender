@@ -3,7 +3,7 @@
 #include "Camera.h"
 #include "Matrix.h"
 
-Sprender_Camera Sprender_Camera_Create(Sprender_Int2D resolution, Sprender_Float2D zoom)
+Sprender_Camera Sprender_Camera_Create(Sprender_Int2D resolution, Sprender_Float3D zoom)
 {
     Sprender_Camera camera;
     memset(&camera, 0, sizeof(camera));

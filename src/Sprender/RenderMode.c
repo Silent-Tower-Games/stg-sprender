@@ -35,7 +35,7 @@ Sprender_RenderMode Sprender_RenderMode_Create(
     
     Sprender_RenderMode renderMode = {
         .bgColor = bgColor,
-        .camera = Sprender_Camera_Create(resolution, (Sprender_Float2D){ 1.0f, 1.0f, }),
+        .camera = Sprender_Camera_Create(resolution, (Sprender_Float3D){ 1.0f, 1.0f, 1.0f }),
         .renderTarget = renderTargetBinding,
         .renderTargetTexture = renderTargetTexture,
         .resolution = resolution,

@@ -32,6 +32,18 @@ typedef struct Sprender_Matrix
 Sprender_Matrix Sprender_Matrix_Create();
 
 /**
+ * @brief Multiply two matrix objects.
+ * 
+ * @param matrix1
+ * @param matrix2
+ * @return Sprender_Matrix result of matrix multiplication
+ */
+Sprender_Matrix Sprender_Matrix_Multiply(
+    Sprender_Matrix matrix1,
+    Sprender_Matrix matrix2
+);
+
+/**
  * @brief Turn your matrix into a transform (e.g. float array).
  * 
  * @param matrix your matrix
