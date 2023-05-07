@@ -21,7 +21,7 @@ application-static:
 .PHONY=lib
 lib:
 	make objs-lib
-	${CC} ${CFLAGS} src/Sprender/Camera.o src/Sprender/Matrix.o src/Sprender/RenderMode.o src/Sprender/Sprender.o src/Sprender/SpriteBatch.o src/Sprender/Shader.o src/Sprender/Texture.o -shared -o libsprender.${EXT} ${LIBS}
+	${CC} ${CFLAGS} src/Sprender/Camera.o src/Sprender/Matrix.o src/Sprender/RenderMode.o src/Sprender/Sprender.o src/Sprender/SpriteBatch.o src/Sprender/Shader.o src/Sprender/Texture.o -shared -o libsprender.${EXT} ${LIBS} -lFNA3D -lm
 
 .PHONY=lib-static
 lib-static:
