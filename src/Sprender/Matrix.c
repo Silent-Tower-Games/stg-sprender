@@ -44,7 +44,7 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
     
     Sprender_Matrix matrix = Sprender_Matrix_Create();
     
-    Sprender_Float2D position = {
+    const Sprender_Float2D position = {
         .X = camera->position.X + camera->origin.X,
         .Y = camera->position.Y + camera->origin.Y,
     };
