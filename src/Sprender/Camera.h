@@ -7,6 +7,7 @@ typedef struct Sprender_Camera
 {
 	Sprender_Int2D resolution;
 	Sprender_Float2D position;
+	Sprender_Float2D origin;
 	Sprender_Float2D zoom;
 	float rotation;
 	float projection[16];
