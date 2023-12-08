@@ -44,10 +44,15 @@ Sprender_Matrix Sprender_Matrix_CreateFromCamera(Sprender_Camera* camera)
     
     Sprender_Matrix matrix = Sprender_Matrix_Create();
     
+    const Sprender_Float2D position = {
+        .X = camera->position.X + camera->origin.X,
+        .Y = camera->position.Y + camera->origin.Y,
+    };
+    
     matrix.M11 = (2.0f / camera->resolution.X) * (camera->zoom.X);
-    matrix.M14 = 0.0f - (2.0f / (camera->resolution.X / camera->position.X / camera->zoom.X));
+    matrix.M14 = 0.0f - (2.0f / (camera->resolution.X / position.X / camera->zoom.X));
     matrix.M22 = -(2.0f / camera->resolution.Y) * (camera->zoom.Y);
-    matrix.M24 = 0.0f + (2.0f / (camera->resolution.Y / camera->position.Y / camera->zoom.Y));
+    matrix.M24 = 0.0f + (2.0f / (camera->resolution.Y / position.Y / camera->zoom.Y));
     matrix.M33 = 1;
     matrix.M44 = 1;
     
